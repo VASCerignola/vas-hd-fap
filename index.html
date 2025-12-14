@@ -51,7 +51,7 @@ body{margin:0;font-family:-apple-system,system-ui;background:var(--bg);color:var
 header{padding:14px;border-bottom:1px solid var(--line)}
 h1{margin:0;font-size:20px}
 small{color:var(--mut)}
-main{padding:14px;max-width:900px;margin:auto}
+main{padding:14px;max-width:920px;margin:auto}
 
 .card{
   border:1px solid var(--line);
@@ -83,14 +83,25 @@ input,select{
 
 .stepTitle{font-weight:900;font-size:16px}
 .stepSub{color:var(--mut);margin-top:4px}
+.progress{margin-top:10px;color:var(--mut);font-weight:800}
 
 .badge{display:inline-block;padding:10px 14px;border-radius:999px;font-weight:900;color:white}
 .g0{background:#3b7d5b}.g1{background:#b58b2a}.g2{background:#c46a2d}.g3{background:#b11226}
 
 .alert{margin-top:12px;padding:12px;border-radius:12px;font-weight:900}
 .alert.red{background:#b11226}
-.progress{margin-top:10px;color:var(--mut);font-weight:800}
+
 hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+.kpi{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.pill{border:1px solid var(--line);border-radius:999px;padding:6px 10px;color:var(--mut);font-weight:800}
+.box{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px;
+  margin-top:12px;
+  background:rgba(15,10,13,.45);
+}
+.mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
 </style>
 </head>
 
@@ -113,6 +124,10 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
   <div class="card">
     <div class="stepTitle">📋 Avvio</div>
     <div class="stepSub">Infermiere → Paziente → Accesso → Checklist → Grading.</div>
+    <div class="kpi">
+      <span class="pill">FAV/AVG: clinico + funzionale</span>
+      <span class="pill">CVC: funzionale + exit-site</span>
+    </div>
   </div>
   <button class="btn" onclick="startWizard()">➕ NUOVA SEDUTA</button>
 </main>
@@ -154,12 +169,12 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 <main>
   <div class="card">
     <div class="stepTitle">🩸 Tipo di accesso</div>
-    <div class="stepSub">La cascata cambia in base all’accesso.</div>
+    <div class="stepSub">La cascata cambia in base all’accesso selezionato.</div>
     <label>Accesso</label>
     <select id="accesso">
       <option value="">— seleziona —</option>
       <option value="FAV">FAV</option>
-      <option value="AVG">AVG</option>
+      <option value="AVG">AVG (graft)</option>
       <option value="CVC">CVC</option>
     </select>
     <div class="row">
@@ -229,6 +244,20 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
           <option value="arteriosi">Arteriosi</option>
           <option value="venosi">Venosi</option>
           <option value="entrambi">Entrambi</option>
+        </select>
+      </div>
+
+      <!-- SOLO AVG -->
+      <div id="av6" class="hidden">
+        <hr>
+        <div class="stepTitle">🧩 Modulo specifico AVG (graft)</div>
+        <div class="stepSub">Valuta cute e graft: segni di infezione/pseudoaneurisma/ulcerazioni.</div>
+
+        <label>6) Cute/graft</label>
+        <select id="avg_graft">
+          <option value="">— seleziona —</option>
+          <option value="ok">Regolare</option>
+          <option value="sospetto">Sospetto (arrossamento/dolore/calore/ulcerazione/pseudoaneurisma)</option>
         </select>
       </div>
     </div>
@@ -305,12 +334,33 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 <section id="s5" class="hidden step-bg bg-result">
 <main>
   <div class="card">
-    <div class="stepTitle">📊 Grading</div>
+    <div class="stepTitle">📊 Grading + Azione</div>
+
     <div id="result"></div>
-    <div id="medAlert" class="alert red hidden">🚨 Medico da informare 🚨</div>
+
+    <div class="box" id="actionBox" class="hidden"></div>
+
+    <div class="box">
+      <div class="stepTitle">📣 Da comunicare (pronto)</div>
+      <div id="handoff" class="mono" style="margin-top:10px;white-space:pre-wrap"></div>
+    </div>
+
+    <div id="medBlock" class="box hidden">
+      <div class="alert red">🚨 G2–G3: obbligatorio informare il medico</div>
+      <label>Medico informato</label>
+      <select id="medicoInf">
+        <option value="">— seleziona —</option>
+        <option value="si">Sì</option>
+        <option value="no">No</option>
+      </select>
+      <div class="stepSub" style="margin-top:8px">
+        Per chiudere la seduta con G2–G3 devi selezionare <b>Sì</b>.
+      </div>
+    </div>
+
     <div class="row">
       <button class="btn2" onclick="go('s4')">⬅ Indietro</button>
-      <button class="btn" onclick="goHome()">Fine</button>
+      <button id="btnFinish" class="btn" onclick="finish()">Fine</button>
     </div>
   </div>
 </main>
@@ -320,6 +370,7 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 
 <script>
 const STATE = { nurse:"", pid:"", accesso:"" };
+let LAST = { grade:0, summary:"", details:"" };
 
 function enterApp(){
   document.getElementById("splash").style.display="none";
@@ -359,11 +410,12 @@ function next3(){
   go('s4');
 }
 
-/* ===== CASCATE: reset duro e sblocco sequenziale ===== */
+/* ===== RESET / FLOW ===== */
 function resetAV(){
   av_puntura.value=""; av_thrill.value=""; av_bruit.value=""; av_qb.value=""; av_allarmi.value="";
-  av2.classList.add("hidden"); av3.classList.add("hidden"); av4.classList.add("hidden"); av5.classList.add("hidden");
-  progAV.textContent="Progress: 0/5";
+  avg_graft.value="";
+  av2.classList.add("hidden"); av3.classList.add("hidden"); av4.classList.add("hidden"); av5.classList.add("hidden"); av6.classList.add("hidden");
+  progAV.textContent = `Progress: 0/${totalAV()}`;
 }
 function resetCVC(){
   cvc_lumi.value=""; cvc_qb.value=""; cvc_allarmi.value=""; cvc_inversione.value=""; cvc_exit.value=""; cvc_febbre.value="";
@@ -382,8 +434,11 @@ function setupFlows(){
     flowAV.classList.remove("hidden");
   }
 }
+function totalAV(){
+  return (STATE.accesso==="AVG") ? 6 : 5;
+}
 
-/* ===== PROGRESS helpers ===== */
+/* ===== COUNT ===== */
 function countAV(){
   let c=0;
   if(av_puntura.value) c++;
@@ -391,6 +446,7 @@ function countAV(){
   if(av_bruit.value) c++;
   if(av_qb.value) c++;
   if(av_allarmi.value) c++;
+  if(STATE.accesso==="AVG" && avg_graft.value) c++;
   return c;
 }
 function countCVC(){
@@ -406,82 +462,139 @@ function updateCalcEnabled(){
   if(STATE.accesso==="CVC"){
     btnCalc.disabled = !(countCVC()===5);
   }else{
-    btnCalc.disabled = !(countAV()===5);
+    btnCalc.disabled = !(countAV()===totalAV());
   }
 }
 
-/* ===== CASCATA AV: sblocca solo il prossimo ===== */
+/* ===== CASCATA AV: reset a valle + sblocco sequenziale ===== */
 av_puntura.addEventListener("change", ()=>{
-  resetAV(); // resetta tutto “a valle”
-  av_puntura.value = av_puntura.value; // mantiene scelta
-  if(!av_puntura.value){ progAV.textContent="Progress: 0/5"; updateCalcEnabled(); return; }
-  av2.classList.remove("hidden");
-  progAV.textContent = `Progress: ${countAV()}/5`;
-  updateCalcEnabled();
-});
-av_thrill.addEventListener("change", ()=>{
   // reset a valle
-  av_bruit.value=""; av_qb.value=""; av_allarmi.value="";
-  av3.classList.add("hidden"); av4.classList.add("hidden"); av5.classList.add("hidden");
-  if(!av_thrill.value){ progAV.textContent = `Progress: ${countAV()}/5`; updateCalcEnabled(); return; }
-  av3.classList.remove("hidden");
-  progAV.textContent = `Progress: ${countAV()}/5`;
-  updateCalcEnabled();
-});
-av_bruit.addEventListener("change", ()=>{
-  av_qb.value=""; av_allarmi.value="";
-  av4.classList.add("hidden"); av5.classList.add("hidden");
-  if(!av_bruit.value){ progAV.textContent = `Progress: ${countAV()}/5`; updateCalcEnabled(); return; }
-  av4.classList.remove("hidden");
-  progAV.textContent = `Progress: ${countAV()}/5`;
-  updateCalcEnabled();
-});
-av_qb.addEventListener("change", ()=>{
-  av_allarmi.value="";
-  av5.classList.add("hidden");
-  if(!av_qb.value){ progAV.textContent = `Progress: ${countAV()}/5`; updateCalcEnabled(); return; }
-  av5.classList.remove("hidden");
-  progAV.textContent = `Progress: ${countAV()}/5`;
-  updateCalcEnabled();
-});
-av_allarmi.addEventListener("change", ()=>{
-  progAV.textContent = `Progress: ${countAV()}/5`;
+  av_thrill.value=""; av_bruit.value=""; av_qb.value=""; av_allarmi.value=""; avg_graft.value="";
+  av2.classList.add("hidden"); av3.classList.add("hidden"); av4.classList.add("hidden"); av5.classList.add("hidden"); av6.classList.add("hidden");
+
+  if(!av_puntura.value){
+    progAV.textContent = `Progress: ${countAV()}/${totalAV()}`;
+    updateCalcEnabled(); return;
+  }
+  av2.classList.remove("hidden");
+  progAV.textContent = `Progress: ${countAV()}/${totalAV()}`;
   updateCalcEnabled();
 });
 
-/* ===== CASCATA CVC: sblocca solo il prossimo ===== */
+av_thrill.addEventListener("change", ()=>{
+  av_bruit.value=""; av_qb.value=""; av_allarmi.value=""; avg_graft.value="";
+  av3.classList.add("hidden"); av4.classList.add("hidden"); av5.classList.add("hidden"); av6.classList.add("hidden");
+
+  if(!av_thrill.value){
+    progAV.textContent = `Progress: ${countAV()}/${totalAV()}`;
+    updateCalcEnabled(); return;
+  }
+  av3.classList.remove("hidden");
+  progAV.textContent = `Progress: ${countAV()}/${totalAV()}`;
+  updateCalcEnabled();
+});
+
+av_bruit.addEventListener("change", ()=>{
+  av_qb.value=""; av_allarmi.value=""; avg_graft.value="";
+  av4.classList.add("hidden"); av5.classList.add("hidden"); av6.classList.add("hidden");
+
+  if(!av_bruit.value){
+    progAV.textContent = `Progress: ${countAV()}/${totalAV()}`;
+    updateCalcEnabled(); return;
+  }
+  av4.classList.remove("hidden");
+  progAV.textContent = `Progress: ${countAV()}/${totalAV()}`;
+  updateCalcEnabled();
+});
+
+av_qb.addEventListener("change", ()=>{
+  av_allarmi.value=""; avg_graft.value="";
+  av5.classList.add("hidden"); av6.classList.add("hidden");
+
+  if(!av_qb.value){
+    progAV.textContent = `Progress: ${countAV()}/${totalAV()}`;
+    updateCalcEnabled(); return;
+  }
+  av5.classList.remove("hidden");
+  progAV.textContent = `Progress: ${countAV()}/${totalAV()}`;
+  updateCalcEnabled();
+});
+
+av_allarmi.addEventListener("change", ()=>{
+  avg_graft.value="";
+  av6.classList.add("hidden");
+
+  if(!av_allarmi.value){
+    progAV.textContent = `Progress: ${countAV()}/${totalAV()}`;
+    updateCalcEnabled(); return;
+  }
+
+  // se AVG, sblocca modulo graft; se FAV chiude qui
+  if(STATE.accesso==="AVG"){
+    av6.classList.remove("hidden");
+  }
+  progAV.textContent = `Progress: ${countAV()}/${totalAV()}`;
+  updateCalcEnabled();
+});
+
+avg_graft.addEventListener("change", ()=>{
+  progAV.textContent = `Progress: ${countAV()}/${totalAV()}`;
+  updateCalcEnabled();
+});
+
+/* ===== CASCATA CVC ===== */
 cvc_lumi.addEventListener("change", ()=>{
-  resetCVC();
-  cvc_lumi.value = cvc_lumi.value;
-  if(!cvc_lumi.value){ progCVC.textContent="Progress: 0/5"; updateCalcEnabled(); return; }
+  cvc_qb.value=""; cvc_allarmi.value=""; cvc_inversione.value=""; cvc_exit.value=""; cvc_febbre.value="";
+  cvc2.classList.add("hidden"); cvc3.classList.add("hidden"); cvc4.classList.add("hidden"); cvc5.classList.add("hidden");
+
+  if(!cvc_lumi.value){
+    progCVC.textContent = `Progress: ${countCVC()}/5`;
+    updateCalcEnabled(); return;
+  }
   cvc2.classList.remove("hidden");
   progCVC.textContent = `Progress: ${countCVC()}/5`;
   updateCalcEnabled();
 });
+
 cvc_qb.addEventListener("change", ()=>{
   cvc_allarmi.value=""; cvc_inversione.value=""; cvc_exit.value=""; cvc_febbre.value="";
   cvc3.classList.add("hidden"); cvc4.classList.add("hidden"); cvc5.classList.add("hidden");
-  if(!cvc_qb.value){ progCVC.textContent = `Progress: ${countCVC()}/5`; updateCalcEnabled(); return; }
+
+  if(!cvc_qb.value){
+    progCVC.textContent = `Progress: ${countCVC()}/5`;
+    updateCalcEnabled(); return;
+  }
   cvc3.classList.remove("hidden");
   progCVC.textContent = `Progress: ${countCVC()}/5`;
   updateCalcEnabled();
 });
+
 cvc_allarmi.addEventListener("change", ()=>{
   cvc_inversione.value=""; cvc_exit.value=""; cvc_febbre.value="";
   cvc4.classList.add("hidden"); cvc5.classList.add("hidden");
-  if(!cvc_allarmi.value){ progCVC.textContent = `Progress: ${countCVC()}/5`; updateCalcEnabled(); return; }
+
+  if(!cvc_allarmi.value){
+    progCVC.textContent = `Progress: ${countCVC()}/5`;
+    updateCalcEnabled(); return;
+  }
   cvc4.classList.remove("hidden");
   progCVC.textContent = `Progress: ${countCVC()}/5`;
   updateCalcEnabled();
 });
+
 cvc_inversione.addEventListener("change", ()=>{
   cvc_exit.value=""; cvc_febbre.value="";
   cvc5.classList.add("hidden");
-  if(!cvc_inversione.value){ progCVC.textContent = `Progress: ${countCVC()}/5`; updateCalcEnabled(); return; }
+
+  if(!cvc_inversione.value){
+    progCVC.textContent = `Progress: ${countCVC()}/5`;
+    updateCalcEnabled(); return;
+  }
   cvc5.classList.remove("hidden");
   progCVC.textContent = `Progress: ${countCVC()}/5`;
   updateCalcEnabled();
 });
+
 cvc_exit.addEventListener("change", ()=>{
   progCVC.textContent = `Progress: ${countCVC()}/5`;
   updateCalcEnabled();
@@ -491,58 +604,60 @@ cvc_febbre.addEventListener("change", ()=>{
   updateCalcEnabled();
 });
 
-/* ===== GRADING differenziato ===== */
+/* ===== GRADING + AZIONE + HANDOFF ===== */
 function calc(){
-  medAlert.classList.add("hidden");
-
   let g=0;
+  let flags = [];
 
   if(STATE.accesso==="CVC"){
     if(countCVC()!==5){ alert("Completa la cascata CVC."); return; }
 
-    // G3: entrambi lumi problematici
-    if(cvc_lumi.value==="due") g=3;
+    if(cvc_lumi.value==="due"){ g=3; flags.push("problema entrambi i lumi"); }
+    if(cvc_lumi.value==="uno"){ flags.push("problema 1 lume"); }
 
-    // G2: probabile disfunzione / sospetta infezione
-    if(g<3){
-      if(cvc_qb.value==="basso") g=Math.max(g,2);
-      if(cvc_allarmi.value==="si") g=Math.max(g,2);
-      if(cvc_inversione.value==="si") g=Math.max(g,2);
-      if(cvc_exit.value==="essudato" || cvc_febbre.value==="si") g=Math.max(g,2);
-    }
+    if(cvc_qb.value==="basso"){ g=Math.max(g,2); flags.push("Qb <85%"); }
+    if(cvc_qb.value==="moderato"){ g=Math.max(g,1); flags.push("Qb 85–94%"); }
 
-    // G1: warning
-    if(g<2){
-      if(cvc_lumi.value==="uno") g=Math.max(g,1);
-      if(cvc_qb.value==="moderato") g=Math.max(g,1);
-      if(cvc_exit.value==="rosso") g=Math.max(g,1);
-    }
+    if(cvc_allarmi.value==="si"){ g=Math.max(g,2); flags.push("allarmi ripetuti"); }
+    if(cvc_inversione.value==="si"){ g=Math.max(g,2); flags.push("inversione linee"); }
+
+    if(cvc_exit.value==="essudato"){ g=Math.max(g,2); flags.push("exit-site essudato"); }
+    if(cvc_exit.value==="rosso"){ g=Math.max(g,1); flags.push("exit-site arrossato"); }
+    if(cvc_febbre.value==="si"){ g=Math.max(g,2); flags.push("febbre"); }
   } else {
-    if(countAV()!==5){ alert("Completa la cascata FAV/AVG."); return; }
+    const tot = totalAV();
+    if(countAV()!==tot){ alert("Completa la cascata FAV/AVG."); return; }
 
-    // G3: impossibile o thrill assente
-    if(av_puntura.value==="impossibile" || av_thrill.value==="assente") g=3;
+    if(av_puntura.value==="impossibile"){ g=3; flags.push("puntura impossibile"); }
+    if(av_puntura.value==="difficile"){ g=Math.max(g,1); flags.push("puntura difficile"); }
 
-    // G2
-    if(g<3){
-      if(av_bruit.value==="alto") g=Math.max(g,2);
-      if(av_qb.value==="basso") g=Math.max(g,2);
-      if(av_allarmi.value==="entrambi") g=Math.max(g,2);
-    }
+    if(av_thrill.value==="assente"){ g=3; flags.push("thrill assente"); }
+    if(av_thrill.value==="ridotto"){ g=Math.max(g,1); flags.push("thrill ridotto"); }
 
-    // G1
-    if(g<2){
-      if(av_puntura.value==="difficile") g=Math.max(g,1);
-      if(av_thrill.value==="ridotto") g=Math.max(g,1);
-      if(av_qb.value==="moderato") g=Math.max(g,1);
-      if(av_allarmi.value==="arteriosi" || av_allarmi.value==="venosi") g=Math.max(g,1);
+    if(av_bruit.value==="alto"){ g=Math.max(g,2); flags.push("bruit alto-pitch"); }
+    if(av_bruit.value==="assente"){ g=Math.max(g,2); flags.push("bruit assente"); }
+
+    if(av_qb.value==="basso"){ g=Math.max(g,2); flags.push("Qb <85%"); }
+    if(av_qb.value==="moderato"){ g=Math.max(g,1); flags.push("Qb 85–94%"); }
+
+    if(av_allarmi.value==="entrambi"){ g=Math.max(g,2); flags.push("allarmi entrambi"); }
+    if(av_allarmi.value==="arteriosi"){ g=Math.max(g,1); flags.push("allarmi arteriosi"); }
+    if(av_allarmi.value==="venosi"){ g=Math.max(g,1); flags.push("allarmi venosi"); }
+
+    if(STATE.accesso==="AVG"){
+      if(avg_graft.value==="sospetto"){ g=Math.max(g,2); flags.push("cute/graft sospetto"); }
+      if(avg_graft.value==="ok"){ flags.push("cute/graft regolare"); }
     }
   }
 
-  renderResult(g);
+  LAST.grade = g;
+  LAST.summary = flags.join(", ");
+
+  renderResult(g, LAST.summary);
+  go('s5');
 }
 
-function renderResult(g){
+function renderResult(g, flags){
   const cls = "g"+g;
   const txt = [
     "G0 – Routine: proseguire sorveglianza.",
@@ -551,17 +666,78 @@ function renderResult(g){
     "G3 – Critico: gestione urgente oggi."
   ][g];
 
+  const action = actionPlan(g, STATE.accesso);
+  const handoffText = buildHandoff(g, STATE.accesso, flags);
+
   result.innerHTML = `
     <div class="stepSub" style="margin-bottom:10px">
       Infermiere: <b>${escapeHtml(STATE.nurse)}</b> · Paziente: <b>${escapeHtml(STATE.pid)}</b> · Accesso: <b>${STATE.accesso}</b>
     </div>
     <span class="badge ${cls}">${txt}</span>
+    <div class="stepSub" style="margin-top:10px">
+      Rilievi: <b>${escapeHtml(flags || "—")}</b>
+    </div>
   `;
 
-  if(g>=2) medAlert.classList.remove("hidden");
-  go('s5');
+  actionBox.innerHTML = `
+    <div class="stepTitle">🧭 Azione consigliata</div>
+    <div style="margin-top:10px;white-space:pre-wrap">${escapeHtml(action)}</div>
+  `;
+
+  handoff.textContent = handoffText;
+
+  // medico informato: obbligo per G2–G3
+  medicoInf.value = "";
+  medBlock.classList.toggle("hidden", !(g>=2));
+  btnFinish.disabled = false;
+  if(g>=2){
+    btnFinish.disabled = true;
+  }
 }
 
+function actionPlan(g, accesso){
+  if(g===0){
+    return "• Proseguire trattamento.\n• Sorveglianza routinaria alla prossima seduta.";
+  }
+  if(g===1){
+    return "• Ricontrollo ravvicinato (prossima seduta o entro 1 settimana).\n• Se peggiora o persiste → informare il medico.";
+  }
+  if(g===2){
+    if(accesso==="CVC"){
+      return "• Informare il medico oggi.\n• Considerare valutazione funzionale CVC (posizione, lock, troubleshooting) ed eventuale ecografia/valutazione clinica.\n• Attenzione a segni di infezione: exit-site/febbre.";
+    }
+    return "• Informare il medico oggi.\n• Considerare eco accesso/valutazione per stenosi o disfunzione.\n• Se necessario pianificare percorso diagnostico-interventistico.";
+  }
+  // g===3
+  if(accesso==="CVC"){
+    return "• Informare il medico immediatamente.\n• Valutare urgenza: impossibilità di dialisi efficace / problemi su entrambi i lumi.\n• Considerare sostituzione/gestione urgente secondo protocollo di reparto.";
+  }
+  return "• Informare il medico immediatamente.\n• Valutare urgenza: accesso critico (thrill assente/puntura impossibile).\n• Considerare gestione urgente secondo protocollo (eco/angiografia/decisione clinica).";
+}
+
+function buildHandoff(g, accesso, flags){
+  const gtxt = `G${g}`;
+  const base = `${gtxt} – ${accesso} – ${STATE.pid} – Infermiere ${STATE.nurse}`;
+  const det = flags ? `Rilievi: ${flags}.` : "Rilievi: —.";
+  const req = (g>=2) ? "Azione: medico informato oggi." : "Azione: sorveglianza.";
+  return `${base}\n${det}\n${req}`;
+}
+
+medicoInf.addEventListener("change", ()=>{
+  if(LAST.grade>=2){
+    btnFinish.disabled = (medicoInf.value!=="si");
+  }
+});
+
+function finish(){
+  if(LAST.grade>=2 && medicoInf.value!=="si"){
+    alert("Per G2–G3 devi selezionare: Medico informato = Sì.");
+    return;
+  }
+  goHome();
+}
+
+/* ===== UTILS ===== */
 function escapeHtml(s){
   return String(s||"").replace(/[&<>"']/g, m => ({
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
