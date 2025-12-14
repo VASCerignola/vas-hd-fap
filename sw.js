@@ -1,8 +1,9 @@
-const CACHE_NAME = "vashd-fap-v1";
+const CACHE_NAME = "vashd-fap-v2";
 const ASSETS = [
   "./",
   "./index.html",
-  "./manifest.webmanifest"
+  "./manifest.webmanifest",
+  "./sw.js"
 ];
 
 self.addEventListener("install", (event) => {
@@ -24,3 +25,4 @@ self.addEventListener("fetch", (event) => {
     caches.match(event.request).then((cached) => cached || fetch(event.request))
   );
 });
+
