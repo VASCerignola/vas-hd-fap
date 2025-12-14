@@ -1,63 +1,243 @@
-/* =========================
-   STORICO VISIVO
-   ========================= */
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>VAS-HD (FAP)</title>
 
-function fmtDate(iso){
-  try{
-    const d = new Date(iso);
-    return d.toLocaleString("it-IT", {year:"2-digit",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
-  }catch(e){ return iso; }
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#c86a9a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<style>
+:root{
+  --bg:#120b10; --card:#1b0f17; --line:#6b2b4a;
+  --txt:#f2e9ee; --mut:#d6b3c4; --accent:#c86a9a;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,system-ui;background:var(--bg);color:var(--txt)}
+.hidden{display:none}
+
+/* ===== BACKGROUND ===== */
+.step-bg{position:relative;min-height:100vh;background-size:cover;background-position:center;background-color:#120b10}
+.step-bg::before{content:"";position:absolute;inset:0;background:rgba(18,11,16,.75)}
+.step-bg>*{position:relative;z-index:1}
+
+.bg-nurse{background-image:url('bg-nurse.jpg')}
+.bg-patient{background-image:url('bg-patient.jpg')}
+.bg-access{background-image:url('bg-access.jpg')}
+.bg-checklist{background-image:url('bg-checklist.jpg')}
+.bg-result{background-image:url('bg-result.jpg')}
+
+/* ===== SPLASH ===== */
+#splash{position:fixed;inset:0;background:#120b10;display:flex;align-items:center;justify-content:center;z-index:9999}
+#splash img{max-width:100%;max-height:100%;object-fit:contain}
+
+/* ===== UI ===== */
+header{padding:14px;border-bottom:1px solid var(--line)}
+h1{margin:0;font-size:20px}
+small{color:var(--mut)}
+main{padding:14px;max-width:980px;margin:auto}
+
+.card{border:1px solid var(--line);border-radius:16px;padding:14px;background:rgba(27,15,23,.95);margin-bottom:14px}
+label{font-size:12px;color:var(--mut);display:block;margin:14px 0 6px}
+input,select{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#0f0a0d;color:var(--txt)}
+.row{display:flex;gap:10px;margin-top:14px}
+.btn,.btn2{width:100%;padding:14px;border-radius:14px;font-weight:900}
+.btn{border:0;background:var(--accent);color:white}
+.btn2{border:1px solid var(--line);background:transparent;color:var(--txt)}
+.btn:disabled{opacity:.45}
+
+.stepTitle{font-weight:900;font-size:16px}
+.stepSub{color:var(--mut);margin-top:4px}
+.progress{margin-top:10px;color:var(--mut);font-weight:800}
+
+.badge{display:inline-block;padding:10px 14px;border-radius:999px;font-weight:900;color:white}
+.g0{background:#3b7d5b}.g1{background:#b58b2a}.g2{background:#c46a2d}.g3{background:#b11226}
+
+.alert{margin-top:12px;padding:12px;border-radius:12px;font-weight:900}
+.alert.red{background:#b11226}
+
+.history{display:flex;flex-direction:column;gap:10px}
+.hitem{border:1px solid var(--line);border-radius:14px;padding:12px;background:rgba(15,10,13,.55)}
+.hrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.hmeta{color:var(--mut);font-weight:800;font-size:12px}
+.hmain{font-weight:900}
+.hbtn{border:1px solid var(--line);background:transparent;color:var(--txt);border-radius:12px;padding:10px 12px;font-weight:900}
+</style>
+</head>
+
+<body>
+
+<div id="splash" onclick="enterApp()">
+  <img src="splash.png">
+</div>
+
+<div id="app" class="hidden">
+
+<header>
+  <h1>VAS-HD (FAP)</h1>
+  <small>🩸 Sorveglianza accessi vascolari</small>
+</header>
+
+<!-- HOME -->
+<main id="home">
+  <div class="card">
+    <div class="stepTitle">📋 Storico sedute</div>
+    <div class="row">
+      <button class="btn2" onclick="exportCSV()">📤 ESPORTA EXCEL</button>
+      <button class="btn2" onclick="shareCSV()">🟢 INVIA SU WHATSAPP</button>
+    </div>
+    <div class="row">
+      <button class="btn2" onclick="clearAll()">🗑️ SVUOTA</button>
+    </div>
+    <div id="history" class="history" style="margin-top:12px"></div>
+  </div>
+  <button class="btn" onclick="startWizard()">➕ NUOVA SEDUTA</button>
+</main>
+
+<!-- STEP 1 -->
+<section id="s1" class="hidden step-bg bg-nurse"><main>
+<div class="card">
+<div class="stepTitle">🧑‍⚕️ Infermiere</div>
+<label>Firma</label><input id="nurse">
+<div class="row">
+<button class="btn2" onclick="goHome()">↩</button>
+<button class="btn" onclick="next1()">Avanti</button>
+</div>
+</div></main></section>
+
+<!-- STEP 2 -->
+<section id="s2" class="hidden step-bg bg-patient"><main>
+<div class="card">
+<div class="stepTitle">🧾 Paziente</div>
+<label>ID</label><input id="pid" placeholder="GR72">
+<div class="row">
+<button class="btn2" onclick="go('s1')">⬅</button>
+<button class="btn" onclick="next2()">Avanti</button>
+</div>
+</div></main></section>
+
+<!-- STEP 3 -->
+<section id="s3" class="hidden step-bg bg-access"><main>
+<div class="card">
+<div class="stepTitle">🩸 Accesso</div>
+<select id="accesso">
+<option value="">— seleziona —</option>
+<option value="FAV">FAV</option>
+<option value="AVG">AVG</option>
+<option value="CVC">CVC</option>
+</select>
+<div class="row">
+<button class="btn2" onclick="go('s2')">⬅</button>
+<button class="btn" onclick="next3()">Avanti</button>
+</div>
+</div></main></section>
+
+<!-- STEP 4 -->
+<section id="s4" class="hidden step-bg bg-checklist"><main>
+<div class="card">
+<div class="stepTitle">🔍 Checklist</div>
+<div id="flow"></div>
+<button id="btnCalc" class="btn" onclick="calc()" disabled>Calcola</button>
+</div></main></section>
+
+<!-- STEP 5 -->
+<section id="s5" class="hidden step-bg bg-result"><main>
+<div class="card">
+<div class="stepTitle">📊 Esito</div>
+<div id="result"></div>
+<div id="medBlock" class="alert red hidden">
+Medico informato?
+<select id="medicoInf">
+<option value="">—</option>
+<option value="si">Sì</option>
+<option value="no">No</option>
+</select>
+</div>
+<div class="row">
+<button class="btn2" onclick="go('s4')">⬅</button>
+<button id="btnFinish" class="btn" onclick="finish()">Fine</button>
+</div>
+</div></main></section>
+
+</div>
+
+<script>
+const STATE={}; let LAST={};
+
+function enterApp(){splash.style.display="none";app.classList.remove("hidden");renderHistory()}
+function go(id){document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));document.getElementById(id).classList.remove("hidden")}
+function goHome(){document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));home.classList.remove("hidden");renderHistory()}
+function startWizard(){home.classList.add("hidden");go("s1")}
+function next1(){if(!nurse.value)return alert("Firma");STATE.nurse=nurse.value;go("s2")}
+function next2(){if(!pid.value)return alert("ID");STATE.pid=pid.value;go("s3")}
+function next3(){if(!accesso.value)return alert("Accesso");STATE.accesso=accesso.value;buildFlow();go("s4")}
+
+function buildFlow(){
+btnCalc.disabled=true;
+flow.innerHTML = STATE.accesso==="CVC"
+? `<label>Lumi</label><select id="a"><option></option><option>OK</option><option>Problema</option></select>
+<label>Qb</label><select id="b"><option></option><option>≥95%</option><option>&lt;85%</option></select>`
+: `<label>Puntura</label><select id="a"><option></option><option>Facile</option><option>Difficile</option></select>
+<label>Thrill</label><select id="b"><option></option><option>Normale</option><option>Assente</option></select>`;
+document.querySelectorAll("#flow select").forEach(s=>s.onchange=()=>btnCalc.disabled=false)
+}
+
+function calc(){
+let g=0;
+if(b.value==="Assente"||b.value==="&lt;85%") g=2;
+LAST={grade:g,summary:`${a.value}, ${b.value}`};
+renderResult();
+go("s5");
+}
+
+function renderResult(){
+result.innerHTML=`<span class="badge g${LAST.grade}">G${LAST.grade}</span><div>${LAST.summary}</div>`;
+medBlock.classList.toggle("hidden",LAST.grade<2);
+btnFinish.disabled=LAST.grade>=2;
+}
+
+medicoInf.onchange=()=>btnFinish.disabled=!(medicoInf.value==="si");
+
+function finish(){
+if(LAST.grade>=2 && medicoInf.value!=="si") return alert("Informare medico");
+saveSession();goHome();
+}
+
+function saveSession(){
+const arr=JSON.parse(localStorage.getItem("VAS")||"[]");
+arr.unshift({date:new Date().toISOString(),...STATE,...LAST});
+localStorage.setItem("VAS",JSON.stringify(arr));
 }
 
 function renderHistory(){
-  const el = document.getElementById("history");
-  if(!el) return;
-
-  const rows = loadSessions();
-  if(rows.length===0){
-    el.innerHTML = `<div class="hitem"><div class="hmeta">Nessuna seduta salvata.</div></div>`;
-    return;
-  }
-
-  el.innerHTML = rows.slice(0,30).map((r, idx)=>`
-    <div class="hitem">
-      <div class="hrow">
-        <div>
-          <div class="hmain">${escapeHtml(r.paziente)} · ${escapeHtml(r.accesso)} · <span class="badge g${r.grading}">G${r.grading}</span></div>
-          <div class="hmeta">${fmtDate(r.date)} · Inf: ${escapeHtml(r.infermiere)}</div>
-        </div>
-        <button class="hbtn" onclick="deleteSession(${idx})">🗑️</button>
-      </div>
-      <div class="hmeta" style="margin-top:8px">Rilievi: ${escapeHtml(r.rilievi || "—")}</div>
-    </div>
-  `).join("");
+const arr=JSON.parse(localStorage.getItem("VAS")||"[]");
+history.innerHTML=arr.map((r,i)=>`
+<div class="hitem">
+<div class="hmain">${r.paziente} · ${r.accesso} · G${r.grade}</div>
+<div class="hmeta">${r.date} · ${r.infermiere}</div>
+</div>`).join("") || `<div class="hmeta">Nessuna seduta</div>`;
 }
 
-function deleteSession(index){
-  const key = "VAS_HD_FAP_SESSIONS";
-  const arr = JSON.parse(localStorage.getItem(key) || "[]");
-  if(index<0 || index>=arr.length) return;
-  arr.splice(index,1);
-  localStorage.setItem(key, JSON.stringify(arr));
-  renderHistory();
+function exportCSV(){
+const arr=JSON.parse(localStorage.getItem("VAS")||"[]");
+if(!arr.length) return alert("Vuoto");
+const csv=["Data;Infermiere;Paziente;Accesso;Grading;Rilievi",
+...arr.map(r=>`${r.date};${r.nurse};${r.pid};${r.accesso};G${r.grade};${r.summary}`)].join("\n");
+const blob=new Blob([csv],{type:"text/csv"});
+const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="VAS-HD.csv";a.click();
 }
 
-function clearAll(){
-  if(!confirm("Vuoi cancellare TUTTO lo storico sul dispositivo?")) return;
-  localStorage.removeItem("VAS_HD_FAP_SESSIONS");
-  renderHistory();
+async function shareCSV(){
+const arr=JSON.parse(localStorage.getItem("VAS")||"[]");
+if(!arr.length) return alert("Vuoto");
+const file=new File([exportCSV], "VAS-HD.csv",{type:"text/csv"});
+if(navigator.share) navigator.share({files:[file],title:"VAS-HD"});
 }
 
-/* aggiorna lo storico quando torni a Home */
-const _goHome = goHome;
-goHome = function(){
-  _goHome();
-  renderHistory();
-};
+function clearAll(){if(confirm("Cancellare tutto?")){localStorage.removeItem("VAS");renderHistory()}}
+</script>
 
-/* aggiorna lo storico all’avvio app */
-const _enterApp = enterApp;
-enterApp = function(){
-  _enterApp();
-  renderHistory();
-};
+</body>
+</html>
