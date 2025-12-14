@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VAS-HD (FAP)</title>
+
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#111318">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<style>
+body { margin:0; font-family:-apple-system,system-ui,Segoe UI,Roboto; background:#111318; color:#e8eaed }
+header { padding:14px; border-bottom:1px solid #2a2f3a }
+h1 { margin:0; font-size:20px }
+small { color:#a8adb7 }
+main { padding:14px }
+.card { border:1px solid #2a2f3a; border-radius:14px; padding:14px; margin-bottom:12px }
+button { width:100%; padding:14px; border-radius:14px; border:none; font-weight:700; background:#2b6cb0; color:white }
+.badge { padding:6px 12px; border-radius:999px; font-weight:800 }
+.g0 { background:#1f6c35 }
+.g1 { background:#8f7a11 }
+.g2 { background:#a75719 }
+.g3 { background:#a61f2a }
+</style>
+</head>
+
+<body>
+<header>
+<h1>VAS-HD (FAP)</h1>
+<small>Vascular Access Surveillance in Hemodialysis</small>
+</header>
+
+<main>
+<div class="card">
+<p><b>Paziente demo</b></p>
+<p>Accesso: FAV</p>
+<p>Thrill: Assente</p>
+<p>Puntura: Impossibile</p>
+</div>
+
+<div class="card">
+<p><b>VAS-Score</b></p>
+<span class="badge g3">G3</span>
+<p style="margin-top:10px"><b>Azione:</b> Gestione urgente oggi</p>
+</div>
+
+<button onclick="alert('VAS-HD (FAP) operativo')">NUOVA SEDUTA</button>
+</main>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+</html>
