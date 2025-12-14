@@ -11,65 +11,270 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <style>
-body { margin:0; font-family:-apple-system,system-ui,Segoe UI,Roboto; background:#111318; color:#e8eaed }
-header { padding:14px; border-bottom:1px solid #2a2f3a }
-h1 { margin:0; font-size:20px }
-small { color:#a8adb7 }
-main { padding:14px }
-.card { border:1px solid #2a2f3a; border-radius:14px; padding:14px; margin-bottom:12px }
-button { width:100%; padding:14px; border-radius:14px; border:none; font-weight:700; background:#2b6cb0; color:white }
-.badge { padding:6px 12px; border-radius:999px; font-weight:800 }
-.g0 { background:#1f6c35 }
-.g1 { background:#8f7a11 }
-.g2 { background:#a75719 }
-.g3 { background:#a61f2a }
+:root{--bg:#111318;--card:#141820;--line:#2a2f3a;--txt:#e8eaed;--mut:#a8adb7}
+body{margin:0;font-family:-apple-system,system-ui,Segoe UI,Roboto;background:var(--bg);color:var(--txt)}
+header{padding:14px;border-bottom:1px solid var(--line)}
+h1{margin:0;font-size:20px}
+small{color:var(--mut)}
+main{padding:14px;max-width:980px;margin:0 auto}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));
+border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:780px){.grid{grid-template-columns:1fr 1fr}}
+label{font-size:12px;color:var(--mut);display:block;margin-bottom:6px}
+select,input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#0f131a;color:var(--txt)}
+.row{display:flex;gap:10px}
+.btn{width:100%;padding:14px;border-radius:14px;border:0;font-weight:900;background:#2b6cb0;color:white}
+.btn2{width:100%;padding:14px;border-radius:14px;border:1px solid var(--line);font-weight:900;background:transparent;color:var(--txt)}
+.badge{display:inline-block;padding:6px 12px;border-radius:999px;font-weight:900}
+.g0{background:#1f6c35}.g1{background:#8f7a11}.g2{background:#a75719}.g3{background:#a61f2a}
+hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;color:var(--mut);font-size:12px;white-space:pre-wrap}
+.hidden{display:none}
 </style>
 </head>
 
 <body>
 <header>
-<h1>VAS-HD (FAP)</h1>
-<small>Vascular Access Surveillance in Hemodialysis</small>
+  <h1>VAS-HD (FAP)</h1>
+  <small>Vascular Access Surveillance in Hemodialysis • Papagno VAS-HD Score</small>
 </header>
 
 <main>
-<div class="card">
-<p><b>Paziente demo</b></p>
-<p>Accesso: FAV</p>
-<p>Thrill: Assente</p>
-<p>Puntura: Impossibile</p>
-</div>
 
-<div class="card">
-<p><b>VAS-Score</b></p>
-<span class="badge g3">G3</span>
-<p style="margin-top:10px"><b>Azione:</b> Gestione urgente oggi</p>
-</div>
-<button onclick="nuovaSeduta()">NUOVA SEDUTA</button>
-</main>
+<!-- HOME -->
+<section id="home">
+  <div class="card">
+    <b>Quick start</b>
+    <p style="color:var(--mut);margin:8px 0 0">
+      Versione reparto (v0): checklist essenziale + grading automatico.
+    </p>
+  </div>
+  <button class="btn" onclick="go('form')">NUOVA SEDUTA</button>
+</section>
 
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js');
-}
-</script>
-<script>
-function nuovaSeduta() {
-  document.body.innerHTML = `
-    <header>
-      <h1>VAS-HD (FAP)</h1>
-      <small>Nuova seduta</small>
-    </header>
-    <main>
-      <div class="card">
-        <p><b>Checklist seduta</b></p>
-        <p>(in costruzione)</p>
+<!-- FORM -->
+<section id="form" class="hidden">
+  <div class="card">
+    <b>Dati</b>
+    <div class="grid" style="margin-top:10px">
+      <div>
+        <label>Tipo accesso</label>
+        <select id="accesso" onchange="toggleCVC()">
+          <option value="FAV">FAV</option>
+          <option value="AVG">AVG</option>
+          <option value="CVC">CVC</option>
+        </select>
       </div>
-      <button onclick="location.reload()">TORNA INDIETRO</button>
-    </main>
-  `;
+      <div>
+        <label>Puntura</label>
+        <select id="puntura">
+          <option value="Facile">Facile</option>
+          <option value="Difficile">Difficile</option>
+          <option value="Impossibile">Impossibile</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Thrill</label>
+        <select id="thrill">
+          <option value="Normale">Normale</option>
+          <option value="Ridotto">Ridotto</option>
+          <option value="Assente">Assente</option>
+        </select>
+      </div>
+      <div>
+        <label>Bruit</label>
+        <select id="bruit">
+          <option value="Normale">Normale</option>
+          <option value="Alto-pitch">Alto-pitch</option>
+          <option value="Assente">Assente</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Qb prescritto (ml/min)</label>
+        <input id="qbPres" type="number" value="300">
+      </div>
+      <div>
+        <label>Qb ottenuto (ml/min)</label>
+        <input id="qbOtt" type="number" value="300">
+      </div>
+
+      <div>
+        <label>Allarmi ripetuti</label>
+        <select id="allarmi">
+          <option value="No">No</option>
+          <option value="Arteriosi">Arteriosi</option>
+          <option value="Venosi">Venosi</option>
+          <option value="Entrambi">Entrambi</option>
+        </select>
+      </div>
+      <div>
+        <label>Seduta completata</label>
+        <select id="completata">
+          <option value="Sì">Sì</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Trombosi sospetta</label>
+        <select id="trombosi">
+          <option value="No">No</option>
+          <option value="Sì">Sì</option>
+        </select>
+      </div>
+      <div>
+        <label>Segni infezione</label>
+        <select id="infezione">
+          <option value="No">No</option>
+          <option value="Sì">Sì</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="cvcBox" class="hidden" style="margin-top:12px">
+      <hr>
+      <b>CVC</b>
+      <div class="grid" style="margin-top:10px">
+        <div>
+          <label>Exit-site</label>
+          <select id="exit">
+            <option value="OK">OK</option>
+            <option value="Arrossato">Arrossato</option>
+            <option value="Essudato">Essudato</option>
+          </select>
+        </div>
+        <div>
+          <label>Febbre</label>
+          <select id="febbre">
+            <option value="No">No</option>
+            <option value="Sì">Sì</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+    <div class="row">
+      <button class="btn2" onclick="go('home')">ANNULLA</button>
+      <button class="btn" onclick="calcola()">CALCOLA GRADING</button>
+    </div>
+  </div>
+</section>
+
+<!-- RESULT -->
+<section id="result" class="hidden">
+  <div class="card">
+    <b>Esito automatico</b>
+    <div style="margin-top:10px">
+      <span id="badge" class="badge g0">G0</span>
+      <div id="titolo" style="font-weight:900;font-size:18px;margin-top:10px">Routine</div>
+      <div id="azione" style="color:var(--txt);margin-top:6px">Accesso stabile.</div>
+    </div>
+    <hr>
+    <details>
+      <summary style="color:var(--mut);font-weight:800;cursor:pointer">Dettaglio logica</summary>
+      <div id="debug" class="mono" style="margin-top:8px"></div>
+    </details>
+  </div>
+
+  <div class="row">
+    <button class="btn2" onclick="go('form')">MODIFICA</button>
+    <button class="btn" onclick="go('home')">NUOVA</button>
+  </div>
+</section>
+
+<script>
+if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+
+function go(id){
+  for(const s of ['home','form','result']) document.getElementById(s).classList.add('hidden');
+  document.getElementById(id).classList.remove('hidden');
 }
+
+function toggleCVC(){
+  const isCVC = document.getElementById('accesso').value === 'CVC';
+  document.getElementById('cvcBox').classList.toggle('hidden', !isCVC);
+}
+
+function calcola(){
+  const accesso = v('accesso');
+  const puntura = v('puntura');
+  const thrill = v('thrill');
+  const bruit = v('bruit');
+  const qbPres = n('qbPres');
+  const qbOtt  = n('qbOtt');
+  const allarmi = v('allarmi');
+  const completata = v('completata');
+  const trombosi = v('trombosi');
+  const infezione = v('infezione');
+
+  // qbRatio (baseline=qbPres in v0)
+  const qbRatio = qbPres>0 ? qbOtt/qbPres : 1.0;
+
+  // strongCrit
+  const strongCrit =
+    (thrill === 'Assente') ||
+    (puntura === 'Impossibile') ||
+    (trombosi === 'Sì') ||
+    (completata === 'No') ||
+    (infezione === 'Sì' && accesso !== 'CVC'); // in v0 per FAV/AVG
+
+  // strong2
+  const strong2 =
+    (thrill === 'Ridotto') ||
+    (bruit === 'Alto-pitch') ||
+    (qbRatio < 0.80) ||
+    (allarmi !== 'No' && puntura === 'Difficile');
+
+  // warnings
+  let warnings = 0;
+  if (puntura === 'Difficile') warnings++;
+  if (allarmi !== 'No') warnings++;
+  if (qbRatio < 0.90) warnings++;
+
+  let grade = 0;
+  if (strongCrit) grade = 3;
+  else if (strong2 || warnings >= 2) grade = 2;
+  else if (warnings === 1) grade = 1;
+
+  // CVC override v0
+  let cvcNote = '';
+  if (accesso === 'CVC'){
+    const exit = v('exit');
+    const febbre = v('febbre');
+    if (febbre === 'Sì' && exit !== 'OK'){ grade = 3; cvcNote = 'CVC override: febbre + exit-site ≠ OK → G3'; }
+    if (exit === 'Essudato' && grade < 2){ grade = 2; cvcNote = 'CVC: exit-site essudato → ≥G2'; }
+  }
+
+  const out = mapGrade(grade);
+  document.getElementById('badge').className = 'badge ' + out.cls;
+  document.getElementById('badge').textContent = 'G' + grade;
+  document.getElementById('titolo').textContent = out.title;
+  document.getElementById('azione').textContent = out.action;
+  document.getElementById('debug').textContent =
+    `accesso=${accesso}\nqbPres=${qbPres} qbOtt=${qbOtt} qbRatio=${qbRatio.toFixed(2)}\n`+
+    `strongCrit=${strongCrit} strong2=${strong2} warnings=${warnings}\n`+
+    (cvcNote ? (cvcNote + '\n') : '');
+
+  go('result');
+}
+
+function mapGrade(g){
+  if (g===0) return {cls:'g0', title:'Routine', action:'Accesso stabile.'};
+  if (g===1) return {cls:'g1', title:'Warning', action:'Ricontrollo prossima seduta + nota.'};
+  if (g===2) return {cls:'g2', title:'Probabile disfunzione', action:'Eco accesso ≤72h + alert VA team.'};
+  return {cls:'g3', title:'CRITICO', action:'Gestione urgente oggi.'};
+}
+
+function v(id){ return document.getElementById(id).value; }
+function n(id){ return parseInt(document.getElementById(id).value||'0',10); }
+
+toggleCVC();
 </script>
+
+</main>
 </body>
 </html>
-
