@@ -16,6 +16,31 @@
 *{box-sizing:border-box}
 body{margin:0;font-family:-apple-system,system-ui;background:var(--bg);color:var(--txt)}
 .hidden{display:none}
+/* === BACKGROUND PER STEP (FIX DEFINITIVO) === */
+.step-bg{
+  position:relative;
+  min-height:100vh;
+  background-size:cover;
+  background-position:center;
+}
+
+.step-bg::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(18,11,16,0.75);
+}
+
+.step-bg > *{
+  position:relative;
+  z-index:1;
+}
+
+.bg-nurse{ background-image:url('bg-nurse.jpg'); }
+.bg-patient{ background-image:url('bg-patient.jpg'); }
+.bg-access{ background-image:url('bg-access.jpg'); }
+.bg-checklist{ background-image:url('bg-checklist.jpg'); }
+.bg-result{ background-image:url('bg-result.jpg'); }
 
 /* SPLASH */
 #splash{position:fixed;inset:0;background:#120b10;display:flex;align-items:center;justify-content:center;z-index:9999}
@@ -153,3 +178,4 @@ hr{border:0;border-top:1px solid var(--line);margin:12px 0}
         <div class="card">
           <div class="stepTitle">🩸 Selezione accesso</div>
           <div class="stepSub">Sce
+
