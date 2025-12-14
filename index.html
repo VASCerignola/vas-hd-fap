@@ -68,7 +68,7 @@ main{padding:14px;max-width:900px;margin:auto}
   margin-bottom:14px;
 }
 
-label{font-size:12px;color:var(--mut);display:block;margin-bottom:6px}
+label{font-size:12px;color:var(--mut);display:block;margin:14px 0 6px}
 input,select{
   width:100%;
   padding:12px;
@@ -78,7 +78,7 @@ input,select{
   color:var(--txt)
 }
 
-.row{display:flex;gap:10px}
+.row{display:flex;gap:10px;margin-top:14px}
 .btn{
   width:100%;
   padding:14px;
@@ -101,7 +101,7 @@ input,select{
 .stepTitle{font-weight:900;font-size:16px}
 .stepSub{color:var(--mut);margin-top:4px}
 
-.badge{padding:6px 12px;border-radius:999px;font-weight:900;color:white}
+.badge{display:inline-block;padding:10px 14px;border-radius:999px;font-weight:900;color:white}
 .g0{background:#3b7d5b}
 .g1{background:#b58b2a}
 .g2{background:#c46a2d}
@@ -109,6 +109,8 @@ input,select{
 
 .alert{margin-top:12px;padding:12px;border-radius:12px;font-weight:900}
 .alert.red{background:#b11226}
+
+.progress{margin-top:10px;color:var(--mut);font-weight:800}
 </style>
 </head>
 
@@ -129,8 +131,8 @@ input,select{
 <!-- HOME -->
 <main id="home">
   <div class="card">
-    <div class="stepTitle">📋 Ultime sedute</div>
-    <div id="history" style="margin-top:10px;color:var(--mut)">Nessuna seduta.</div>
+    <div class="stepTitle">📋 Avvio</div>
+    <div class="stepSub">Wizard guidato: Infermiere → Paziente → Accesso → Checklist → Grading.</div>
   </div>
   <button class="btn" onclick="startWizard()">➕ NUOVA SEDUTA</button>
 </main>
@@ -138,102 +140,209 @@ input,select{
 <!-- STEP 1 -->
 <section id="s1" class="hidden step-bg bg-nurse">
 <main>
-<div class="card">
-<div class="stepTitle">🧑‍⚕️ Identificazione infermiere</div>
-<div class="stepSub">Firma o sigla per tracciabilità</div>
-<label>Firma</label>
-<input id="nurse">
-<div class="row" style="margin-top:12px">
-<button class="btn2" onclick="goHome()">↩ Esci</button>
-<button class="btn" onclick="go('s2')">Avanti ➜</button>
-</div>
-</div>
+  <div class="card">
+    <div class="stepTitle">🧑‍⚕️ Identificazione infermiere</div>
+    <div class="stepSub">Firma o sigla per tracciabilità.</div>
+    <label>Firma</label>
+    <input id="nurse" placeholder="Es. M.R. / Maria Rossi">
+    <div class="row">
+      <button class="btn2" onclick="goHome()">↩ Esci</button>
+      <button class="btn" onclick="next1()">Avanti ➜</button>
+    </div>
+  </div>
 </main>
 </section>
 
 <!-- STEP 2 -->
 <section id="s2" class="hidden step-bg bg-patient">
 <main>
-<div class="card">
-<div class="stepTitle">🧾 Identificazione paziente</div>
-<label>ID paziente</label>
-<input id="pid" placeholder="Es. GR72">
-<div class="row" style="margin-top:12px">
-<button class="btn2" onclick="go('s1')">⬅ Indietro</button>
-<button class="btn" onclick="go('s3')">Avanti ➜</button>
-</div>
-</div>
+  <div class="card">
+    <div class="stepTitle">🧾 Identificazione paziente</div>
+    <div class="stepSub">Inserisci ID (es. GR72).</div>
+    <label>ID paziente</label>
+    <input id="pid" placeholder="Es. GR72">
+    <div class="row">
+      <button class="btn2" onclick="go('s1')">⬅ Indietro</button>
+      <button class="btn" onclick="next2()">Avanti ➜</button>
+    </div>
+  </div>
 </main>
 </section>
 
 <!-- STEP 3 -->
 <section id="s3" class="hidden step-bg bg-access">
 <main>
-<div class="card">
-<div class="stepTitle">🩸 Tipo di accesso</div>
-<select id="accesso">
-<option value="">Seleziona</option>
-<option>FAV</option>
-<option>AVG</option>
-<option>CVC</option>
-</select>
-<div class="row" style="margin-top:12px">
-<button class="btn2" onclick="go('s2')">⬅ Indietro</button>
-<button class="btn" onclick="go('s4')">Avanti ➜</button>
-</div>
-</div>
+  <div class="card">
+    <div class="stepTitle">🩸 Tipo di accesso</div>
+    <div class="stepSub">La checklist successiva cambia in base all’accesso.</div>
+    <label>Accesso</label>
+    <select id="accesso">
+      <option value="">— seleziona —</option>
+      <option value="FAV">FAV</option>
+      <option value="AVG">AVG</option>
+      <option value="CVC">CVC</option>
+    </select>
+    <div class="row">
+      <button class="btn2" onclick="go('s2')">⬅ Indietro</button>
+      <button class="btn" onclick="next3()">Avanti ➜</button>
+    </div>
+  </div>
 </main>
 </section>
 
 <!-- STEP 4 -->
 <section id="s4" class="hidden step-bg bg-checklist">
 <main>
-<div class="card">
-<div class="stepTitle">🔍 Sorveglianza accesso vascolare</div>
+  <div class="card">
+    <div class="stepTitle">🔍 Sorveglianza dell’accesso vascolare</div>
+    <div class="stepSub">Compila una voce per volta: la cascata segue l’accesso selezionato.</div>
 
-<label>Puntura</label>
-<select id="puntura">
-<option>Normale</option>
-<option>Difficile</option>
-<option>Impossibile</option>
-</select>
+    <!-- FLOW FAV/AVG -->
+    <div id="flowAV" class="hidden">
+      <div class="progress" id="progAV">Progress: 0/5</div>
 
-<label>Thrill</label>
-<select id="thrill">
-<option>Normale</option>
-<option>Ridotto</option>
-<option>Assente</option>
-</select>
+      <div id="av1">
+        <label>1) Puntura</label>
+        <select id="av_puntura">
+          <option value="">— seleziona —</option>
+          <option>Facile</option>
+          <option>Difficile</option>
+          <option>Impossibile</option>
+        </select>
+      </div>
 
-<label>Allarmi</label>
-<select id="allarmi">
-<option>Nessuno</option>
-<option>Ripetuti</option>
-<option>Persistenti</option>
-</select>
+      <div id="av2" class="hidden">
+        <label>2) Thrill</label>
+        <select id="av_thrill">
+          <option value="">— seleziona —</option>
+          <option>Normale</option>
+          <option>Ridotto</option>
+          <option>Assente</option>
+        </select>
+      </div>
 
-<div class="row" style="margin-top:12px">
-<button class="btn2" onclick="go('s3')">⬅ Indietro</button>
-<button class="btn" onclick="calc()">Calcola ➜</button>
-</div>
-</div>
+      <div id="av3" class="hidden">
+        <label>3) Bruit</label>
+        <select id="av_bruit">
+          <option value="">— seleziona —</option>
+          <option>Normale</option>
+          <option>Alto-pitch</option>
+          <option>Assente</option>
+        </select>
+      </div>
+
+      <div id="av4" class="hidden">
+        <label>4) Qb ottenuto rispetto al prescritto</label>
+        <select id="av_qb">
+          <option value="">— seleziona —</option>
+          <option value="ok">≥ 95%</option>
+          <option value="moderato">85–94%</option>
+          <option value="basso">&lt; 85%</option>
+        </select>
+      </div>
+
+      <div id="av5" class="hidden">
+        <label>5) Allarmi ripetuti</label>
+        <select id="av_allarmi">
+          <option value="">— seleziona —</option>
+          <option value="no">No</option>
+          <option value="arteriosi">Arteriosi</option>
+          <option value="venosi">Venosi</option>
+          <option value="entrambi">Entrambi</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- FLOW CVC -->
+    <div id="flowCVC" class="hidden">
+      <div class="progress" id="progCVC">Progress: 0/5</div>
+
+      <div id="cvc1">
+        <label>1) Aspirazione/flussaggio dei lumi</label>
+        <select id="cvc_lumi">
+          <option value="">— seleziona —</option>
+          <option value="ok">OK entrambi</option>
+          <option value="uno">Problema 1 lume</option>
+          <option value="due">Problema entrambi</option>
+        </select>
+      </div>
+
+      <div id="cvc2" class="hidden">
+        <label>2) Inversione linee necessaria</label>
+        <select id="cvc_inversione">
+          <option value="">— seleziona —</option>
+          <option value="no">No</option>
+          <option value="si">Sì</option>
+        </select>
+      </div>
+
+      <div id="cvc3" class="hidden">
+        <label>3) Qb ottenuto rispetto al prescritto</label>
+        <select id="cvc_qb">
+          <option value="">— seleziona —</option>
+          <option value="ok">≥ 95%</option>
+          <option value="moderato">85–94%</option>
+          <option value="basso">&lt; 85%</option>
+        </select>
+      </div>
+
+      <div id="cvc4" class="hidden">
+        <label>4) Allarmi ripetuti</label>
+        <select id="cvc_allarmi">
+          <option value="">— seleziona —</option>
+          <option value="no">No</option>
+          <option value="si">Sì</option>
+        </select>
+      </div>
+
+      <div id="cvc5" class="hidden">
+        <label>5) Exit-site / infezione</label>
+        <select id="cvc_exit">
+          <option value="">— seleziona —</option>
+          <option value="ok">OK</option>
+          <option value="rosso">Arrossato</option>
+          <option value="essudato">Essudato</option>
+        </select>
+
+        <label style="margin-top:12px">Febbre</label>
+        <select id="cvc_febbre">
+          <option value="">— seleziona —</option>
+          <option value="no">No</option>
+          <option value="si">Sì</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <button class="btn2" onclick="go('s3')">⬅ Indietro</button>
+      <button class="btn" onclick="calc()">Calcola ➜</button>
+    </div>
+  </div>
 </main>
 </section>
 
 <!-- STEP 5 -->
 <section id="s5" class="hidden step-bg bg-result">
 <main>
-<div class="card">
-<div class="stepTitle">📊 Esito</div>
-<div id="result"></div>
-<button class="btn" onclick="goHome()">Fine</button>
-</div>
+  <div class="card">
+    <div class="stepTitle">📊 Grading</div>
+    <div id="result"></div>
+
+    <div id="medAlert" class="alert red hidden">🚨 Medico da informare 🚨</div>
+
+    <div class="row">
+      <button class="btn2" onclick="go('s4')">⬅ Indietro</button>
+      <button class="btn" onclick="goHome()">Fine</button>
+    </div>
+  </div>
 </main>
 </section>
 
 </div>
 
 <script>
+const STATE = { nurse:"", pid:"", accesso:"" };
+
 function enterApp(){
   document.getElementById("splash").style.display="none";
   document.getElementById("app").classList.remove("hidden");
@@ -254,12 +363,201 @@ function goHome(){
   document.getElementById("home").classList.remove("hidden");
 }
 
+function next1(){
+  const v = (nurse.value||"").trim();
+  if(!v){ alert("Inserisci la firma infermiere."); return; }
+  STATE.nurse = v;
+  go('s2');
+}
+function next2(){
+  const v = (pid.value||"").trim();
+  if(!v){ alert("Inserisci l'ID paziente."); return; }
+  STATE.pid = v;
+  go('s3');
+}
+function next3(){
+  const v = accesso.value;
+  if(!v){ alert("Seleziona il tipo di accesso."); return; }
+  STATE.accesso = v;
+  setupFlows();
+  go('s4');
+}
+
+/* --- setup cascata differente --- */
+function hideAllSteps(){
+  // AV
+  ["av2","av3","av4","av5"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+  av_puntura.value=""; av_thrill.value=""; av_bruit.value=""; av_qb.value=""; av_allarmi.value="";
+  progAV.textContent="Progress: 0/5";
+
+  // CVC
+  ["cvc2","cvc3","cvc4","cvc5"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+  cvc_lumi.value=""; cvc_inversione.value=""; cvc_qb.value=""; cvc_allarmi.value=""; cvc_exit.value=""; cvc_febbre.value="";
+  progCVC.textContent="Progress: 0/5";
+}
+
+function setupFlows(){
+  hideAllSteps();
+  flowAV.classList.add("hidden");
+  flowCVC.classList.add("hidden");
+
+  if(STATE.accesso==="CVC"){
+    flowCVC.classList.remove("hidden");
+  } else {
+    flowAV.classList.remove("hidden");
+  }
+}
+
+/* --- cascata AV --- */
+function countAV(){
+  let c=0;
+  if(av_puntura.value) c++;
+  if(av_thrill.value) c++;
+  if(av_bruit.value) c++;
+  if(av_qb.value) c++;
+  if(av_allarmi.value) c++;
+  return c;
+}
+av_puntura.addEventListener("change", ()=>{
+  if(!av_puntura.value) return;
+  av2.classList.remove("hidden");
+  progAV.textContent = `Progress: ${countAV()}/5`;
+});
+av_thrill.addEventListener("change", ()=>{
+  if(!av_thrill.value) return;
+  av3.classList.remove("hidden");
+  progAV.textContent = `Progress: ${countAV()}/5`;
+});
+av_bruit.addEventListener("change", ()=>{
+  if(!av_bruit.value) return;
+  av4.classList.remove("hidden");
+  progAV.textContent = `Progress: ${countAV()}/5`;
+});
+av_qb.addEventListener("change", ()=>{
+  if(!av_qb.value) return;
+  av5.classList.remove("hidden");
+  progAV.textContent = `Progress: ${countAV()}/5`;
+});
+av_allarmi.addEventListener("change", ()=> progAV.textContent = `Progress: ${countAV()}/5`);
+
+/* --- cascata CVC --- */
+function countCVC(){
+  let c=0;
+  if(cvc_lumi.value) c++;
+  if(cvc_inversione.value) c++;
+  if(cvc_qb.value) c++;
+  if(cvc_allarmi.value) c++;
+  if(cvc_exit.value && cvc_febbre.value) c++;
+  return c;
+}
+cvc_lumi.addEventListener("change", ()=>{
+  if(!cvc_lumi.value) return;
+  cvc2.classList.remove("hidden");
+  progCVC.textContent = `Progress: ${countCVC()}/5`;
+});
+cvc_inversione.addEventListener("change", ()=>{
+  if(!cvc_inversione.value) return;
+  cvc3.classList.remove("hidden");
+  progCVC.textContent = `Progress: ${countCVC()}/5`;
+});
+cvc_qb.addEventListener("change", ()=>{
+  if(!cvc_qb.value) return;
+  cvc4.classList.remove("hidden");
+  progCVC.textContent = `Progress: ${countCVC()}/5`;
+});
+cvc_allarmi.addEventListener("change", ()=>{
+  if(!cvc_allarmi.value) return;
+  cvc5.classList.remove("hidden");
+  progCVC.textContent = `Progress: ${countCVC()}/5`;
+});
+cvc_exit.addEventListener("change", ()=> progCVC.textContent = `Progress: ${countCVC()}/5`);
+cvc_febbre.addEventListener("change", ()=> progCVC.textContent = `Progress: ${countCVC()}/5`);
+
+/* --- grading differenziato --- */
 function calc(){
-  let g="g0",txt="G0 – Accesso funzionante";
-  if(allarmi.value==="Ripetuti"){g="g2";txt="G2 – Medico da informare"}
-  if(allarmi.value==="Persistenti"){g="g3";txt="G3 – Urgenza"}
-  result.innerHTML=`<span class="badge ${g}">${txt}</span>`;
+  medAlert.classList.add("hidden");
+
+  if(STATE.accesso==="CVC"){
+    if(!cvc_lumi.value || !cvc_inversione.value || !cvc_qb.value || !cvc_allarmi.value || !cvc_exit.value || !cvc_febbre.value){
+      alert("Completa tutti i campi CVC."); return;
+    }
+
+    let g=0;
+
+    // Critico
+    if(cvc_lumi.value==="due") g=3;
+
+    // Disfunzione probabile
+    if(g<3){
+      if(cvc_qb.value==="basso") g=Math.max(g,2);
+      if(cvc_inversione.value==="si") g=Math.max(g,2);
+      if(cvc_allarmi.value==="si") g=Math.max(g,2);
+      if(cvc_exit.value==="essudato" || cvc_febbre.value==="si") g=Math.max(g,2);
+    }
+
+    // Warning
+    if(g<2){
+      if(cvc_lumi.value==="uno") g=Math.max(g,1);
+      if(cvc_qb.value==="moderato") g=Math.max(g,1);
+      if(cvc_exit.value==="rosso") g=Math.max(g,1);
+    }
+
+    renderResult(g);
+    return;
+  }
+
+  // FAV/AVG
+  if(!av_puntura.value || !av_thrill.value || !av_bruit.value || !av_qb.value || !av_allarmi.value){
+    alert("Completa tutti i campi FAV/AVG."); return;
+  }
+
+  let g=0;
+
+  // Critico
+  if(av_puntura.value==="Impossibile" || av_thrill.value==="Assente") g=3;
+
+  // Disfunzione probabile
+  if(g<3){
+    if(av_bruit.value==="Alto-pitch") g=Math.max(g,2);
+    if(av_qb.value==="basso") g=Math.max(g,2);
+    if(av_allarmi.value==="entrambi") g=Math.max(g,2);
+  }
+
+  // Warning
+  if(g<2){
+    if(av_puntura.value==="Difficile") g=Math.max(g,1);
+    if(av_thrill.value==="Ridotto") g=Math.max(g,1);
+    if(av_qb.value==="moderato") g=Math.max(g,1);
+    if(av_allarmi.value==="arteriosi" || av_allarmi.value==="venosi") g=Math.max(g,1);
+  }
+
+  renderResult(g);
+}
+
+function renderResult(g){
+  let cls = "g"+g;
+  let txt = [
+    "G0 – Routine: proseguire sorveglianza.",
+    "G1 – Warning: ricontrollo ravvicinato.",
+    "G2 – Disfunzione probabile: valutazione medica/eco.",
+    "G3 – Critico: gestione urgente oggi."
+  ][g];
+
+  result.innerHTML = `
+    <div class="stepSub" style="margin-bottom:10px">
+      Infermiere: <b>${escapeHtml(STATE.nurse)}</b> · Paziente: <b>${escapeHtml(STATE.pid)}</b> · Accesso: <b>${STATE.accesso}</b>
+    </div>
+    <span class="badge ${cls}">${txt}</span>
+  `;
+
+  if(g>=2) medAlert.classList.remove("hidden");
   go('s5');
+}
+
+function escapeHtml(s){
+  return String(s||"").replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[m]));
 }
 </script>
 
