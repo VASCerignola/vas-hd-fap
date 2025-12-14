@@ -1,76 +1,79 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>VAS-HD (FAP)</title>
-
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#c86a9a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 
 <style>
 :root{
- --bg:#120b10;--card:#1b0f17;--line:#6b2b4a;
- --txt:#f2e9ee;--mut:#d6b3c4;--accent:#c86a9a
+  --bg:#120b10;--card:#1b0f17;--line:#6b2b4a;
+  --txt:#f2e9ee;--mut:#d6b3c4;--accent:#c86a9a;
 }
 *{box-sizing:border-box}
 body{margin:0;font-family:-apple-system,system-ui;background:var(--bg);color:var(--txt)}
 .hidden{display:none}
 
 /* SPLASH */
-#splash{
- position:fixed;
- inset:0;
- background:#120b10;
- display:flex;
- align-items:center;
- justify-content:center;
- z-index:9999;
-}
-#splash img{
- max-width:100%;
- max-height:100%;
- object-fit:contain;
-}
+#splash{position:fixed;inset:0;background:#120b10;display:flex;align-items:center;justify-content:center;z-index:9999}
+#splash img{max-width:100%;max-height:100%;object-fit:contain}
 
-/* APP */
+/* APP UI */
 header{padding:14px;border-bottom:1px solid var(--line)}
 h1{margin:0;font-size:20px}
 small{color:var(--mut)}
 main{padding:14px;max-width:980px;margin:0 auto}
-.card{border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;background:var(--card)}
+.card{border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px;background:rgba(27,15,23,0.92)}
 .grid{display:grid;grid-template-columns:1fr;gap:10px}
 @media(min-width:780px){.grid{grid-template-columns:1fr 1fr}}
-label{font-size:12px;color:var(--mut)}
-select,input{
- width:100%;padding:12px;border-radius:12px;
- border:1px solid var(--line);
- background:#0f0a0d;color:var(--txt)
-}
+label{font-size:12px;color:var(--mut);display:block;margin-bottom:6px}
+select,input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#0f0a0d;color:var(--txt)}
 .row{display:flex;gap:10px}
-.btn{
- width:100%;padding:14px;border-radius:14px;border:0;
- font-weight:900;background:var(--accent);color:white
-}
-.btn2{
- width:100%;padding:14px;border-radius:14px;
- border:1px solid var(--line);
- font-weight:900;background:transparent;color:var(--txt)
-}
-.badge{padding:6px 12px;border-radius:999px;font-weight:900;color:white}
-.g0{background:#3b7d5b}
-.g1{background:#b58b2a}
-.g2{background:#c46a2d}
-.g3{background:#b11226}
+.btn{width:100%;padding:14px;border-radius:14px;border:0;font-weight:900;background:var(--accent);color:white}
+.btn2{width:100%;padding:14px;border-radius:14px;border:1px solid var(--line);font-weight:900;background:transparent;color:var(--txt)}
+.badge{display:inline-block;padding:6px 12px;border-radius:999px;font-weight:900;color:white}
+.g0{background:#3b7d5b}.g1{background:#b58b2a}.g2{background:#c46a2d}.g3{background:#b11226}
+.kpi{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.pill{border:1px solid var(--line);border-radius:999px;padding:6px 10px;color:var(--mut);font-weight:800}
+hr{border:0;border-top:1px solid var(--line);margin:12px 0}
 
+/* Alert */
 .alert{padding:12px;border-radius:12px;margin-top:10px;font-weight:900}
 .alert.red{background:#b11226}
 
-/* sirena lampeggiante */
+/* Sirena */
 @keyframes blink{0%{opacity:1}50%{opacity:.2}100%{opacity:1}}
 .siren{animation:blink 1s infinite;text-align:center}
 .flash{animation:blink .25s 3}
+
+/* Titoli step */
+.stepTitle{font-weight:900;font-size:16px}
+.stepSub{color:var(--mut);margin-top:4px}
+
+/* === BACKGROUND PER STEP === */
+.step-bg{
+  position:relative;
+  min-height:100vh;
+  background-size:cover;
+  background-position:center;
+}
+.step-bg::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(18,11,16,0.75); /* overlay scuro */
+}
+.step-bg > *{position:relative;z-index:1}
+
+/* immagini specifiche */
+.bg-nurse{ background-image:url('bg-nurse.jpg'); }
+.bg-patient{ background-image:url('bg-patient.jpg'); }
+.bg-access{ background-image:url('bg-access.jpg'); }
+.bg-checklist{ background-image:url('bg-checklist.jpg'); }
+.bg-result{ background-image:url('bg-result.jpg'); }
 </style>
 </head>
 
@@ -81,199 +84,519 @@ select,input{
   <img src="splash.png" alt="VAS-HD">
 </div>
 
-<!-- APP -->
 <div id="app" class="hidden">
+  <header>
+    <h1>VAS-HD (FAP)</h1>
+    <small>🩸 Sorveglianza accessi vascolari – wizard a cascata</small>
+  </header>
 
-<header>
- <h1>VAS-HD (FAP)</h1>
- <small>🩸 Sorveglianza accessi vascolari in emodialisi</small>
-</header>
+  <main>
 
-<main>
+    <!-- HOME -->
+    <section id="home">
+      <div class="card">
+        <div class="stepTitle">📋 Ultime sedute</div>
+        <div id="history" style="margin-top:10px;color:var(--mut)">Nessuna seduta.</div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn2" onclick="exportCSV()">📤 ESPORTA EXCEL</button>
+          <button class="btn2" onclick="clearAll()">🗑️ SVUOTA</button>
+        </div>
+      </div>
+      <button class="btn" onclick="startWizard()">➕ NUOVA SEDUTA</button>
+    </section>
 
-<section id="home">
- <div class="card">
-  <b>📋 Ultime sedute</b>
-  <div id="history" style="margin-top:10px;color:var(--mut)">
-   Nessuna seduta.
-  </div>
-  <div class="row" style="margin-top:10px">
-   <button class="btn2" onclick="exportCSV()">📤 ESPORTA EXCEL</button>
-   <button class="btn2" onclick="clearAll()">🗑️ SVUOTA</button>
-  </div>
- </div>
- <button class="btn" onclick="go('form')">➕ NUOVA SEDUTA</button>
-</section>
+    <!-- STEP 1: INFERMIERE -->
+    <section id="s1" class="hidden step-bg bg-nurse">
+      <main>
+        <div class="card">
+          <div class="stepTitle">🧑‍⚕️ Identificazione infermiere</div>
+          <div class="stepSub">Inserisci firma/sigla per tracciabilità.</div>
+          <div style="margin-top:12px">
+            <label>Firma infermiere</label>
+            <input id="nurse" placeholder="Es. M.R. / Maria Rossi">
+          </div>
+          <div class="kpi">
+            <span class="pill" id="pillNurse">Firma: —</span>
+          </div>
+          <div class="row" style="margin-top:12px">
+            <button class="btn2" onclick="go('home')">↩️ Esci</button>
+            <button class="btn" onclick="nextFromNurse()">Avanti ➜</button>
+          </div>
+        </div>
+      </main>
+    </section>
 
-<section id="form" class="hidden">
- <div class="card">
-  <b>🧑‍⚕️ Dati seduta</b>
-  <div class="grid" style="margin-top:10px">
-   <div><label>ID paziente</label><input id="pid" placeholder="GR72"></div>
-   <div><label>Firma infermiere</label><input id="firma" placeholder="Sigla / Nome"></div>
+    <!-- STEP 2: PAZIENTE -->
+    <section id="s2" class="hidden step-bg bg-patient">
+      <main>
+        <div class="card">
+          <div class="stepTitle">🧾 Identificazione paziente</div>
+          <div class="stepSub">Inserisci un ID (es. GR72).</div>
+          <div style="margin-top:12px">
+            <label>ID paziente</label>
+            <input id="pid" placeholder="Es. GR72">
+          </div>
+          <div class="kpi">
+            <span class="pill" id="pillPid">Paziente: —</span>
+          </div>
+          <div class="row" style="margin-top:12px">
+            <button class="btn2" onclick="backTo('s1')">⬅︎ Indietro</button>
+            <button class="btn" onclick="nextFromPid()">Avanti ➜</button>
+          </div>
+        </div>
+      </main>
+    </section>
 
-   <div><label>Accesso</label>
-    <select id="accesso">
-     <option>FAV</option><option>AVG</option><option>CVC</option>
-    </select>
-   </div>
+    <!-- STEP 3: ACCESSO -->
+    <section id="s3" class="hidden step-bg bg-access">
+      <main>
+        <div class="card">
+          <div class="stepTitle">🩸 Selezione accesso</div>
+          <div class="stepSub">Scegli FAV / AVG / CVC.</div>
+          <div style="margin-top:12px">
+            <label>Accesso</label>
+            <select id="accesso">
+              <option value="">— seleziona —</option>
+              <option>FAV</option>
+              <option>AVG</option>
+              <option>CVC</option>
+            </select>
+          </div>
+          <div class="kpi">
+            <span class="pill" id="pillAcc">Accesso: —</span>
+          </div>
+          <div class="row" style="margin-top:12px">
+            <button class="btn2" onclick="backTo('s2')">⬅︎ Indietro</button>
+            <button class="btn" onclick="nextFromAccess()">Avanti ➜</button>
+          </div>
+        </div>
+      </main>
+    </section>
 
-   <div><label>Puntura</label>
-    <select id="puntura">
-     <option>Facile</option><option>Difficile</option><option>Impossibile</option>
-    </select>
-   </div>
+    <!-- STEP 4: CHECKLIST A CASCATA -->
+    <section id="s4" class="hidden step-bg bg-checklist">
+      <main>
+        <div class="card">
+          <div class="stepTitle">Sorveglianza dell’accesso vascolare</div>
+          <div class="stepSub">Compila una voce per volta: le sezioni compaiono progressivamente.</div>
 
-   <div><label>Thrill</label>
-    <select id="thrill">
-     <option>Normale</option><option>Ridotto</option><option>Assente</option>
-    </select>
-   </div>
-  </div>
+          <!-- Puntura -->
+          <div id="q1" style="margin-top:12px">
+            <label>1) Puntura</label>
+            <select id="puntura">
+              <option value="">— seleziona —</option>
+              <option>Facile</option>
+              <option>Difficile</option>
+              <option>Impossibile</option>
+            </select>
+          </div>
 
-  <div class="row" style="margin-top:12px">
-   <button class="btn2" onclick="go('home')">↩️ ANNULLA</button>
-   <button class="btn" onclick="calcola()">⚙️ CALCOLA</button>
-  </div>
- </div>
-</section>
+          <!-- Thrill -->
+          <div id="q2" class="hidden" style="margin-top:12px">
+            <label>2) Thrill</label>
+            <select id="thrill">
+              <option value="">— seleziona —</option>
+              <option>Normale</option>
+              <option>Ridotto</option>
+              <option>Assente</option>
+            </select>
+          </div>
 
-<section id="result" class="hidden">
- <div class="card">
-  <b>📊 Esito</b>
-  <div style="margin-top:10px">
-   <span id="badge" class="badge g0">G0</span>
+          <!-- Bruit -->
+          <div id="q3" class="hidden" style="margin-top:12px">
+            <label>3) Bruit</label>
+            <select id="bruit">
+              <option value="">— seleziona —</option>
+              <option>Normale</option>
+              <option>Alto-pitch</option>
+              <option>Assente</option>
+            </select>
+          </div>
 
-   <div id="alertMedico" class="alert red siren hidden">
-    🚨 COMUNICARE IMMEDIATAMENTE AL MEDICO 🚨
-   </div>
+          <!-- Qb -->
+          <div id="q4" class="hidden" style="margin-top:12px">
+            <div class="grid">
+              <div>
+                <label>4) Qb prescritto (mL/min)</label>
+                <input id="qbPres" type="number" value="300">
+              </div>
+              <div>
+                <label>Qb ottenuto (mL/min)</label>
+                <input id="qbOtt" type="number" value="300">
+              </div>
+            </div>
+          </div>
 
-   <div id="medicoBox" class="hidden" style="margin-top:10px">
-    <label>👨‍⚕️ Medico informato</label>
-    <select id="medicoInf">
-     <option value="">— seleziona —</option>
-     <option>Sì</option>
-     <option>No</option>
-    </select>
-   </div>
-  </div>
- </div>
+          <!-- Allarmi -->
+          <div id="q5" class="hidden" style="margin-top:12px">
+            <label>5) Allarmi</label>
+            <select id="allarmi">
+              <option value="">— seleziona —</option>
+              <option>No</option>
+              <option>Arteriosi</option>
+              <option>Venosi</option>
+              <option>Entrambi</option>
+            </select>
+          </div>
 
- <div class="row">
-  <button class="btn2" onclick="go('form')">✏️ MODIFICA</button>
-  <button class="btn" onclick="salva()">💾 SALVA</button>
- </div>
-</section>
+          <!-- CVC extra -->
+          <div id="q6" class="hidden" style="margin-top:12px">
+            <hr>
+            <div class="stepTitle">🧫 Modulo CVC</div>
+            <div class="grid" style="margin-top:10px">
+              <div>
+                <label>Exit-site</label>
+                <select id="exit">
+                  <option value="">— seleziona —</option>
+                  <option>OK</option>
+                  <option>Arrossato</option>
+                  <option>Essudato</option>
+                </select>
+              </div>
+              <div>
+                <label>Febbre</label>
+                <select id="febbre">
+                  <option value="">— seleziona —</option>
+                  <option>No</option>
+                  <option>Sì</option>
+                </select>
+              </div>
+            </div>
+          </div>
 
-</main>
+          <div class="kpi">
+            <span class="pill" id="pillProg">Progress: 0/5</span>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <button class="btn2" onclick="backTo('s3')">⬅︎ Indietro</button>
+            <button class="btn" onclick="goResult()">Calcola ➜</button>
+          </div>
+        </div>
+      </main>
+    </section>
+
+    <!-- STEP 5: RISULTATO -->
+    <section id="s5" class="hidden step-bg bg-result">
+      <main>
+        <div class="card">
+          <div class="stepTitle">📊 Grading finale</div>
+
+          <div style="margin-top:12px">
+            <span id="badge" class="badge g0">G0</span>
+            <div id="action" style="margin-top:10px;font-weight:900"></div>
+
+            <div id="alertMedico" class="alert red siren hidden">
+              🚨 COMUNICARE IMMEDIATAMENTE AL MEDICO 🚨
+            </div>
+
+            <div id="medicoBox" class="hidden" style="margin-top:10px">
+              <label>👨‍⚕️ Medico informato</label>
+              <select id="medicoInf">
+                <option value="">— seleziona —</option>
+                <option>Sì</option>
+                <option>No</option>
+              </select>
+            </div>
+
+            <div class="kpi">
+              <span class="pill" id="sum1">Infermiere: —</span>
+              <span class="pill" id="sum2">Paziente: —</span>
+              <span class="pill" id="sum3">Accesso: —</span>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <button class="btn2" onclick="backTo('s4')">⬅︎ Indietro</button>
+            <button class="btn" onclick="saveSession()">💾 Salva</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="stepTitle">Dopo il salvataggio</div>
+          <div class="stepSub">Puoi esportare in Excel dalla Home.</div>
+          <div class="row" style="margin-top:12px">
+            <button class="btn2" onclick="go('home')">🏠 Home</button>
+            <button class="btn2" onclick="startWizard()">➕ Nuova seduta</button>
+          </div>
+        </div>
+      </main>
+    </section>
+
+  </main>
 </div>
 
 <script>
-if('serviceWorker' in navigator){
- navigator.serviceWorker.register('sw.js');
-}
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js'); }
 
-const KEY="vashd_fap_sessions_final";
+const STORE_KEY = "vashd_fap_sessions_wizard_v2";
+const STATE = { nurse:"", pid:"", accesso:"", data:{} };
 
-/* splash */
 function enterApp(){
- document.getElementById('splash').style.display='none';
- document.getElementById('app').classList.remove('hidden');
+  document.getElementById('splash').style.display='none';
+  document.getElementById('app').classList.remove('hidden');
+  renderHistory();
 }
 
-/* navigation */
 function go(id){
- ['home','form','result'].forEach(s=>{
-  document.getElementById(s).classList.add('hidden');
- });
- document.getElementById(id).classList.remove('hidden');
+  ["home","s1","s2","s3","s4","s5"].forEach(x=>document.getElementById(x).classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
 }
 
-/* vibrazione / flash */
-function alertHaptic(g){
- if(navigator.vibrate){
-  navigator.vibrate(g===3?[200,80,200,80,400]:[150,80,150]);
-  return;
- }
- document.body.classList.add('flash');
- setTimeout(()=>document.body.classList.remove('flash'),700);
+function backTo(stepId){ go(stepId); }
+
+/* vibrazione/flash */
+function alertHaptic(level){
+  if (navigator.vibrate){
+    navigator.vibrate(level===3 ? [200,80,200,80,400] : [150,80,150]);
+    return;
+  }
+  document.body.classList.add("flash");
+  setTimeout(()=>document.body.classList.remove("flash"), 700);
 }
+
+/* wizard start/reset */
+function startWizard(){
+  STATE.nurse=""; STATE.pid=""; STATE.accesso=""; STATE.data={};
+  nurse.value=""; pid.value=""; accesso.value="";
+  puntura.value=""; thrill.value=""; bruit.value="";
+  qbPres.value=300; qbOtt.value=300; allarmi.value="";
+  exit.value=""; febbre.value=""; medicoInf.value="";
+  hideCascade();
+  q1.classList.remove("hidden");
+  pillProg.textContent = "Progress: 0/5";
+  updatePills();
+  go("s1");
+}
+
+function nextFromNurse(){
+  const v=(nurse.value||"").trim();
+  if(!v){ alert("Inserisci la firma infermiere."); return; }
+  STATE.nurse=v;
+  updatePills();
+  go("s2");
+}
+
+function nextFromPid(){
+  const v=(pid.value||"").trim();
+  if(!v){ alert("Inserisci l'ID paziente."); return; }
+  STATE.pid=v;
+  updatePills();
+  go("s3");
+}
+
+function nextFromAccess(){
+  const v=accesso.value;
+  if(!v){ alert("Seleziona il tipo di accesso."); return; }
+  STATE.accesso=v;
+  updatePills();
+  hideCascade();
+  q1.classList.remove("hidden");
+  pillProg.textContent = "Progress: 0/5";
+  go("s4");
+}
+
+/* cascata */
+function hideCascade(){
+  ["q2","q3","q4","q5","q6"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+}
+function progressCount(){
+  let c=0;
+  if(puntura.value) c++;
+  if(thrill.value) c++;
+  if(bruit.value) c++;
+  if(qbPres.value && qbOtt.value) c++;
+  if(allarmi.value) c++;
+  return c;
+}
+puntura.addEventListener("change", ()=>{
+  if(!puntura.value) return;
+  q2.classList.remove("hidden");
+  pillProg.textContent = `Progress: ${progressCount()}/5`;
+});
+thrill.addEventListener("change", ()=>{
+  if(!thrill.value) return;
+  q3.classList.remove("hidden");
+  pillProg.textContent = `Progress: ${progressCount()}/5`;
+});
+bruit.addEventListener("change", ()=>{
+  if(!bruit.value) return;
+  q4.classList.remove("hidden");
+  pillProg.textContent = `Progress: ${progressCount()}/5`;
+});
+qbPres.addEventListener("input", ()=> pillProg.textContent = `Progress: ${progressCount()}/5`);
+qbOtt.addEventListener("input", ()=> pillProg.textContent = `Progress: ${progressCount()}/5`);
+allarmi.addEventListener("change", ()=>{
+  if(!allarmi.value) return;
+  q5.classList.remove("hidden");
+  if(STATE.accesso==="CVC") q6.classList.remove("hidden");
+  else q6.classList.add("hidden");
+  pillProg.textContent = `Progress: ${progressCount()}/5`;
+});
 
 /* grading */
-function calcola(){
- let g=0;
- if(thrill.value==='Assente' || puntura.value==='Impossibile') g=3;
+function goResult(){
+  if(!puntura.value){ alert("Seleziona Puntura."); return; }
+  if(!thrill.value){ alert("Seleziona Thrill."); return; }
+  if(!bruit.value){ alert("Seleziona Bruit."); return; }
+  if(!qbPres.value || !qbOtt.value){ alert("Inserisci Qb prescritto e ottenuto."); return; }
+  if(!allarmi.value){ alert("Seleziona Allarmi."); return; }
 
- badge.className='badge g'+g;
- badge.textContent='G'+g;
+  STATE.data = {
+    puntura: puntura.value,
+    thrill: thrill.value,
+    bruit: bruit.value,
+    qbPres: Number(qbPres.value||0),
+    qbOtt: Number(qbOtt.value||0),
+    allarmi: allarmi.value,
+    exit: (STATE.accesso==="CVC" ? exit.value : ""),
+    febbre: (STATE.accesso==="CVC" ? febbre.value : "")
+  };
 
- const need=g>=2;
- alertMedico.classList.toggle('hidden',!need);
- medicoBox.classList.toggle('hidden',!need);
+  let g = 0;
 
- window.lastGrade=g;
- if(need) alertHaptic(g);
+  // Regole forti
+  if(STATE.data.puntura==="Impossibile" || STATE.data.thrill==="Assente") g = 3;
 
- go('result');
+  // Regole intermedie
+  const qbDrop = (STATE.data.qbPres>0) ? (STATE.data.qbOtt / STATE.data.qbPres) : 1;
+  if(g<3){
+    if(STATE.data.allarmi==="Entrambi") g = Math.max(g,2);
+    if(STATE.data.bruit==="Alto-pitch") g = Math.max(g,2);
+    if(qbDrop < 0.85) g = Math.max(g,2);
+  }
+
+  // Warning
+  if(g<2){
+    if(STATE.data.puntura==="Difficile" || STATE.data.thrill==="Ridotto") g = Math.max(g,1);
+    if(STATE.data.allarmi==="Arteriosi" || STATE.data.allarmi==="Venosi") g = Math.max(g,1);
+    if(qbDrop < 0.95) g = Math.max(g,1);
+  }
+
+  // CVC sospetto infezione -> almeno G2
+  if(STATE.accesso==="CVC"){
+    if(STATE.data.exit==="Essudato" || STATE.data.febbre==="Sì") g = Math.max(g,2);
+  }
+
+  window.lastGrade = g;
+
+  badge.className = "badge g"+g;
+  badge.textContent = "G"+g;
+
+  const actions = [
+    "Routine: proseguire sorveglianza.",
+    "Warning: ricontrollo ravvicinato / rivalutare segni clinici.",
+    "Disfunzione probabile: considerare eco accesso / valutazione medica.",
+    "Critico: gestione urgente oggi."
+  ];
+  action.textContent = actions[g];
+
+  const needMed = (g>=2);
+  alertMedico.classList.toggle("hidden", !needMed);
+  medicoBox.classList.toggle("hidden", !needMed);
+  medicoInf.value = "";
+
+  if(needMed) alertHaptic(g);
+
+  sum1.textContent = `Infermiere: ${STATE.nurse}`;
+  sum2.textContent = `Paziente: ${STATE.pid}`;
+  sum3.textContent = `Accesso: ${STATE.accesso}`;
+
+  go("s5");
 }
 
-/* save */
-function salva(){
- if(!pid.value.trim()){alert('Inserisci ID paziente');return;}
- if(!firma.value.trim()){alert('Inserisci firma infermiere');return;}
- if(lastGrade>=2 && medicoInf.value!=='Sì'){
-  alert('Per G2–G3 devi informare il medico');
-  return;
- }
-
- const s=JSON.parse(localStorage.getItem(KEY)||"[]");
- s.push({
-  ts:Date.now(),
-  id:pid.value.trim(),
-  accesso:accesso.value,
-  grade:lastGrade,
-  firma:firma.value.trim(),
-  medico:lastGrade>=2?medicoInf.value:''
- });
- localStorage.setItem(KEY,JSON.stringify(s));
- render();
- go('home');
+function updatePills(){
+  pillNurse.textContent = "Firma: " + (STATE.nurse || "—");
+  pillPid.textContent = "Paziente: " + (STATE.pid || "—");
+  pillAcc.textContent = "Accesso: " + (STATE.accesso || "—");
 }
 
-/* history */
-function render(){
- const h=document.getElementById('history');
- const s=JSON.parse(localStorage.getItem(KEY)||"[]");
- h.innerHTML=s.length
-  ? s.slice().reverse().slice(0,20).map(e=>{
-     return `${new Date(e.ts).toLocaleString()} • ${e.id} • G${e.grade} • 🧑‍⚕️ ${e.firma}`;
-    }).join('<br>')
-  : "Nessuna seduta.";
+/* storage */
+function loadSessions(){
+  try { return JSON.parse(localStorage.getItem(STORE_KEY)||"[]"); } catch { return []; }
+}
+function saveSessions(arr){ localStorage.setItem(STORE_KEY, JSON.stringify(arr)); }
+
+function saveSession(){
+  if(window.lastGrade>=2 && medicoInf.value!=="Sì"){
+    alert("Per G2–G3 devi informare il medico (seleziona Sì).");
+    return;
+  }
+
+  const entry = {
+    ts: Date.now(),
+    nurse: STATE.nurse,
+    pid: STATE.pid,
+    accesso: STATE.accesso,
+    grade: window.lastGrade,
+    medico: (window.lastGrade>=2 ? medicoInf.value : ""),
+    ...STATE.data
+  };
+
+  const all = loadSessions();
+  all.push(entry);
+  saveSessions(all);
+  renderHistory();
+  alert("Seduta salvata.");
 }
 
-/* clear */
+function renderHistory(){
+  const h = document.getElementById("history");
+  const all = loadSessions().slice().reverse().slice(0,20);
+  if(all.length===0){ h.innerHTML="Nessuna seduta."; return; }
+  h.innerHTML = all.map(e=>{
+    const dt = new Date(e.ts).toLocaleString("it-IT");
+    const med = (e.grade>=2 ? ` • 👨‍⚕️ ${e.medico||""}` : "");
+    return `${dt} • <b>${e.pid}</b> • G${e.grade} • 🧑‍⚕️ ${e.nurse}${med}`;
+  }).join("<br>");
+}
+
 function clearAll(){
- if(confirm('Svuotare tutte le sedute?')){
-  localStorage.removeItem(KEY);
-  render();
- }
+  if(confirm("Svuotare tutte le sedute salvate su questo dispositivo?")){
+    localStorage.removeItem(STORE_KEY);
+    renderHistory();
+  }
 }
 
-/* export excel */
+/* export */
 function exportCSV(){
- const s=JSON.parse(localStorage.getItem(KEY)||"[]");
- if(!s.length){alert('Nessun dato');return;}
- const head="Data;ID;Accesso;Grading;Infermiere;Medico\n";
- const rows=s.map(e=>{
-  return `${new Date(e.ts).toLocaleString()};${e.id};${e.accesso};G${e.grade};${e.firma};${e.medico||''}`;
- }).join("\n");
- const a=document.createElement('a');
- a.href=URL.createObjectURL(new Blob([head+rows],{type:'text/csv;charset=utf-8;'}));
- a.download="VAS-HD_sedute.csv";
- a.click();
+  const s = loadSessions();
+  if(s.length===0){ alert("Nessun dato da esportare."); return; }
+
+  const header = [
+    "Data","Infermiere","ID_paziente","Accesso",
+    "Puntura","Thrill","Bruit","Qb_prescritto","Qb_ottenuto",
+    "Allarmi","Exit_site","Febbre","Grading","Medico_informato"
+  ].join(";") + "\n";
+
+  const rows = s.map(e=>{
+    const dt = new Date(e.ts).toLocaleString("it-IT");
+    return [
+      dt, safe(e.nurse), safe(e.pid), safe(e.accesso),
+      safe(e.puntura), safe(e.thrill), safe(e.bruit),
+      safe(e.qbPres), safe(e.qbOtt),
+      safe(e.allarmi), safe(e.exit), safe(e.febbre),
+      "G"+e.grade, safe(e.medico)
+    ].join(";");
+  }).join("\n");
+
+  const blob = new Blob([header+rows], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const today = new Date().toISOString().slice(0,10);
+  a.href = url;
+  a.download = `VAS-HD_sedute_${today}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
-render();
+function safe(v){
+  const s = String(v??"");
+  if(s.includes(";") || s.includes('"') || s.includes("\n")){
+    return `"${s.replace(/"/g,'""')}"`;
+  }
+  return s;
+}
 </script>
 
 </body>
