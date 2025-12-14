@@ -16,7 +16,6 @@
 }
 *{box-sizing:border-box}
 body{margin:0;font-family:-apple-system,system-ui;background:var(--bg);color:var(--txt)}
-
 .hidden{display:none}
 
 /* SPLASH */
@@ -44,16 +43,31 @@ main{padding:14px;max-width:980px;margin:0 auto}
 .grid{display:grid;grid-template-columns:1fr;gap:10px}
 @media(min-width:780px){.grid{grid-template-columns:1fr 1fr}}
 label{font-size:12px;color:var(--mut)}
-select,input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#0f0a0d;color:var(--txt)}
+select,input{
+ width:100%;padding:12px;border-radius:12px;
+ border:1px solid var(--line);
+ background:#0f0a0d;color:var(--txt)
+}
 .row{display:flex;gap:10px}
-.btn{width:100%;padding:14px;border-radius:14px;border:0;font-weight:900;background:var(--accent);color:white}
-.btn2{width:100%;padding:14px;border-radius:14px;border:1px solid var(--line);font-weight:900;background:transparent;color:var(--txt)}
+.btn{
+ width:100%;padding:14px;border-radius:14px;border:0;
+ font-weight:900;background:var(--accent);color:white
+}
+.btn2{
+ width:100%;padding:14px;border-radius:14px;
+ border:1px solid var(--line);
+ font-weight:900;background:transparent;color:var(--txt)
+}
 .badge{padding:6px 12px;border-radius:999px;font-weight:900;color:white}
-.g0{background:#3b7d5b}.g1{background:#b58b2a}.g2{background:#c46a2d}.g3{background:#b11226}
+.g0{background:#3b7d5b}
+.g1{background:#b58b2a}
+.g2{background:#c46a2d}
+.g3{background:#b11226}
+
 .alert{padding:12px;border-radius:12px;margin-top:10px;font-weight:900}
 .alert.red{background:#b11226}
 
-/* sirena */
+/* sirena lampeggiante */
 @keyframes blink{0%{opacity:1}50%{opacity:.2}100%{opacity:1}}
 .siren{animation:blink 1s infinite;text-align:center}
 .flash{animation:blink .25s 3}
@@ -72,7 +86,7 @@ select,input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--l
 
 <header>
  <h1>VAS-HD (FAP)</h1>
- <small>🩸 Sorveglianza accessi vascolari</small>
+ <small>🩸 Sorveglianza accessi vascolari in emodialisi</small>
 </header>
 
 <main>
@@ -80,7 +94,9 @@ select,input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--l
 <section id="home">
  <div class="card">
   <b>📋 Ultime sedute</b>
-  <div id="history" style="margin-top:10px;color:var(--mut)">Nessuna seduta.</div>
+  <div id="history" style="margin-top:10px;color:var(--mut)">
+   Nessuna seduta.
+  </div>
   <div class="row" style="margin-top:10px">
    <button class="btn2" onclick="exportCSV()">📤 ESPORTA EXCEL</button>
    <button class="btn2" onclick="clearAll()">🗑️ SVUOTA</button>
@@ -95,10 +111,26 @@ select,input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--l
   <div class="grid" style="margin-top:10px">
    <div><label>ID paziente</label><input id="pid" placeholder="GR72"></div>
    <div><label>Firma infermiere</label><input id="firma" placeholder="Sigla / Nome"></div>
-   <div><label>Accesso</label><select id="accesso"><option>FAV</option><option>AVG</option><option>CVC</option></select></div>
-   <div><label>Puntura</label><select id="puntura"><option>Facile</option><option>Difficile</option><option>Impossibile</option></select></div>
-   <div><label>Thrill</label><select id="thrill"><option>Normale</option><option>Ridotto</option><option>Assente</option></select></div>
+
+   <div><label>Accesso</label>
+    <select id="accesso">
+     <option>FAV</option><option>AVG</option><option>CVC</option>
+    </select>
+   </div>
+
+   <div><label>Puntura</label>
+    <select id="puntura">
+     <option>Facile</option><option>Difficile</option><option>Impossibile</option>
+    </select>
+   </div>
+
+   <div><label>Thrill</label>
+    <select id="thrill">
+     <option>Normale</option><option>Ridotto</option><option>Assente</option>
+    </select>
+   </div>
   </div>
+
   <div class="row" style="margin-top:12px">
    <button class="btn2" onclick="go('home')">↩️ ANNULLA</button>
    <button class="btn" onclick="calcola()">⚙️ CALCOLA</button>
@@ -109,15 +141,24 @@ select,input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--l
 <section id="result" class="hidden">
  <div class="card">
   <b>📊 Esito</b>
-  <span id="badge" class="badge g0">G0</span>
-  <div id="alertMedico" class="alert red siren hidden">
-   🚨 COMUNICARE IMMEDIATAMENTE AL MEDICO 🚨
-  </div>
-  <div id="medicoBox" class="hidden" style="margin-top:10px">
-   <label>👨‍⚕️ Medico informato</label>
-   <select id="medicoInf"><option></option><option>Sì</option><option>No</option></select>
+  <div style="margin-top:10px">
+   <span id="badge" class="badge g0">G0</span>
+
+   <div id="alertMedico" class="alert red siren hidden">
+    🚨 COMUNICARE IMMEDIATAMENTE AL MEDICO 🚨
+   </div>
+
+   <div id="medicoBox" class="hidden" style="margin-top:10px">
+    <label>👨‍⚕️ Medico informato</label>
+    <select id="medicoInf">
+     <option value="">— seleziona —</option>
+     <option>Sì</option>
+     <option>No</option>
+    </select>
+   </div>
   </div>
  </div>
+
  <div class="row">
   <button class="btn2" onclick="go('form')">✏️ MODIFICA</button>
   <button class="btn" onclick="salva()">💾 SALVA</button>
@@ -128,61 +169,108 @@ select,input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--l
 </div>
 
 <script>
-if('serviceWorker'in navigator){navigator.serviceWorker.register('sw.js')}
-const KEY="vashd_fap_sessions_v5";
+if('serviceWorker' in navigator){
+ navigator.serviceWorker.register('sw.js');
+}
 
+const KEY="vashd_fap_sessions_final";
+
+/* splash */
 function enterApp(){
  document.getElementById('splash').style.display='none';
  document.getElementById('app').classList.remove('hidden');
 }
 
+/* navigation */
 function go(id){
- ['home','form','result'].forEach(s=>document.getElementById(s).classList.add('hidden'));
+ ['home','form','result'].forEach(s=>{
+  document.getElementById(s).classList.add('hidden');
+ });
  document.getElementById(id).classList.remove('hidden');
 }
 
+/* vibrazione / flash */
 function alertHaptic(g){
- if(navigator.vibrate){navigator.vibrate(g===3?[200,80,200,80,400]:[150,80,150]);return;}
+ if(navigator.vibrate){
+  navigator.vibrate(g===3?[200,80,200,80,400]:[150,80,150]);
+  return;
+ }
  document.body.classList.add('flash');
  setTimeout(()=>document.body.classList.remove('flash'),700);
 }
 
+/* grading */
 function calcola(){
  let g=0;
- if(thrill.value==='Assente'||puntura.value==='Impossibile') g=3;
- badge.className='badge g'+g; badge.textContent='G'+g;
+ if(thrill.value==='Assente' || puntura.value==='Impossibile') g=3;
+
+ badge.className='badge g'+g;
+ badge.textContent='G'+g;
+
  const need=g>=2;
  alertMedico.classList.toggle('hidden',!need);
  medicoBox.classList.toggle('hidden',!need);
+
  window.lastGrade=g;
  if(need) alertHaptic(g);
+
  go('result');
 }
 
+/* save */
 function salva(){
- if(!pid.value||!firma.value){alert('Completa i dati');return;}
- if(lastGrade>=2 && medicoInf.value!=='Sì'){alert('Devi informare il medico');return;}
+ if(!pid.value.trim()){alert('Inserisci ID paziente');return;}
+ if(!firma.value.trim()){alert('Inserisci firma infermiere');return;}
+ if(lastGrade>=2 && medicoInf.value!=='Sì'){
+  alert('Per G2–G3 devi informare il medico');
+  return;
+ }
+
  const s=JSON.parse(localStorage.getItem(KEY)||"[]");
- s.push({ts:Date.now(),id:pid.value,grade:lastGrade,firma:firma.value,medico:medicoInf.value});
+ s.push({
+  ts:Date.now(),
+  id:pid.value.trim(),
+  accesso:accesso.value,
+  grade:lastGrade,
+  firma:firma.value.trim(),
+  medico:lastGrade>=2?medicoInf.value:''
+ });
  localStorage.setItem(KEY,JSON.stringify(s));
- render(); go('home');
+ render();
+ go('home');
 }
 
+/* history */
 function render(){
  const h=document.getElementById('history');
  const s=JSON.parse(localStorage.getItem(KEY)||"[]");
- h.innerHTML=s.length?s.slice().reverse().map(e=>`${new Date(e.ts).toLocaleString()} • ${e.id} • G${e.grade}`).join('<br>'):"Nessuna seduta.";
+ h.innerHTML=s.length
+  ? s.slice().reverse().slice(0,20).map(e=>{
+     return `${new Date(e.ts).toLocaleString()} • ${e.id} • G${e.grade} • 🧑‍⚕️ ${e.firma}`;
+    }).join('<br>')
+  : "Nessuna seduta.";
 }
 
-function clearAll(){if(confirm('Svuotare tutto?')){localStorage.removeItem(KEY);render();}}
+/* clear */
+function clearAll(){
+ if(confirm('Svuotare tutte le sedute?')){
+  localStorage.removeItem(KEY);
+  render();
+ }
+}
 
+/* export excel */
 function exportCSV(){
  const s=JSON.parse(localStorage.getItem(KEY)||"[]");
- if(!s.length)return alert('Nessun dato');
- let csv="Data;ID;Grading;Infermiere;Medico\n"+s.map(e=>`${new Date(e.ts).toLocaleString()};${e.id};G${e.grade};${e.firma};${e.medico}`).join("\n");
+ if(!s.length){alert('Nessun dato');return;}
+ const head="Data;ID;Accesso;Grading;Infermiere;Medico\n";
+ const rows=s.map(e=>{
+  return `${new Date(e.ts).toLocaleString()};${e.id};${e.accesso};G${e.grade};${e.firma};${e.medico||''}`;
+ }).join("\n");
  const a=document.createElement('a');
- a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
- a.download='VAS-HD_sedute.csv'; a.click();
+ a.href=URL.createObjectURL(new Blob([head+rows],{type:'text/csv;charset=utf-8;'}));
+ a.download="VAS-HD_sedute.csv";
+ a.click();
 }
 
 render();
