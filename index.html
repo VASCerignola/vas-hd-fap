@@ -743,7 +743,72 @@ function escapeHtml(s){
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
   }[m]));
 }
+  /* =========================
+   SALVATAGGIO LOCALE + CSV
+   ========================= */
+
+function saveSession(){
+  const record = {
+    date: new Date().toISOString(),
+    infermiere: STATE.nurse,
+    paziente: STATE.pid,
+    accesso: STATE.accesso,
+    grading: LAST.grade,
+    rilievi: LAST.summary
+  };
+
+  const key = "VAS_HD_FAP_SESSIONS";
+  const arr = JSON.parse(localStorage.getItem(key) || "[]");
+  arr.unshift(record);
+  localStorage.setItem(key, JSON.stringify(arr));
+}
+
+function loadSessions(){
+  return JSON.parse(localStorage.getItem("VAS_HD_FAP_SESSIONS") || "[]");
+}
+
+function exportCSV(){
+  const rows = loadSessions();
+  if(rows.length===0){
+    alert("Nessuna seduta salvata.");
+    return;
+  }
+
+  const header = ["Data","Infermiere","Paziente","Accesso","Grading","Rilievi"];
+  const csv = [
+    header.join(";"),
+    ...rows.map(r=>[
+      r.date,
+      r.infermiere,
+      r.paziente,
+      r.accesso,
+      "G"+r.grading,
+      r.rilievi
+    ].join(";"))
+  ].join("\n");
+
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "VAS-HD_FAP_sedute.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* intercetta chiusura corretta */
+const _finish = finish;
+finish = function(){
+  if(LAST.grade>=2 && medicoInf.value!=="si"){
+    alert("Per G2–G3 devi selezionare: Medico informato = Sì.");
+    return;
+  }
+  saveSession();
+  goHome();
+};
+
 </script>
 
 </body>
 </html>
+
