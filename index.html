@@ -11,12 +11,8 @@
 
 <style>
 :root{
-  --bg:#120b10;
-  --card:#1b0f17;
-  --line:#6b2b4a;
-  --txt:#f2e9ee;
-  --mut:#d6b3c4;
-  --accent:#c86a9a;
+  --bg:#120b10; --card:#1b0f17; --line:#6b2b4a;
+  --txt:#f2e9ee; --mut:#d6b3c4; --accent:#c86a9a;
 }
 *{box-sizing:border-box}
 body{margin:0;font-family:-apple-system,system-ui;background:var(--bg);color:var(--txt)}
@@ -28,6 +24,7 @@ body{margin:0;font-family:-apple-system,system-ui;background:var(--bg);color:var
   min-height:100vh;
   background-size:cover;
   background-position:center;
+  background-color:#120b10;
 }
 .step-bg::before{
   content:"";
@@ -45,12 +42,8 @@ body{margin:0;font-family:-apple-system,system-ui;background:var(--bg);color:var
 
 /* ===== SPLASH ===== */
 #splash{
-  position:fixed;inset:0;
-  background:#120b10;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:9999;
+  position:fixed;inset:0;background:#120b10;
+  display:flex;align-items:center;justify-content:center;z-index:9999
 }
 #splash img{max-width:100%;max-height:100%;object-fit:contain}
 
@@ -77,40 +70,27 @@ input,select{
   background:#0f0a0d;
   color:var(--txt)
 }
-
 .row{display:flex;gap:10px;margin-top:14px}
-.btn{
+.btn, .btn2{
   width:100%;
   padding:14px;
   border-radius:14px;
-  border:0;
   font-weight:900;
-  background:var(--accent);
-  color:white
 }
-.btn2{
-  width:100%;
-  padding:14px;
-  border-radius:14px;
-  border:1px solid var(--line);
-  background:transparent;
-  color:var(--txt);
-  font-weight:900
-}
+.btn{border:0;background:var(--accent);color:white}
+.btn2{border:1px solid var(--line);background:transparent;color:var(--txt)}
+.btn:disabled{opacity:.45}
 
 .stepTitle{font-weight:900;font-size:16px}
 .stepSub{color:var(--mut);margin-top:4px}
 
 .badge{display:inline-block;padding:10px 14px;border-radius:999px;font-weight:900;color:white}
-.g0{background:#3b7d5b}
-.g1{background:#b58b2a}
-.g2{background:#c46a2d}
-.g3{background:#b11226}
+.g0{background:#3b7d5b}.g1{background:#b58b2a}.g2{background:#c46a2d}.g3{background:#b11226}
 
 .alert{margin-top:12px;padding:12px;border-radius:12px;font-weight:900}
 .alert.red{background:#b11226}
-
 .progress{margin-top:10px;color:var(--mut);font-weight:800}
+hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 </style>
 </head>
 
@@ -132,7 +112,7 @@ input,select{
 <main id="home">
   <div class="card">
     <div class="stepTitle">📋 Avvio</div>
-    <div class="stepSub">Wizard guidato: Infermiere → Paziente → Accesso → Checklist → Grading.</div>
+    <div class="stepSub">Infermiere → Paziente → Accesso → Checklist → Grading.</div>
   </div>
   <button class="btn" onclick="startWizard()">➕ NUOVA SEDUTA</button>
 </main>
@@ -158,7 +138,7 @@ input,select{
 <main>
   <div class="card">
     <div class="stepTitle">🧾 Identificazione paziente</div>
-    <div class="stepSub">Inserisci ID (es. GR72).</div>
+    <div class="stepSub">ID breve (es. GR72).</div>
     <label>ID paziente</label>
     <input id="pid" placeholder="Es. GR72">
     <div class="row">
@@ -174,7 +154,7 @@ input,select{
 <main>
   <div class="card">
     <div class="stepTitle">🩸 Tipo di accesso</div>
-    <div class="stepSub">La checklist successiva cambia in base all’accesso.</div>
+    <div class="stepSub">La cascata cambia in base all’accesso.</div>
     <label>Accesso</label>
     <select id="accesso">
       <option value="">— seleziona —</option>
@@ -195,7 +175,7 @@ input,select{
 <main>
   <div class="card">
     <div class="stepTitle">🔍 Sorveglianza dell’accesso vascolare</div>
-    <div class="stepSub">Compila una voce per volta: la cascata segue l’accesso selezionato.</div>
+    <div class="stepSub">Una domanda sblocca la successiva. “Calcola” si attiva solo a cascata completa.</div>
 
     <!-- FLOW FAV/AVG -->
     <div id="flowAV" class="hidden">
@@ -205,9 +185,9 @@ input,select{
         <label>1) Puntura</label>
         <select id="av_puntura">
           <option value="">— seleziona —</option>
-          <option>Facile</option>
-          <option>Difficile</option>
-          <option>Impossibile</option>
+          <option value="facile">Facile</option>
+          <option value="difficile">Difficile</option>
+          <option value="impossibile">Impossibile</option>
         </select>
       </div>
 
@@ -215,9 +195,9 @@ input,select{
         <label>2) Thrill</label>
         <select id="av_thrill">
           <option value="">— seleziona —</option>
-          <option>Normale</option>
-          <option>Ridotto</option>
-          <option>Assente</option>
+          <option value="normale">Normale</option>
+          <option value="ridotto">Ridotto</option>
+          <option value="assente">Assente</option>
         </select>
       </div>
 
@@ -225,14 +205,14 @@ input,select{
         <label>3) Bruit</label>
         <select id="av_bruit">
           <option value="">— seleziona —</option>
-          <option>Normale</option>
-          <option>Alto-pitch</option>
-          <option>Assente</option>
+          <option value="normale">Normale</option>
+          <option value="alto">Alto-pitch</option>
+          <option value="assente">Assente</option>
         </select>
       </div>
 
       <div id="av4" class="hidden">
-        <label>4) Qb ottenuto rispetto al prescritto</label>
+        <label>4) Qb ottenuto (rispetto al prescritto)</label>
         <select id="av_qb">
           <option value="">— seleziona —</option>
           <option value="ok">≥ 95%</option>
@@ -258,7 +238,7 @@ input,select{
       <div class="progress" id="progCVC">Progress: 0/5</div>
 
       <div id="cvc1">
-        <label>1) Aspirazione/flussaggio dei lumi</label>
+        <label>1) Funzionalità lumi</label>
         <select id="cvc_lumi">
           <option value="">— seleziona —</option>
           <option value="ok">OK entrambi</option>
@@ -268,16 +248,7 @@ input,select{
       </div>
 
       <div id="cvc2" class="hidden">
-        <label>2) Inversione linee necessaria</label>
-        <select id="cvc_inversione">
-          <option value="">— seleziona —</option>
-          <option value="no">No</option>
-          <option value="si">Sì</option>
-        </select>
-      </div>
-
-      <div id="cvc3" class="hidden">
-        <label>3) Qb ottenuto rispetto al prescritto</label>
+        <label>2) Qb ottenuto (rispetto al prescritto)</label>
         <select id="cvc_qb">
           <option value="">— seleziona —</option>
           <option value="ok">≥ 95%</option>
@@ -286,9 +257,18 @@ input,select{
         </select>
       </div>
 
-      <div id="cvc4" class="hidden">
-        <label>4) Allarmi ripetuti</label>
+      <div id="cvc3" class="hidden">
+        <label>3) Allarmi ripetuti</label>
         <select id="cvc_allarmi">
+          <option value="">— seleziona —</option>
+          <option value="no">No</option>
+          <option value="si">Sì</option>
+        </select>
+      </div>
+
+      <div id="cvc4" class="hidden">
+        <label>4) Inversione linee necessaria</label>
+        <select id="cvc_inversione">
           <option value="">— seleziona —</option>
           <option value="no">No</option>
           <option value="si">Sì</option>
@@ -315,7 +295,7 @@ input,select{
 
     <div class="row">
       <button class="btn2" onclick="go('s3')">⬅ Indietro</button>
-      <button class="btn" onclick="calc()">Calcola ➜</button>
+      <button id="btnCalc" class="btn" onclick="calc()" disabled>Calcola ➜</button>
     </div>
   </div>
 </main>
@@ -327,9 +307,7 @@ input,select{
   <div class="card">
     <div class="stepTitle">📊 Grading</div>
     <div id="result"></div>
-
     <div id="medAlert" class="alert red hidden">🚨 Medico da informare 🚨</div>
-
     <div class="row">
       <button class="btn2" onclick="go('s4')">⬅ Indietro</button>
       <button class="btn" onclick="goHome()">Fine</button>
@@ -347,22 +325,20 @@ function enterApp(){
   document.getElementById("splash").style.display="none";
   document.getElementById("app").classList.remove("hidden");
 }
-
 function startWizard(){
   document.getElementById("home").classList.add("hidden");
   go('s1');
 }
-
 function go(id){
   document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
   document.getElementById(id).classList.remove("hidden");
 }
-
 function goHome(){
   document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
   document.getElementById("home").classList.remove("hidden");
 }
 
+/* ===== NAV ===== */
 function next1(){
   const v = (nurse.value||"").trim();
   if(!v){ alert("Inserisci la firma infermiere."); return; }
@@ -383,32 +359,31 @@ function next3(){
   go('s4');
 }
 
-/* --- setup cascata differente --- */
-function hideAllSteps(){
-  // AV
-  ["av2","av3","av4","av5"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+/* ===== CASCATE: reset duro e sblocco sequenziale ===== */
+function resetAV(){
   av_puntura.value=""; av_thrill.value=""; av_bruit.value=""; av_qb.value=""; av_allarmi.value="";
+  av2.classList.add("hidden"); av3.classList.add("hidden"); av4.classList.add("hidden"); av5.classList.add("hidden");
   progAV.textContent="Progress: 0/5";
-
-  // CVC
-  ["cvc2","cvc3","cvc4","cvc5"].forEach(id=>document.getElementById(id).classList.add("hidden"));
-  cvc_lumi.value=""; cvc_inversione.value=""; cvc_qb.value=""; cvc_allarmi.value=""; cvc_exit.value=""; cvc_febbre.value="";
+}
+function resetCVC(){
+  cvc_lumi.value=""; cvc_qb.value=""; cvc_allarmi.value=""; cvc_inversione.value=""; cvc_exit.value=""; cvc_febbre.value="";
+  cvc2.classList.add("hidden"); cvc3.classList.add("hidden"); cvc4.classList.add("hidden"); cvc5.classList.add("hidden");
   progCVC.textContent="Progress: 0/5";
 }
-
 function setupFlows(){
-  hideAllSteps();
+  btnCalc.disabled = true;
   flowAV.classList.add("hidden");
   flowCVC.classList.add("hidden");
+  resetAV(); resetCVC();
 
   if(STATE.accesso==="CVC"){
     flowCVC.classList.remove("hidden");
-  } else {
+  }else{
     flowAV.classList.remove("hidden");
   }
 }
 
-/* --- cascata AV --- */
+/* ===== PROGRESS helpers ===== */
 function countAV(){
   let c=0;
   if(av_puntura.value) c++;
@@ -418,125 +393,158 @@ function countAV(){
   if(av_allarmi.value) c++;
   return c;
 }
-av_puntura.addEventListener("change", ()=>{
-  if(!av_puntura.value) return;
-  av2.classList.remove("hidden");
-  progAV.textContent = `Progress: ${countAV()}/5`;
-});
-av_thrill.addEventListener("change", ()=>{
-  if(!av_thrill.value) return;
-  av3.classList.remove("hidden");
-  progAV.textContent = `Progress: ${countAV()}/5`;
-});
-av_bruit.addEventListener("change", ()=>{
-  if(!av_bruit.value) return;
-  av4.classList.remove("hidden");
-  progAV.textContent = `Progress: ${countAV()}/5`;
-});
-av_qb.addEventListener("change", ()=>{
-  if(!av_qb.value) return;
-  av5.classList.remove("hidden");
-  progAV.textContent = `Progress: ${countAV()}/5`;
-});
-av_allarmi.addEventListener("change", ()=> progAV.textContent = `Progress: ${countAV()}/5`);
-
-/* --- cascata CVC --- */
 function countCVC(){
   let c=0;
   if(cvc_lumi.value) c++;
-  if(cvc_inversione.value) c++;
   if(cvc_qb.value) c++;
   if(cvc_allarmi.value) c++;
+  if(cvc_inversione.value) c++;
   if(cvc_exit.value && cvc_febbre.value) c++;
   return c;
 }
+function updateCalcEnabled(){
+  if(STATE.accesso==="CVC"){
+    btnCalc.disabled = !(countCVC()===5);
+  }else{
+    btnCalc.disabled = !(countAV()===5);
+  }
+}
+
+/* ===== CASCATA AV: sblocca solo il prossimo ===== */
+av_puntura.addEventListener("change", ()=>{
+  resetAV(); // resetta tutto “a valle”
+  av_puntura.value = av_puntura.value; // mantiene scelta
+  if(!av_puntura.value){ progAV.textContent="Progress: 0/5"; updateCalcEnabled(); return; }
+  av2.classList.remove("hidden");
+  progAV.textContent = `Progress: ${countAV()}/5`;
+  updateCalcEnabled();
+});
+av_thrill.addEventListener("change", ()=>{
+  // reset a valle
+  av_bruit.value=""; av_qb.value=""; av_allarmi.value="";
+  av3.classList.add("hidden"); av4.classList.add("hidden"); av5.classList.add("hidden");
+  if(!av_thrill.value){ progAV.textContent = `Progress: ${countAV()}/5`; updateCalcEnabled(); return; }
+  av3.classList.remove("hidden");
+  progAV.textContent = `Progress: ${countAV()}/5`;
+  updateCalcEnabled();
+});
+av_bruit.addEventListener("change", ()=>{
+  av_qb.value=""; av_allarmi.value="";
+  av4.classList.add("hidden"); av5.classList.add("hidden");
+  if(!av_bruit.value){ progAV.textContent = `Progress: ${countAV()}/5`; updateCalcEnabled(); return; }
+  av4.classList.remove("hidden");
+  progAV.textContent = `Progress: ${countAV()}/5`;
+  updateCalcEnabled();
+});
+av_qb.addEventListener("change", ()=>{
+  av_allarmi.value="";
+  av5.classList.add("hidden");
+  if(!av_qb.value){ progAV.textContent = `Progress: ${countAV()}/5`; updateCalcEnabled(); return; }
+  av5.classList.remove("hidden");
+  progAV.textContent = `Progress: ${countAV()}/5`;
+  updateCalcEnabled();
+});
+av_allarmi.addEventListener("change", ()=>{
+  progAV.textContent = `Progress: ${countAV()}/5`;
+  updateCalcEnabled();
+});
+
+/* ===== CASCATA CVC: sblocca solo il prossimo ===== */
 cvc_lumi.addEventListener("change", ()=>{
-  if(!cvc_lumi.value) return;
+  resetCVC();
+  cvc_lumi.value = cvc_lumi.value;
+  if(!cvc_lumi.value){ progCVC.textContent="Progress: 0/5"; updateCalcEnabled(); return; }
   cvc2.classList.remove("hidden");
   progCVC.textContent = `Progress: ${countCVC()}/5`;
-});
-cvc_inversione.addEventListener("change", ()=>{
-  if(!cvc_inversione.value) return;
-  cvc3.classList.remove("hidden");
-  progCVC.textContent = `Progress: ${countCVC()}/5`;
+  updateCalcEnabled();
 });
 cvc_qb.addEventListener("change", ()=>{
-  if(!cvc_qb.value) return;
-  cvc4.classList.remove("hidden");
+  cvc_allarmi.value=""; cvc_inversione.value=""; cvc_exit.value=""; cvc_febbre.value="";
+  cvc3.classList.add("hidden"); cvc4.classList.add("hidden"); cvc5.classList.add("hidden");
+  if(!cvc_qb.value){ progCVC.textContent = `Progress: ${countCVC()}/5`; updateCalcEnabled(); return; }
+  cvc3.classList.remove("hidden");
   progCVC.textContent = `Progress: ${countCVC()}/5`;
+  updateCalcEnabled();
 });
 cvc_allarmi.addEventListener("change", ()=>{
-  if(!cvc_allarmi.value) return;
+  cvc_inversione.value=""; cvc_exit.value=""; cvc_febbre.value="";
+  cvc4.classList.add("hidden"); cvc5.classList.add("hidden");
+  if(!cvc_allarmi.value){ progCVC.textContent = `Progress: ${countCVC()}/5`; updateCalcEnabled(); return; }
+  cvc4.classList.remove("hidden");
+  progCVC.textContent = `Progress: ${countCVC()}/5`;
+  updateCalcEnabled();
+});
+cvc_inversione.addEventListener("change", ()=>{
+  cvc_exit.value=""; cvc_febbre.value="";
+  cvc5.classList.add("hidden");
+  if(!cvc_inversione.value){ progCVC.textContent = `Progress: ${countCVC()}/5`; updateCalcEnabled(); return; }
   cvc5.classList.remove("hidden");
   progCVC.textContent = `Progress: ${countCVC()}/5`;
+  updateCalcEnabled();
 });
-cvc_exit.addEventListener("change", ()=> progCVC.textContent = `Progress: ${countCVC()}/5`);
-cvc_febbre.addEventListener("change", ()=> progCVC.textContent = `Progress: ${countCVC()}/5`);
+cvc_exit.addEventListener("change", ()=>{
+  progCVC.textContent = `Progress: ${countCVC()}/5`;
+  updateCalcEnabled();
+});
+cvc_febbre.addEventListener("change", ()=>{
+  progCVC.textContent = `Progress: ${countCVC()}/5`;
+  updateCalcEnabled();
+});
 
-/* --- grading differenziato --- */
+/* ===== GRADING differenziato ===== */
 function calc(){
   medAlert.classList.add("hidden");
 
+  let g=0;
+
   if(STATE.accesso==="CVC"){
-    if(!cvc_lumi.value || !cvc_inversione.value || !cvc_qb.value || !cvc_allarmi.value || !cvc_exit.value || !cvc_febbre.value){
-      alert("Completa tutti i campi CVC."); return;
-    }
+    if(countCVC()!==5){ alert("Completa la cascata CVC."); return; }
 
-    let g=0;
-
-    // Critico
+    // G3: entrambi lumi problematici
     if(cvc_lumi.value==="due") g=3;
 
-    // Disfunzione probabile
+    // G2: probabile disfunzione / sospetta infezione
     if(g<3){
       if(cvc_qb.value==="basso") g=Math.max(g,2);
-      if(cvc_inversione.value==="si") g=Math.max(g,2);
       if(cvc_allarmi.value==="si") g=Math.max(g,2);
+      if(cvc_inversione.value==="si") g=Math.max(g,2);
       if(cvc_exit.value==="essudato" || cvc_febbre.value==="si") g=Math.max(g,2);
     }
 
-    // Warning
+    // G1: warning
     if(g<2){
       if(cvc_lumi.value==="uno") g=Math.max(g,1);
       if(cvc_qb.value==="moderato") g=Math.max(g,1);
       if(cvc_exit.value==="rosso") g=Math.max(g,1);
     }
+  } else {
+    if(countAV()!==5){ alert("Completa la cascata FAV/AVG."); return; }
 
-    renderResult(g);
-    return;
-  }
+    // G3: impossibile o thrill assente
+    if(av_puntura.value==="impossibile" || av_thrill.value==="assente") g=3;
 
-  // FAV/AVG
-  if(!av_puntura.value || !av_thrill.value || !av_bruit.value || !av_qb.value || !av_allarmi.value){
-    alert("Completa tutti i campi FAV/AVG."); return;
-  }
+    // G2
+    if(g<3){
+      if(av_bruit.value==="alto") g=Math.max(g,2);
+      if(av_qb.value==="basso") g=Math.max(g,2);
+      if(av_allarmi.value==="entrambi") g=Math.max(g,2);
+    }
 
-  let g=0;
-
-  // Critico
-  if(av_puntura.value==="Impossibile" || av_thrill.value==="Assente") g=3;
-
-  // Disfunzione probabile
-  if(g<3){
-    if(av_bruit.value==="Alto-pitch") g=Math.max(g,2);
-    if(av_qb.value==="basso") g=Math.max(g,2);
-    if(av_allarmi.value==="entrambi") g=Math.max(g,2);
-  }
-
-  // Warning
-  if(g<2){
-    if(av_puntura.value==="Difficile") g=Math.max(g,1);
-    if(av_thrill.value==="Ridotto") g=Math.max(g,1);
-    if(av_qb.value==="moderato") g=Math.max(g,1);
-    if(av_allarmi.value==="arteriosi" || av_allarmi.value==="venosi") g=Math.max(g,1);
+    // G1
+    if(g<2){
+      if(av_puntura.value==="difficile") g=Math.max(g,1);
+      if(av_thrill.value==="ridotto") g=Math.max(g,1);
+      if(av_qb.value==="moderato") g=Math.max(g,1);
+      if(av_allarmi.value==="arteriosi" || av_allarmi.value==="venosi") g=Math.max(g,1);
+    }
   }
 
   renderResult(g);
 }
 
 function renderResult(g){
-  let cls = "g"+g;
-  let txt = [
+  const cls = "g"+g;
+  const txt = [
     "G0 – Routine: proseguire sorveglianza.",
     "G1 – Warning: ricontrollo ravvicinato.",
     "G2 – Disfunzione probabile: valutazione medica/eco.",
