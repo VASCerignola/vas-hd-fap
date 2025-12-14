@@ -45,8 +45,7 @@ button { width:100%; padding:14px; border-radius:14px; border:none; font-weight:
 <span class="badge g3">G3</span>
 <p style="margin-top:10px"><b>Azione:</b> Gestione urgente oggi</p>
 </div>
-
-<button onclick="alert('VAS-HD (FAP) operativo')">NUOVA SEDUTA</button>
+<button onclick="nuovaSeduta()">NUOVA SEDUTA</button>
 </main>
 
 <script>
@@ -54,5 +53,23 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
 }
 </script>
+<script>
+function nuovaSeduta() {
+  document.body.innerHTML = `
+    <header>
+      <h1>VAS-HD (FAP)</h1>
+      <small>Nuova seduta</small>
+    </header>
+    <main>
+      <div class="card">
+        <p><b>Checklist seduta</b></p>
+        <p>(in costruzione)</p>
+      </div>
+      <button onclick="location.reload()">TORNA INDIETRO</button>
+    </main>
+  `;
+}
+</script>
 </body>
 </html>
+
