@@ -6,37 +6,130 @@
 <title>VAS-HD (FAP)</title>
 
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#111318">
+<meta name="theme-color" content="#c86a9a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <style>
 :root{
-  --bg:#120b10;      /* sfondo scuro con tono rosa */
-  --card:#1b0f17;    /* card */
-  --line:#6b2b4a;    /* bordi */
-  --txt:#f2e9ee;     /* testo principale */
-  --mut:#d6b3c4      /* testo secondario */
+  --bg:#120b10;
+  --card:#1b0f17;
+  --line:#6b2b4a;
+  --txt:#f2e9ee;
+  --mut:#d6b3c4;
+  --accent:#c86a9a;
 }
 
-body{margin:0;font-family:-apple-system,system-ui,Segoe UI,Roboto;background:var(--bg);color:var(--txt)}
-header{padding:14px;border-bottom:1px solid var(--line)}
-h1{margin:0;font-size:20px}
+body{
+  margin:0;
+  font-family:-apple-system,system-ui,Segoe UI,Roboto;
+  background:var(--bg);
+  color:var(--txt);
+}
+
+header{
+  padding:14px;
+  border-bottom:1px solid var(--line);
+}
+
+h1{
+  margin:0;
+  font-size:20px;
+}
+
 small{color:var(--mut)}
-main{padding:14px;max-width:980px;margin:0 auto}
-.card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));
-border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
-.grid{display:grid;grid-template-columns:1fr;gap:10px}
-@media(min-width:780px){.grid{grid-template-columns:1fr 1fr}}
-label{font-size:12px;color:var(--mut);display:block;margin-bottom:6px}
-select,input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#0f131a;color:var(--txt)}
-.row{display:flex;gap:10px}
-.btn{width:100%;padding:14px;border-radius:14px;border:0;font-weight:900;background:#2b6cb0;color:white}
-.btn2{width:100%;padding:14px;border-radius:14px;border:1px solid var(--line);font-weight:900;background:transparent;color:var(--txt)}
-.badge{display:inline-block;padding:6px 12px;border-radius:999px;font-weight:900}
-.g0{background:#1f6c35}.g1{background:#8f7a11}.g2{background:#a75719}.g3{background:#a61f2a}
-hr{border:0;border-top:1px solid var(--line);margin:12px 0}
-.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;color:var(--mut);font-size:12px;white-space:pre-wrap}
+
+main{
+  padding:14px;
+  max-width:980px;
+  margin:0 auto;
+}
+
+.card{
+  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:12px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+}
+
+@media(min-width:780px){
+  .grid{grid-template-columns:1fr 1fr}
+}
+
+label{
+  font-size:12px;
+  color:var(--mut);
+  display:block;
+  margin-bottom:6px;
+}
+
+select,input{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:#0f0a0d;
+  color:var(--txt);
+}
+
+.row{
+  display:flex;
+  gap:10px;
+}
+
+.btn{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:0;
+  font-weight:900;
+  background:var(--accent);
+  color:white;
+}
+
+.btn2{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  font-weight:900;
+  background:transparent;
+  color:var(--txt);
+}
+
+.badge{
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:999px;
+  font-weight:900;
+  color:white;
+}
+
+.g0{background:#3b7d5b}
+.g1{background:#b58b2a}
+.g2{background:#c46a2d}
+.g3{background:#b11226}
+
+hr{
+  border:0;
+  border-top:1px solid var(--line);
+  margin:12px 0;
+}
+
+.mono{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  color:var(--mut);
+  font-size:12px;
+  white-space:pre-wrap;
+}
+
 .hidden{display:none}
 </style>
 </head>
@@ -44,99 +137,103 @@ hr{border:0;border-top:1px solid var(--line);margin:12px 0}
 <body>
 <header>
   <h1>VAS-HD (FAP)</h1>
-  <small>Vascular Access Surveillance in Hemodialysis • Papagno VAS-HD Score</small>
+  <small>Vascular Access Surveillance in Hemodialysis</small>
 </header>
 
 <main>
 
-<!-- HOME -->
 <section id="home">
   <div class="card">
-    <b>Quick start</b>
+    <b>Versione reparto</b>
     <p style="color:var(--mut);margin:8px 0 0">
-      Versione reparto (v0): checklist essenziale + grading automatico.
+      Checklist clinica essenziale con grading automatico.
     </p>
   </div>
   <button class="btn" onclick="go('form')">NUOVA SEDUTA</button>
 </section>
 
-<!-- FORM -->
 <section id="form" class="hidden">
   <div class="card">
-    <b>Dati</b>
+    <b>Dati seduta</b>
+
     <div class="grid" style="margin-top:10px">
       <div>
         <label>Tipo accesso</label>
         <select id="accesso" onchange="toggleCVC()">
-          <option value="FAV">FAV</option>
-          <option value="AVG">AVG</option>
-          <option value="CVC">CVC</option>
+          <option>FAV</option>
+          <option>AVG</option>
+          <option>CVC</option>
         </select>
       </div>
+
       <div>
         <label>Puntura</label>
         <select id="puntura">
-          <option value="Facile">Facile</option>
-          <option value="Difficile">Difficile</option>
-          <option value="Impossibile">Impossibile</option>
+          <option>Facile</option>
+          <option>Difficile</option>
+          <option>Impossibile</option>
         </select>
       </div>
 
       <div>
         <label>Thrill</label>
         <select id="thrill">
-          <option value="Normale">Normale</option>
-          <option value="Ridotto">Ridotto</option>
-          <option value="Assente">Assente</option>
-        </select>
-      </div>
-      <div>
-        <label>Bruit</label>
-        <select id="bruit">
-          <option value="Normale">Normale</option>
-          <option value="Alto-pitch">Alto-pitch</option>
-          <option value="Assente">Assente</option>
+          <option>Normale</option>
+          <option>Ridotto</option>
+          <option>Assente</option>
         </select>
       </div>
 
       <div>
-        <label>Qb prescritto (ml/min)</label>
+        <label>Bruit</label>
+        <select id="bruit">
+          <option>Normale</option>
+          <option>Alto-pitch</option>
+          <option>Assente</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Qb prescritto</label>
         <input id="qbPres" type="number" value="300">
       </div>
+
       <div>
-        <label>Qb ottenuto (ml/min)</label>
+        <label>Qb ottenuto</label>
         <input id="qbOtt" type="number" value="300">
       </div>
 
       <div>
-        <label>Allarmi ripetuti</label>
+        <label>Allarmi</label>
         <select id="allarmi">
-          <option value="No">No</option>
-          <option value="Arteriosi">Arteriosi</option>
-          <option value="Venosi">Venosi</option>
-          <option value="Entrambi">Entrambi</option>
+          <option>No</option>
+          <option>Arteriosi</option>
+          <option>Venosi</option>
+          <option>Entrambi</option>
         </select>
       </div>
+
       <div>
         <label>Seduta completata</label>
         <select id="completata">
-          <option value="Sì">Sì</option>
-          <option value="No">No</option>
+          <option>Sì</option>
+          <option>No</option>
         </select>
       </div>
 
       <div>
         <label>Trombosi sospetta</label>
         <select id="trombosi">
-          <option value="No">No</option>
-          <option value="Sì">Sì</option>
+          <option>No</option>
+          <option>Sì</option>
         </select>
       </div>
+
       <div>
         <label>Segni infezione</label>
         <select id="infezione">
-          <option value="No">No</option>
-          <option value="Sì">Sì</option>
+          <option>No</option>
+          <option>Sì</option>
         </select>
       </div>
     </div>
@@ -148,22 +245,23 @@ hr{border:0;border-top:1px solid var(--line);margin:12px 0}
         <div>
           <label>Exit-site</label>
           <select id="exit">
-            <option value="OK">OK</option>
-            <option value="Arrossato">Arrossato</option>
-            <option value="Essudato">Essudato</option>
+            <option>OK</option>
+            <option>Arrossato</option>
+            <option>Essudato</option>
           </select>
         </div>
         <div>
           <label>Febbre</label>
           <select id="febbre">
-            <option value="No">No</option>
-            <option value="Sì">Sì</option>
+            <option>No</option>
+            <option>Sì</option>
           </select>
         </div>
       </div>
     </div>
 
     <hr>
+
     <div class="row">
       <button class="btn2" onclick="go('home')">ANNULLA</button>
       <button class="btn" onclick="calcola()">CALCOLA GRADING</button>
@@ -171,20 +269,14 @@ hr{border:0;border-top:1px solid var(--line);margin:12px 0}
   </div>
 </section>
 
-<!-- RESULT -->
 <section id="result" class="hidden">
   <div class="card">
-    <b>Esito automatico</b>
+    <b>Esito</b>
     <div style="margin-top:10px">
       <span id="badge" class="badge g0">G0</span>
       <div id="titolo" style="font-weight:900;font-size:18px;margin-top:10px">Routine</div>
-      <div id="azione" style="color:var(--txt);margin-top:6px">Accesso stabile.</div>
+      <div id="azione" style="margin-top:6px">Accesso stabile.</div>
     </div>
-    <hr>
-    <details>
-      <summary style="color:var(--mut);font-weight:800;cursor:pointer">Dettaglio logica</summary>
-      <div id="debug" class="mono" style="margin-top:8px"></div>
-    </details>
   </div>
 
   <div class="row">
@@ -194,90 +286,39 @@ hr{border:0;border-top:1px solid var(--line);margin:12px 0}
 </section>
 
 <script>
-if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}
 
 function go(id){
-  for(const s of ['home','form','result']) document.getElementById(s).classList.add('hidden');
+  ['home','form','result'].forEach(s=>document.getElementById(s).classList.add('hidden'));
   document.getElementById(id).classList.remove('hidden');
 }
 
 function toggleCVC(){
-  const isCVC = document.getElementById('accesso').value === 'CVC';
-  document.getElementById('cvcBox').classList.toggle('hidden', !isCVC);
+  document.getElementById('cvcBox').classList.toggle(
+    'hidden',
+    document.getElementById('accesso').value!=='CVC'
+  );
 }
 
 function calcola(){
-  const accesso = v('accesso');
-  const puntura = v('puntura');
-  const thrill = v('thrill');
-  const bruit = v('bruit');
-  const qbPres = n('qbPres');
-  const qbOtt  = n('qbOtt');
-  const allarmi = v('allarmi');
-  const completata = v('completata');
-  const trombosi = v('trombosi');
-  const infezione = v('infezione');
+  let grade=0;
+  if(document.getElementById('thrill').value==='Assente') grade=3;
+  if(document.getElementById('puntura').value==='Impossibile') grade=3;
 
-  // qbRatio (baseline=qbPres in v0)
-  const qbRatio = qbPres>0 ? qbOtt/qbPres : 1.0;
+  const map=[
+    ['g0','Routine','Accesso stabile.'],
+    ['g1','Warning','Ricontrollo prossima seduta.'],
+    ['g2','Disfunzione probabile','Eco accesso entro 72h.'],
+    ['g3','Critico','Gestione urgente oggi.']
+  ];
 
-  // strongCrit
-  const strongCrit =
-    (thrill === 'Assente') ||
-    (puntura === 'Impossibile') ||
-    (trombosi === 'Sì') ||
-    (completata === 'No') ||
-    (infezione === 'Sì' && accesso !== 'CVC'); // in v0 per FAV/AVG
-
-  // strong2
-  const strong2 =
-    (thrill === 'Ridotto') ||
-    (bruit === 'Alto-pitch') ||
-    (qbRatio < 0.80) ||
-    (allarmi !== 'No' && puntura === 'Difficile');
-
-  // warnings
-  let warnings = 0;
-  if (puntura === 'Difficile') warnings++;
-  if (allarmi !== 'No') warnings++;
-  if (qbRatio < 0.90) warnings++;
-
-  let grade = 0;
-  if (strongCrit) grade = 3;
-  else if (strong2 || warnings >= 2) grade = 2;
-  else if (warnings === 1) grade = 1;
-
-  // CVC override v0
-  let cvcNote = '';
-  if (accesso === 'CVC'){
-    const exit = v('exit');
-    const febbre = v('febbre');
-    if (febbre === 'Sì' && exit !== 'OK'){ grade = 3; cvcNote = 'CVC override: febbre + exit-site ≠ OK → G3'; }
-    if (exit === 'Essudato' && grade < 2){ grade = 2; cvcNote = 'CVC: exit-site essudato → ≥G2'; }
-  }
-
-  const out = mapGrade(grade);
-  document.getElementById('badge').className = 'badge ' + out.cls;
-  document.getElementById('badge').textContent = 'G' + grade;
-  document.getElementById('titolo').textContent = out.title;
-  document.getElementById('azione').textContent = out.action;
-  document.getElementById('debug').textContent =
-    `accesso=${accesso}\nqbPres=${qbPres} qbOtt=${qbOtt} qbRatio=${qbRatio.toFixed(2)}\n`+
-    `strongCrit=${strongCrit} strong2=${strong2} warnings=${warnings}\n`+
-    (cvcNote ? (cvcNote + '\n') : '');
+  document.getElementById('badge').className='badge '+map[grade][0];
+  document.getElementById('badge').textContent='G'+grade;
+  document.getElementById('titolo').textContent=map[grade][1];
+  document.getElementById('azione').textContent=map[grade][2];
 
   go('result');
 }
-
-function mapGrade(g){
-  if (g===0) return {cls:'g0', title:'Routine', action:'Accesso stabile.'};
-  if (g===1) return {cls:'g1', title:'Warning', action:'Ricontrollo prossima seduta + nota.'};
-  if (g===2) return {cls:'g2', title:'Probabile disfunzione', action:'Eco accesso ≤72h + alert VA team.'};
-  return {cls:'g3', title:'CRITICO', action:'Gestione urgente oggi.'};
-}
-
-function v(id){ return document.getElementById(id).value; }
-function n(id){ return parseInt(document.getElementById(id).value||'0',10); }
 
 toggleCVC();
 </script>
@@ -285,4 +326,3 @@ toggleCVC();
 </main>
 </body>
 </html>
-
