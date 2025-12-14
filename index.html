@@ -4,81 +4,25 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>VAS-HD (FAP)</title>
+
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#c86a9a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 
 <style>
 :root{
-  --bg:#120b10;--card:#1b0f17;--line:#6b2b4a;
-  --txt:#f2e9ee;--mut:#d6b3c4;--accent:#c86a9a;
+  --bg:#120b10;
+  --card:#1b0f17;
+  --line:#6b2b4a;
+  --txt:#f2e9ee;
+  --mut:#d6b3c4;
+  --accent:#c86a9a;
 }
 *{box-sizing:border-box}
 body{margin:0;font-family:-apple-system,system-ui;background:var(--bg);color:var(--txt)}
 .hidden{display:none}
-/* === BACKGROUND PER STEP (FIX DEFINITIVO) === */
-.step-bg{
-  position:relative;
-  min-height:100vh;
-  background-size:cover;
-  background-position:center;
-}
 
-.step-bg::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:rgba(18,11,16,0.75);
-}
-
-.step-bg > *{
-  position:relative;
-  z-index:1;
-}
-
-.bg-nurse{ background-image:url('bg-nurse.jpg'); }
-.bg-patient{ background-image:url('bg-patient.jpg'); }
-.bg-access{ background-image:url('bg-access.jpg'); }
-.bg-checklist{ background-image:url('bg-checklist.jpg'); }
-.bg-result{ background-image:url('bg-result.jpg'); }
-
-/* SPLASH */
-#splash{position:fixed;inset:0;background:#120b10;display:flex;align-items:center;justify-content:center;z-index:9999}
-#splash img{max-width:100%;max-height:100%;object-fit:contain}
-
-/* APP UI */
-header{padding:14px;border-bottom:1px solid var(--line)}
-h1{margin:0;font-size:20px}
-small{color:var(--mut)}
-main{padding:14px;max-width:980px;margin:0 auto}
-.card{border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px;background:rgba(27,15,23,0.92)}
-.grid{display:grid;grid-template-columns:1fr;gap:10px}
-@media(min-width:780px){.grid{grid-template-columns:1fr 1fr}}
-label{font-size:12px;color:var(--mut);display:block;margin-bottom:6px}
-select,input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#0f0a0d;color:var(--txt)}
-.row{display:flex;gap:10px}
-.btn{width:100%;padding:14px;border-radius:14px;border:0;font-weight:900;background:var(--accent);color:white}
-.btn2{width:100%;padding:14px;border-radius:14px;border:1px solid var(--line);font-weight:900;background:transparent;color:var(--txt)}
-.badge{display:inline-block;padding:6px 12px;border-radius:999px;font-weight:900;color:white}
-.g0{background:#3b7d5b}.g1{background:#b58b2a}.g2{background:#c46a2d}.g3{background:#b11226}
-.kpi{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-.pill{border:1px solid var(--line);border-radius:999px;padding:6px 10px;color:var(--mut);font-weight:800}
-hr{border:0;border-top:1px solid var(--line);margin:12px 0}
-
-/* Alert */
-.alert{padding:12px;border-radius:12px;margin-top:10px;font-weight:900}
-.alert.red{background:#b11226}
-
-/* Sirena */
-@keyframes blink{0%{opacity:1}50%{opacity:.2}100%{opacity:1}}
-.siren{animation:blink 1s infinite;text-align:center}
-.flash{animation:blink .25s 3}
-
-/* Titoli step */
-.stepTitle{font-weight:900;font-size:16px}
-.stepSub{color:var(--mut);margin-top:4px}
-
-/* === BACKGROUND PER STEP === */
+/* ===== BACKGROUND STEP ===== */
 .step-bg{
   position:relative;
   min-height:100vh;
@@ -93,12 +37,78 @@ hr{border:0;border-top:1px solid var(--line);margin:12px 0}
 }
 .step-bg > *{position:relative;z-index:1}
 
-/* immagini specifiche */
-.bg-nurse{ background-image:url('bg-nurse.jpg'); }
-.bg-patient{ background-image:url('bg-patient.jpg'); }
-.bg-access{ background-image:url('bg-access.jpg'); }
-.bg-checklist{ background-image:url('bg-checklist.jpg'); }
-.bg-result{ background-image:url('bg-result.jpg'); }
+.bg-nurse{background-image:url('bg-nurse.jpg')}
+.bg-patient{background-image:url('bg-patient.jpg')}
+.bg-access{background-image:url('bg-access.jpg')}
+.bg-checklist{background-image:url('bg-checklist.jpg')}
+.bg-result{background-image:url('bg-result.jpg')}
+
+/* ===== SPLASH ===== */
+#splash{
+  position:fixed;inset:0;
+  background:#120b10;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+#splash img{max-width:100%;max-height:100%;object-fit:contain}
+
+/* ===== UI ===== */
+header{padding:14px;border-bottom:1px solid var(--line)}
+h1{margin:0;font-size:20px}
+small{color:var(--mut)}
+main{padding:14px;max-width:900px;margin:auto}
+
+.card{
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:14px;
+  background:rgba(27,15,23,.95);
+  margin-bottom:14px;
+}
+
+label{font-size:12px;color:var(--mut);display:block;margin-bottom:6px}
+input,select{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:#0f0a0d;
+  color:var(--txt)
+}
+
+.row{display:flex;gap:10px}
+.btn{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:0;
+  font-weight:900;
+  background:var(--accent);
+  color:white
+}
+.btn2{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:transparent;
+  color:var(--txt);
+  font-weight:900
+}
+
+.stepTitle{font-weight:900;font-size:16px}
+.stepSub{color:var(--mut);margin-top:4px}
+
+.badge{padding:6px 12px;border-radius:999px;font-weight:900;color:white}
+.g0{background:#3b7d5b}
+.g1{background:#b58b2a}
+.g2{background:#c46a2d}
+.g3{background:#b11226}
+
+.alert{margin-top:12px;padding:12px;border-radius:12px;font-weight:900}
+.alert.red{background:#b11226}
 </style>
 </head>
 
@@ -110,72 +120,148 @@ hr{border:0;border-top:1px solid var(--line);margin:12px 0}
 </div>
 
 <div id="app" class="hidden">
-  <header>
-    <h1>VAS-HD (FAP)</h1>
-    <small>🩸 Sorveglianza accessi vascolari – wizard a cascata</small>
-  </header>
 
-  <main>
+<header>
+  <h1>VAS-HD (FAP)</h1>
+  <small>🩸 Sorveglianza accessi vascolari – wizard a cascata</small>
+</header>
 
-    <!-- HOME -->
-    <section id="home">
-      <div class="card">
-        <div class="stepTitle">📋 Ultime sedute</div>
-        <div id="history" style="margin-top:10px;color:var(--mut)">Nessuna seduta.</div>
-        <div class="row" style="margin-top:10px">
-          <button class="btn2" onclick="exportCSV()">📤 ESPORTA EXCEL</button>
-          <button class="btn2" onclick="clearAll()">🗑️ SVUOTA</button>
-        </div>
-      </div>
-      <button class="btn" onclick="startWizard()">➕ NUOVA SEDUTA</button>
-    </section>
+<!-- HOME -->
+<main id="home">
+  <div class="card">
+    <div class="stepTitle">📋 Ultime sedute</div>
+    <div id="history" style="margin-top:10px;color:var(--mut)">Nessuna seduta.</div>
+  </div>
+  <button class="btn" onclick="startWizard()">➕ NUOVA SEDUTA</button>
+</main>
 
-    <!-- STEP 1: INFERMIERE -->
-    <section id="s1" class="hidden step-bg bg-nurse">
-      <main>
-        <div class="card">
-          <div class="stepTitle">🧑‍⚕️ Identificazione infermiere</div>
-          <div class="stepSub">Inserisci firma/sigla per tracciabilità.</div>
-          <div style="margin-top:12px">
-            <label>Firma infermiere</label>
-            <input id="nurse" placeholder="Es. M.R. / Maria Rossi">
-          </div>
-          <div class="kpi">
-            <span class="pill" id="pillNurse">Firma: —</span>
-          </div>
-          <div class="row" style="margin-top:12px">
-            <button class="btn2" onclick="go('home')">↩️ Esci</button>
-            <button class="btn" onclick="nextFromNurse()">Avanti ➜</button>
-          </div>
-        </div>
-      </main>
-    </section>
+<!-- STEP 1 -->
+<section id="s1" class="hidden step-bg bg-nurse">
+<main>
+<div class="card">
+<div class="stepTitle">🧑‍⚕️ Identificazione infermiere</div>
+<div class="stepSub">Firma o sigla per tracciabilità</div>
+<label>Firma</label>
+<input id="nurse">
+<div class="row" style="margin-top:12px">
+<button class="btn2" onclick="goHome()">↩ Esci</button>
+<button class="btn" onclick="go('s2')">Avanti ➜</button>
+</div>
+</div>
+</main>
+</section>
 
-    <!-- STEP 2: PAZIENTE -->
-    <section id="s2" class="hidden step-bg bg-patient">
-      <main>
-        <div class="card">
-          <div class="stepTitle">🧾 Identificazione paziente</div>
-          <div class="stepSub">Inserisci un ID (es. GR72).</div>
-          <div style="margin-top:12px">
-            <label>ID paziente</label>
-            <input id="pid" placeholder="Es. GR72">
-          </div>
-          <div class="kpi">
-            <span class="pill" id="pillPid">Paziente: —</span>
-          </div>
-          <div class="row" style="margin-top:12px">
-            <button class="btn2" onclick="backTo('s1')">⬅︎ Indietro</button>
-            <button class="btn" onclick="nextFromPid()">Avanti ➜</button>
-          </div>
-        </div>
-      </main>
-    </section>
+<!-- STEP 2 -->
+<section id="s2" class="hidden step-bg bg-patient">
+<main>
+<div class="card">
+<div class="stepTitle">🧾 Identificazione paziente</div>
+<label>ID paziente</label>
+<input id="pid" placeholder="Es. GR72">
+<div class="row" style="margin-top:12px">
+<button class="btn2" onclick="go('s1')">⬅ Indietro</button>
+<button class="btn" onclick="go('s3')">Avanti ➜</button>
+</div>
+</div>
+</main>
+</section>
 
-    <!-- STEP 3: ACCESSO -->
-    <section id="s3" class="hidden step-bg bg-access">
-      <main>
-        <div class="card">
-          <div class="stepTitle">🩸 Selezione accesso</div>
-          <div class="stepSub">Sce
+<!-- STEP 3 -->
+<section id="s3" class="hidden step-bg bg-access">
+<main>
+<div class="card">
+<div class="stepTitle">🩸 Tipo di accesso</div>
+<select id="accesso">
+<option value="">Seleziona</option>
+<option>FAV</option>
+<option>AVG</option>
+<option>CVC</option>
+</select>
+<div class="row" style="margin-top:12px">
+<button class="btn2" onclick="go('s2')">⬅ Indietro</button>
+<button class="btn" onclick="go('s4')">Avanti ➜</button>
+</div>
+</div>
+</main>
+</section>
 
+<!-- STEP 4 -->
+<section id="s4" class="hidden step-bg bg-checklist">
+<main>
+<div class="card">
+<div class="stepTitle">🔍 Sorveglianza accesso vascolare</div>
+
+<label>Puntura</label>
+<select id="puntura">
+<option>Normale</option>
+<option>Difficile</option>
+<option>Impossibile</option>
+</select>
+
+<label>Thrill</label>
+<select id="thrill">
+<option>Normale</option>
+<option>Ridotto</option>
+<option>Assente</option>
+</select>
+
+<label>Allarmi</label>
+<select id="allarmi">
+<option>Nessuno</option>
+<option>Ripetuti</option>
+<option>Persistenti</option>
+</select>
+
+<div class="row" style="margin-top:12px">
+<button class="btn2" onclick="go('s3')">⬅ Indietro</button>
+<button class="btn" onclick="calc()">Calcola ➜</button>
+</div>
+</div>
+</main>
+</section>
+
+<!-- STEP 5 -->
+<section id="s5" class="hidden step-bg bg-result">
+<main>
+<div class="card">
+<div class="stepTitle">📊 Esito</div>
+<div id="result"></div>
+<button class="btn" onclick="goHome()">Fine</button>
+</div>
+</main>
+</section>
+
+</div>
+
+<script>
+function enterApp(){
+  document.getElementById("splash").style.display="none";
+  document.getElementById("app").classList.remove("hidden");
+}
+
+function startWizard(){
+  document.getElementById("home").classList.add("hidden");
+  go('s1');
+}
+
+function go(id){
+  document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+}
+
+function goHome(){
+  document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
+  document.getElementById("home").classList.remove("hidden");
+}
+
+function calc(){
+  let g="g0",txt="G0 – Accesso funzionante";
+  if(allarmi.value==="Ripetuti"){g="g2";txt="G2 – Medico da informare"}
+  if(allarmi.value==="Persistenti"){g="g3";txt="G3 – Urgenza"}
+  result.innerHTML=`<span class="badge ${g}">${txt}</span>`;
+  go('s5');
+}
+</script>
+
+</body>
+</html>
