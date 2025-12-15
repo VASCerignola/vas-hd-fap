@@ -1,4 +1,4 @@
-<!doctype html>
+<<!doctype html>
 <html lang="it">
 <head>
 <meta charset="utf-8"/>
@@ -18,29 +18,13 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%}
-body{
-  margin:0;
-  font-family:-apple-system,system-ui;
-  background:var(--bg);color:var(--txt);
-  -webkit-text-size-adjust:100%;
-}
+body{margin:0;font-family:-apple-system,system-ui;background:var(--bg);color:var(--txt);-webkit-text-size-adjust:100%}
 .hidden{display:none}
-
-/* safe area */
-.safe{
-  padding-left:max(14px, env(safe-area-inset-left));
-  padding-right:max(14px, env(safe-area-inset-right));
-}
-
-/* container always centered */
+.safe{padding-left:max(14px, env(safe-area-inset-left));padding-right:max(14px, env(safe-area-inset-right))}
 .container{width:100%;max-width:980px;margin:0 auto}
 
-/* background steps */
-.step-bg{
-  position:relative;min-height:100vh;
-  background-size:cover;background-position:center;background-color:#120b10;
-  display:flex;
-}
+/* backgrounds */
+.step-bg{position:relative;min-height:100vh;background-size:cover;background-position:center;background-color:#120b10;display:flex}
 .step-bg::before{content:"";position:absolute;inset:0;background:rgba(18,11,16,.75)}
 .step-bg>.container{position:relative;z-index:1;width:100%}
 .bg-nurse{background-image:url('bg-nurse.jpg')}
@@ -50,62 +34,33 @@ body{
 .bg-result{background-image:url('bg-result.jpg')}
 
 /* splash */
-#splash{
-  position:fixed;inset:0;background:#120b10;
-  display:flex;align-items:center;justify-content:center;z-index:9999;
-  padding:max(10px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom)) 10px;
-}
+#splash{position:fixed;inset:0;background:#120b10;display:flex;align-items:center;justify-content:center;z-index:9999;
+  padding:max(10px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom)) 10px}
 #splash img{max-width:100%;max-height:100%;object-fit:contain}
 
-/* header */
+/* ui */
 header{padding:14px;border-bottom:1px solid var(--line)}
 h1{margin:0;font-size:20px}
 small{color:var(--mut)}
-
-/* content */
 main{padding:14px}
-.card{
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  padding:16px;
-  background:rgba(27,15,23,.95);
-  margin-bottom:14px;
-}
-
+.card{border:1px solid var(--line);border-radius:var(--radius);padding:16px;background:rgba(27,15,23,.95);margin-bottom:14px}
 .block{margin-top:var(--gap)}
 .block.hidden{display:none}
-
 label{font-size:13px;color:var(--mut);display:block;margin:18px 0 8px}
 input,select{
-  width:100%;
-  padding:var(--fieldPad);
-  border-radius:14px;
-  border:1px solid var(--line);
-  background:#0f0a0d;
-  color:var(--txt);
-  font-size:16px;         /* evita zoom iOS */
-  line-height:1.2;
-  min-height:54px;        /* touch target */
+  width:100%;padding:var(--fieldPad);
+  border-radius:14px;border:1px solid var(--line);
+  background:#0f0a0d;color:var(--txt);
+  font-size:16px;line-height:1.2;min-height:54px
 }
-
-/* buttons */
-.btn,.btn2{
-  width:100%;
-  padding:16px;
-  border-radius:16px;
-  font-weight:900;
-  font-size:16px;
-}
+.btn,.btn2{width:100%;padding:16px;border-radius:16px;font-weight:900;font-size:16px}
 .btn{border:0;background:var(--accent);color:white}
 .btn2{border:1px solid var(--line);background:transparent;color:var(--txt)}
 .btn:disabled,.btn2:disabled{opacity:.45}
-
-/* badges + alerts */
 .badge{display:inline-block;padding:12px 16px;border-radius:999px;font-weight:900;color:white;font-size:16px}
 .g0{background:#3b7d5b}.g1{background:#b58b2a}.g2{background:#c46a2d}.g3{background:#b11226}
 .alert{margin-top:14px;padding:14px;border-radius:14px;font-weight:900}
 .alert.red{background:#b11226}
-
 .progress{margin-top:10px;color:var(--mut);font-weight:800}
 .history{display:flex;flex-direction:column;gap:10px}
 .hitem{border:1px solid var(--line);border-radius:14px;padding:12px;background:rgba(15,10,13,.55)}
@@ -115,28 +70,18 @@ hr{border:0;border-top:1px solid var(--line);margin:18px 0}
 .box{border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:12px;background:rgba(15,10,13,.45)}
 .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
 
-/* ✅ STICKY / FIXED BOTTOM BAR */
+/* sticky bar */
 .actionBar{
-  position:fixed;
-  left:0;right:0;bottom:0;
-  z-index:2000;
+  position:fixed;left:0;right:0;bottom:0;z-index:2000;
   background:rgba(18,11,16,.92);
   border-top:1px solid var(--line);
   backdrop-filter:saturate(1.2) blur(10px);
   padding:10px 0 calc(10px + env(safe-area-inset-bottom));
 }
-.actionBar .inner{
-  display:flex;gap:12px;
-  padding-left:max(14px, env(safe-area-inset-left));
-  padding-right:max(14px, env(safe-area-inset-right));
-}
+.actionBar .inner{display:flex;gap:12px;padding-left:max(14px, env(safe-area-inset-left));padding-right:max(14px, env(safe-area-inset-right))}
 .actionBar .inner .btn2{flex:1}
 .actionBar .inner .btn{flex:2}
-
-/* ✅ evita che la barra copra gli ultimi campi */
-.withBarPadding{
-  padding-bottom: calc(var(--barH) + 20px + env(safe-area-inset-bottom));
-}
+.withBarPadding{padding-bottom: calc(var(--barH) + 20px + env(safe-area-inset-bottom));}
 
 @media (max-width:480px){
   header{padding:14px 12px}
@@ -148,9 +93,7 @@ hr{border:0;border-top:1px solid var(--line);margin:18px 0}
 </head>
 
 <body>
-<div id="splash" onclick="enterApp()">
-  <img src="splash.png" alt="VAS-HD">
-</div>
+<div id="splash" onclick="enterApp()"><img src="splash.png" alt="VAS-HD"></div>
 
 <div id="app" class="hidden">
 
@@ -161,7 +104,6 @@ hr{border:0;border-top:1px solid var(--line);margin:18px 0}
   </div>
 </header>
 
-<!-- HOME -->
 <main id="home" class="safe">
   <div class="container">
     <div class="card">
@@ -176,211 +118,187 @@ hr{border:0;border-top:1px solid var(--line);margin:18px 0}
   </div>
 </main>
 
-<!-- STEP 1 -->
-<section id="s1" class="hidden step-bg bg-nurse">
-  <div class="container safe">
-    <main id="m1" class="withBarPadding">
-      <div class="card">
-        <label>Infermiere</label>
-        <input id="nurse" placeholder="Es. M.R. / Maria Rossi">
-      </div>
-    </main>
-  </div>
-</section>
+<section id="s1" class="hidden step-bg bg-nurse"><div class="container safe">
+  <main class="withBarPadding"><div class="card">
+    <label>Infermiere</label><input id="nurse" placeholder="Es. M.R. / Maria Rossi">
+  </div></main>
+</div></section>
 
-<!-- STEP 2 -->
-<section id="s2" class="hidden step-bg bg-patient">
-  <div class="container safe">
-    <main id="m2" class="withBarPadding">
-      <div class="card">
-        <label>ID Paziente</label>
-        <input id="pid" placeholder="GR72">
-      </div>
-    </main>
-  </div>
-</section>
+<section id="s2" class="hidden step-bg bg-patient"><div class="container safe">
+  <main class="withBarPadding"><div class="card">
+    <label>ID Paziente</label><input id="pid" placeholder="GR72">
+  </div></main>
+</div></section>
 
-<!-- STEP 3 -->
-<section id="s3" class="hidden step-bg bg-access">
-  <div class="container safe">
-    <main id="m3" class="withBarPadding">
-      <div class="card">
-        <label>Tipo di accesso</label>
-        <select id="accesso">
-          <option value="">—</option>
-          <option value="FAV">FAV</option>
-          <option value="AVG">AVG</option>
-          <option value="CVC">CVC</option>
-        </select>
-      </div>
-    </main>
-  </div>
-</section>
+<section id="s3" class="hidden step-bg bg-access"><div class="container safe">
+  <main class="withBarPadding"><div class="card">
+    <label>Tipo di accesso</label>
+    <select id="accesso">
+      <option value="">—</option>
+      <option value="FAV">FAV</option>
+      <option value="AVG">AVG</option>
+      <option value="CVC">CVC</option>
+    </select>
+  </div></main>
+</div></section>
 
-<!-- STEP 4 -->
-<section id="s4" class="hidden step-bg bg-checklist">
-  <div class="container safe">
-    <main id="m4" class="withBarPadding">
-      <div class="card">
-        <div class="progress" id="prog">Progress: 0/0</div>
+<section id="s4" class="hidden step-bg bg-checklist"><div class="container safe">
+  <main class="withBarPadding">
+    <div class="card">
+      <div class="progress" id="prog">Progress: 0/0</div>
 
-        <!-- FLOW AV -->
-        <div id="flowAV" class="hidden">
-          <div id="av1" class="block">
-            <label>1) Qb ottenuto</label>
-            <select id="av_qb">
-              <option value="">—</option>
-              <option value="ok">≥95%</option>
-              <option value="mid">85–94%</option>
-              <option value="low">&lt;85%</option>
-            </select>
-          </div>
-
-          <div id="av2" class="block hidden">
-            <label>2) Allarmi ripetuti</label>
-            <select id="av_alarm">
-              <option value="">—</option>
-              <option value="no">No</option>
-              <option value="single">Sì, intermittenti</option>
-              <option value="many">Sì, frequenti</option>
-            </select>
-          </div>
-
-          <div id="av3" class="block hidden">
-            <label>3) Cannulazione / puntura</label>
-            <select id="av_cann">
-              <option value="">—</option>
-              <option value="ok">Facile</option>
-              <option value="diff">Difficile / multipli tentativi</option>
-              <option value="imp">Impossibile / infiltrazione importante</option>
-            </select>
-          </div>
-
-          <div id="av4" class="block hidden">
-            <label>4) Sanguinamento post-ago</label>
-            <select id="av_bleed">
-              <option value="">—</option>
-              <option value="ok">Normale</option>
-              <option value="prol">Prolungato</option>
-              <option value="mass">Molto prolungato / problematico</option>
-            </select>
-          </div>
-
-          <div id="av5" class="block hidden">
-            <label>5) Segni clinici locali (opzionale ma utile)</label>
-            <select id="av_note">
-              <option value="">—</option>
-              <option value="Nessuno">Nessuno</option>
-              <option value="Thrill/Bruit modificato">Thrill/Bruit modificato</option>
-              <option value="Edema/dolore/segni locali">Edema/dolore/segni locali</option>
-              <option value="Ischemia/steal sospetta">Ischemia/steal sospetta</option>
-            </select>
-          </div>
-
-          <div id="avg6" class="block hidden">
-            <hr>
-            <label>6) Solo AVG – cute/graft</label>
-            <select id="avg_skin">
-              <option value="">—</option>
-              <option value="ok">Regolare</option>
-              <option value="warn">Sospetto (arrossamento/dolore/calore)</option>
-              <option value="crit">Ulcerazione/essudato/pseudoaneurisma</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- FLOW CVC -->
-        <div id="flowCVC" class="hidden">
-          <div id="cvc1" class="block">
-            <label>1) Funzionalità lumi (aspirazione/flussaggio)</label>
-            <select id="cvc_lumen">
-              <option value="">—</option>
-              <option value="ok">OK entrambi</option>
-              <option value="one">Problema 1 lume</option>
-              <option value="two">Problema entrambi</option>
-            </select>
-          </div>
-
-          <div id="cvc2" class="block hidden">
-            <label>2) Qb ottenuto</label>
-            <select id="cvc_qb">
-              <option value="">—</option>
-              <option value="ok">≥95%</option>
-              <option value="mid">85–94%</option>
-              <option value="low">&lt;85%</option>
-            </select>
-          </div>
-
-          <div id="cvc3" class="block hidden">
-            <label>3) Allarmi ripetuti / flusso instabile</label>
-            <select id="cvc_alarm">
-              <option value="">—</option>
-              <option value="no">No</option>
-              <option value="single">Sì, intermittenti</option>
-              <option value="many">Sì, frequenti</option>
-            </select>
-          </div>
-
-          <div id="cvc4" class="block hidden">
-            <label>4) Inversione linee necessaria</label>
-            <select id="cvc_reverse">
-              <option value="">—</option>
-              <option value="no">No</option>
-              <option value="yes">Sì</option>
-            </select>
-          </div>
-
-          <div id="cvc5" class="block hidden">
-            <label>5) Exit-site</label>
-            <select id="cvc_exit">
-              <option value="">—</option>
-              <option value="ok">OK</option>
-              <option value="red">Arrossato/dolorabile</option>
-              <option value="pus">Essudato</option>
-            </select>
-          </div>
-
-          <div id="cvc6" class="block hidden">
-            <label>6) Sintomi sistemici (febbre/brividi)</label>
-            <select id="cvc_sys">
-              <option value="">—</option>
-              <option value="no">No</option>
-              <option value="yes">Sì</option>
-            </select>
-          </div>
-        </div>
-
-      </div>
-    </main>
-  </div>
-</section>
-
-<!-- STEP 5 -->
-<section id="s5" class="hidden step-bg bg-result">
-  <div class="container safe">
-    <main id="m5" class="withBarPadding">
-      <div class="card">
-        <div id="result"></div>
-
-        <div class="box">
-          <div class="hmain">📣 Messaggio pronto</div>
-          <div id="handoff" class="mono" style="margin-top:10px;white-space:pre-wrap"></div>
-        </div>
-
-        <div id="medBlock" class="alert red hidden">
-          Medico informato?
-          <select id="medicoInf">
+      <!-- AV -->
+      <div id="flowAV" class="hidden">
+        <div id="av1" class="block">
+          <label>1) Qb ottenuto</label>
+          <select id="av_qb">
             <option value="">—</option>
-            <option value="si">Sì</option>
+            <option value="ok">≥95%</option>
+            <option value="mid">85–94%</option>
+            <option value="low">&lt;85%</option>
           </select>
-          <div class="hmeta" style="margin-top:8px">G2–G3: per chiudere devi selezionare “Sì”.</div>
+        </div>
+
+        <div id="av2" class="block hidden">
+          <label>2) Allarmi ripetuti</label>
+          <select id="av_alarm">
+            <option value="">—</option>
+            <option value="no">No</option>
+            <option value="single">Sì, intermittenti</option>
+            <option value="many">Sì, frequenti</option>
+          </select>
+        </div>
+
+        <div id="av3" class="block hidden">
+          <label>3) Cannulazione / puntura</label>
+          <select id="av_cann">
+            <option value="">—</option>
+            <option value="ok">Facile</option>
+            <option value="diff">Difficile / multipli tentativi</option>
+            <option value="imp">Impossibile / infiltrazione importante</option>
+          </select>
+        </div>
+
+        <div id="av4" class="block hidden">
+          <label>4) Sanguinamento post-ago</label>
+          <select id="av_bleed">
+            <option value="">—</option>
+            <option value="ok">Normale</option>
+            <option value="prol">Prolungato</option>
+            <option value="mass">Molto prolungato / problematico</option>
+          </select>
+        </div>
+
+        <div id="av5" class="block hidden">
+          <label>5) Segni clinici locali</label>
+          <select id="av_note">
+            <option value="">—</option>
+            <option value="Nessuno">Nessuno</option>
+            <option value="Thrill/Bruit modificato">Thrill/Bruit modificato</option>
+            <option value="Edema/dolore/segni locali">Edema/dolore/segni locali</option>
+            <option value="Ischemia/steal sospetta">Ischemia/steal sospetta</option>
+          </select>
+        </div>
+
+        <div id="avg6" class="block hidden">
+          <hr>
+          <label>6) Solo AVG – cute/graft</label>
+          <select id="avg_skin">
+            <option value="">—</option>
+            <option value="ok">Regolare</option>
+            <option value="warn">Sospetto</option>
+            <option value="crit">Ulcerazione/essudato/pseudoaneurisma</option>
+          </select>
         </div>
       </div>
-    </main>
-  </div>
-</section>
 
-<!-- ✅ ACTION BAR (sticky bottom) -->
+      <!-- CVC -->
+      <div id="flowCVC" class="hidden">
+        <div id="cvc1" class="block">
+          <label>1) Funzionalità lumi (aspirazione/flussaggio)</label>
+          <select id="cvc_lumen">
+            <option value="">—</option>
+            <option value="ok">OK entrambi</option>
+            <option value="one">Problema 1 lume</option>
+            <option value="two">Problema entrambi</option>
+          </select>
+        </div>
+
+        <div id="cvc2" class="block hidden">
+          <label>2) Qb ottenuto</label>
+          <select id="cvc_qb">
+            <option value="">—</option>
+            <option value="ok">≥95%</option>
+            <option value="mid">85–94%</option>
+            <option value="low">&lt;85%</option>
+          </select>
+        </div>
+
+        <div id="cvc3" class="block hidden">
+          <label>3) Allarmi ripetuti / flusso instabile</label>
+          <select id="cvc_alarm">
+            <option value="">—</option>
+            <option value="no">No</option>
+            <option value="single">Sì, intermittenti</option>
+            <option value="many">Sì, frequenti</option>
+          </select>
+        </div>
+
+        <div id="cvc4" class="block hidden">
+          <label>4) Inversione linee necessaria</label>
+          <select id="cvc_reverse">
+            <option value="">—</option>
+            <option value="no">No</option>
+            <option value="yes">Sì</option>
+          </select>
+        </div>
+
+        <div id="cvc5" class="block hidden">
+          <label>5) Exit-site</label>
+          <select id="cvc_exit">
+            <option value="">—</option>
+            <option value="ok">OK</option>
+            <option value="red">Arrossato/dolorabile</option>
+            <option value="pus">Essudato</option>
+          </select>
+        </div>
+
+        <div id="cvc6" class="block hidden">
+          <label>6) Sintomi sistemici (febbre/brividi)</label>
+          <select id="cvc_sys">
+            <option value="">—</option>
+            <option value="no">No</option>
+            <option value="yes">Sì</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div></section>
+
+<section id="s5" class="hidden step-bg bg-result"><div class="container safe">
+  <main class="withBarPadding">
+    <div class="card">
+      <div id="result"></div>
+      <div class="box">
+        <div class="hmain">📣 Messaggio pronto</div>
+        <div id="handoff" class="mono" style="margin-top:10px;white-space:pre-wrap"></div>
+      </div>
+
+      <div id="medBlock" class="alert red hidden">
+        Medico informato?
+        <select id="medicoInf">
+          <option value="">—</option>
+          <option value="si">Sì</option>
+        </select>
+        <div class="hmeta" style="margin-top:8px">G2–G3: per chiudere devi selezionare “Sì”.</div>
+      </div>
+    </div>
+  </main>
+</div></section>
+
+<!-- sticky bar -->
 <div id="actionBar" class="actionBar hidden">
   <div class="container">
     <div class="inner safe">
@@ -398,99 +316,67 @@ const STATE={ nurse:"", pid:"", accesso:"" };
 let LAST={ grade:0, summary:"", msg:"" };
 let CURRENT="home";
 
-/* ====== NAV ====== */
+/* ===== NAV ===== */
 function enterApp(){ splash.style.display="none"; app.classList.remove("hidden"); renderHistory(); hideBar(); }
 function startWizard(){ document.getElementById("home").classList.add("hidden"); go("s1"); }
 function showHome(){
   document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
   document.getElementById("home").classList.remove("hidden");
-  CURRENT="home";
-  renderHistory();
-  hideBar();
+  CURRENT="home"; renderHistory(); hideBar();
 }
 function go(id){
   document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
   document.getElementById(id).classList.remove("hidden");
   CURRENT=id;
+
+  // ✅ FIX: entrando in s4 forzo SEMPRE la cascata corretta
+  if(id==="s4"){ forceCorrectFlow(); }
+
   configureBarForStep(id);
 }
 
-/* ====== STICKY BAR ====== */
+/* ===== STICKY BAR ===== */
 function showBar(){ actionBar.classList.remove("hidden"); }
 function hideBar(){ actionBar.classList.add("hidden"); }
-function setBar(leftLabel, rightLabel, rightEnabled=true){
-  barLeft.textContent = leftLabel;
-  barRight.textContent = rightLabel;
-  barRight.disabled = !rightEnabled;
+function setBar(leftLabel,rightLabel,rightEnabled=true){
+  barLeft.textContent=leftLabel; barRight.textContent=rightLabel; barRight.disabled=!rightEnabled;
 }
-
-/* handlers are dynamic */
-let _barLeft = ()=>{};
-let _barRight = ()=>{};
+let _barLeft=()=>{}, _barRight=()=>{};
 function barLeftAction(){ _barLeft(); }
 function barRightAction(){ _barRight(); }
 
 function configureBarForStep(id){
   if(id==="home"){ hideBar(); return; }
   showBar();
-
-  if(id==="s1"){
-    setBar("↩ Home","Avanti", true);
-    _barLeft = showHome;
-    _barRight = next1;
-  } else if(id==="s2"){
-    setBar("⬅ Indietro","Avanti", true);
-    _barLeft = ()=>go("s1");
-    _barRight = next2;
-  } else if(id==="s3"){
-    setBar("⬅ Indietro","Avanti", true);
-    _barLeft = ()=>go("s2");
-    _barRight = next3;
-  } else if(id==="s4"){
-    setBar("⬅ Indietro","Calcola", false); // abilito quando cascata completa
-    _barLeft = ()=>go("s3");
-    _barRight = calc;
-  } else if(id==="s5"){
-    const needConfirm = (LAST.grade>=2);
-    setBar("⬅ Indietro","Fine", !needConfirm); // se G2-G3 abilito solo dopo “Sì”
-    _barLeft = ()=>go("s4");
-    _barRight = finish;
+  if(id==="s1"){ setBar("↩ Home","Avanti",true); _barLeft=showHome; _barRight=next1; }
+  else if(id==="s2"){ setBar("⬅ Indietro","Avanti",true); _barLeft=()=>go("s1"); _barRight=next2; }
+  else if(id==="s3"){ setBar("⬅ Indietro","Avanti",true); _barLeft=()=>go("s2"); _barRight=next3; }
+  else if(id==="s4"){ setBar("⬅ Indietro","Calcola",false); _barLeft=()=>go("s3"); _barRight=calc; }
+  else if(id==="s5"){
+    const needConfirm=(LAST.grade>=2);
+    setBar("⬅ Indietro","Fine", !needConfirm);
+    _barLeft=()=>go("s4"); _barRight=finish;
   }
 }
 
-/* ====== STEP FUNCTIONS ====== */
-function next1(){
-  const v=(nurse.value||"").trim();
-  if(!v) return alert("Inserisci infermiere");
-  STATE.nurse=v;
-  go("s2");
-}
-function next2(){
-  const v=(pid.value||"").trim();
-  if(!v) return alert("Inserisci paziente");
-  STATE.pid=v;
-  go("s3");
-}
-function next3(){
-  const v=accesso.value;
-  if(!v) return alert("Seleziona accesso");
-  STATE.accesso=v;
-  setupCascade();
-  go("s4");
+/* ===== STEP 1-3 ===== */
+function next1(){ const v=(nurse.value||"").trim(); if(!v) return alert("Inserisci infermiere"); STATE.nurse=v; go("s2"); }
+function next2(){ const v=(pid.value||"").trim(); if(!v) return alert("Inserisci paziente"); STATE.pid=v; go("s3"); }
+function next3(){ const v=accesso.value; if(!v) return alert("Seleziona accesso"); STATE.accesso=v; setupCascade(); go("s4"); }
+
+/* ===== HARD RESET + FORCE FLOW (FIX) ===== */
+function hardHideAll(){
+  // nascondi i due flow SEMPRE
+  flowAV.classList.add("hidden"); flowCVC.classList.add("hidden");
+  // nascondi tutti i sotto-step
+  [av2,av3,av4,av5,avg6,cvc2,cvc3,cvc4,cvc5,cvc6].forEach(x=>x.classList.add("hidden"));
+  // reset valori
+  av_qb.value=""; av_alarm.value=""; av_cann.value=""; av_bleed.value=""; av_note.value=""; avg_skin.value="";
+  cvc_lumen.value=""; cvc_qb.value=""; cvc_alarm.value=""; cvc_reverse.value=""; cvc_exit.value=""; cvc_sys.value="";
 }
 
-/* ====== CASCATA ====== */
-function resetAV(){
-  av_qb.value=""; av_alarm.value=""; av_cann.value=""; av_bleed.value=""; av_note.value=""; avg_skin.value="";
-  av2.classList.add("hidden"); av3.classList.add("hidden"); av4.classList.add("hidden"); av5.classList.add("hidden"); avg6.classList.add("hidden");
-}
-function resetCVC(){
-  cvc_lumen.value=""; cvc_qb.value=""; cvc_alarm.value=""; cvc_reverse.value=""; cvc_exit.value=""; cvc_sys.value="";
-  cvc2.classList.add("hidden"); cvc3.classList.add("hidden"); cvc4.classList.add("hidden"); cvc5.classList.add("hidden"); cvc6.classList.add("hidden");
-}
 function setupCascade(){
-  flowAV.classList.add("hidden"); flowCVC.classList.add("hidden");
-  resetAV(); resetCVC();
+  hardHideAll();
   if(STATE.accesso==="CVC"){
     flowCVC.classList.remove("hidden");
     prog.textContent="Progress: 0/6";
@@ -498,98 +384,119 @@ function setupCascade(){
     flowAV.classList.remove("hidden");
     prog.textContent=`Progress: 0/${STATE.accesso==="AVG"?6:5}`;
   }
-  // Calcola disabilitato finché non completo
-  if(CURRENT==="s4"){ setBar("⬅ Indietro","Calcola", false); }
+  if(CURRENT==="s4") setBar("⬅ Indietro","Calcola", false);
 }
 
+// ✅ se entri in s4 e l'accesso è CVC, garantisco che l'AV sia invisibile (e viceversa)
+function forceCorrectFlow(){
+  // se non ho accesso scelto, rimando indietro
+  if(!STATE.accesso){ go("s3"); return; }
+  // se per qualche motivo è rimasto visibile il flow sbagliato, lo resetto
+  if(STATE.accesso==="CVC"){
+    flowAV.classList.add("hidden");
+    flowCVC.classList.remove("hidden");
+    // se l'utente vedeva step AV sbloccati, li richiudo
+    [av2,av3,av4,av5,avg6].forEach(x=>x.classList.add("hidden"));
+  }else{
+    flowCVC.classList.add("hidden");
+    flowAV.classList.remove("hidden");
+    [cvc2,cvc3,cvc4,cvc5,cvc6].forEach(x=>x.classList.add("hidden"));
+  }
+  updateProgress();
+}
+
+/* ===== PROGRESS ===== */
 function updateProgress(){
   let ok=false;
-
   if(STATE.accesso==="CVC"){
     const filled=[cvc_lumen,cvc_qb,cvc_alarm,cvc_reverse,cvc_exit,cvc_sys].filter(x=>x.value).length;
     prog.textContent=`Progress: ${filled}/6`;
-    ok = (filled===6);
-  } else {
+    ok=(filled===6);
+  }else{
     const base=[av_qb,av_alarm,av_cann,av_bleed,av_note].filter(x=>x.value).length;
     let total=5, filled=base;
     if(STATE.accesso==="AVG"){ total=6; if(avg_skin.value) filled++; }
     prog.textContent=`Progress: ${filled}/${total}`;
-    ok = (filled===total);
+    ok=(filled===total);
   }
-
-  if(CURRENT==="s4"){
-    // abilita “Calcola” sulla barra
-    setBar("⬅ Indietro","Calcola", ok);
-  }
+  if(CURRENT==="s4") setBar("⬅ Indietro","Calcola", ok);
 }
 
-/* AV unlock */
+/* ===== CASCADE AV ===== */
 av_qb.addEventListener("change", ()=>{
+  if(STATE.accesso==="CVC") return;
   av_alarm.value=""; av_cann.value=""; av_bleed.value=""; av_note.value=""; avg_skin.value="";
-  av2.classList.add("hidden"); av3.classList.add("hidden"); av4.classList.add("hidden"); av5.classList.add("hidden"); avg6.classList.add("hidden");
+  [av2,av3,av4,av5,avg6].forEach(x=>x.classList.add("hidden"));
   if(av_qb.value) av2.classList.remove("hidden");
   updateProgress();
 });
 av_alarm.addEventListener("change", ()=>{
+  if(STATE.accesso==="CVC") return;
   av_cann.value=""; av_bleed.value=""; av_note.value=""; avg_skin.value="";
-  av3.classList.add("hidden"); av4.classList.add("hidden"); av5.classList.add("hidden"); avg6.classList.add("hidden");
+  [av3,av4,av5,avg6].forEach(x=>x.classList.add("hidden"));
   if(av_alarm.value) av3.classList.remove("hidden");
   updateProgress();
 });
 av_cann.addEventListener("change", ()=>{
+  if(STATE.accesso==="CVC") return;
   av_bleed.value=""; av_note.value=""; avg_skin.value="";
-  av4.classList.add("hidden"); av5.classList.add("hidden"); avg6.classList.add("hidden");
+  [av4,av5,avg6].forEach(x=>x.classList.add("hidden"));
   if(av_cann.value) av4.classList.remove("hidden");
   updateProgress();
 });
 av_bleed.addEventListener("change", ()=>{
+  if(STATE.accesso==="CVC") return;
   av_note.value=""; avg_skin.value="";
-  av5.classList.add("hidden"); avg6.classList.add("hidden");
+  [av5,avg6].forEach(x=>x.classList.add("hidden"));
   if(av_bleed.value) av5.classList.remove("hidden");
   updateProgress();
 });
 av_note.addEventListener("change", ()=>{
-  avg_skin.value="";
-  avg6.classList.add("hidden");
+  if(STATE.accesso==="CVC") return;
+  avg_skin.value=""; avg6.classList.add("hidden");
   if(av_note.value && STATE.accesso==="AVG") avg6.classList.remove("hidden");
   updateProgress();
 });
-avg_skin.addEventListener("change", updateProgress);
+avg_skin.addEventListener("change", ()=>{ if(STATE.accesso!=="AVG") return; updateProgress(); });
 
-/* CVC unlock */
+/* ===== CASCADE CVC ===== */
 cvc_lumen.addEventListener("change", ()=>{
+  if(STATE.accesso!=="CVC") return;
   cvc_qb.value=""; cvc_alarm.value=""; cvc_reverse.value=""; cvc_exit.value=""; cvc_sys.value="";
-  cvc2.classList.add("hidden"); cvc3.classList.add("hidden"); cvc4.classList.add("hidden"); cvc5.classList.add("hidden"); cvc6.classList.add("hidden");
+  [cvc2,cvc3,cvc4,cvc5,cvc6].forEach(x=>x.classList.add("hidden"));
   if(cvc_lumen.value) cvc2.classList.remove("hidden");
   updateProgress();
 });
 cvc_qb.addEventListener("change", ()=>{
+  if(STATE.accesso!=="CVC") return;
   cvc_alarm.value=""; cvc_reverse.value=""; cvc_exit.value=""; cvc_sys.value="";
-  cvc3.classList.add("hidden"); cvc4.classList.add("hidden"); cvc5.classList.add("hidden"); cvc6.classList.add("hidden");
+  [cvc3,cvc4,cvc5,cvc6].forEach(x=>x.classList.add("hidden"));
   if(cvc_qb.value) cvc3.classList.remove("hidden");
   updateProgress();
 });
 cvc_alarm.addEventListener("change", ()=>{
+  if(STATE.accesso!=="CVC") return;
   cvc_reverse.value=""; cvc_exit.value=""; cvc_sys.value="";
-  cvc4.classList.add("hidden"); cvc5.classList.add("hidden"); cvc6.classList.add("hidden");
+  [cvc4,cvc5,cvc6].forEach(x=>x.classList.add("hidden"));
   if(cvc_alarm.value) cvc4.classList.remove("hidden");
   updateProgress();
 });
 cvc_reverse.addEventListener("change", ()=>{
+  if(STATE.accesso!=="CVC") return;
   cvc_exit.value=""; cvc_sys.value="";
-  cvc5.classList.add("hidden"); cvc6.classList.add("hidden");
+  [cvc5,cvc6].forEach(x=>x.classList.add("hidden"));
   if(cvc_reverse.value) cvc5.classList.remove("hidden");
   updateProgress();
 });
 cvc_exit.addEventListener("change", ()=>{
-  cvc_sys.value="";
-  cvc6.classList.add("hidden");
+  if(STATE.accesso!=="CVC") return;
+  cvc_sys.value=""; cvc6.classList.add("hidden");
   if(cvc_exit.value) cvc6.classList.remove("hidden");
   updateProgress();
 });
-cvc_sys.addEventListener("change", updateProgress);
+cvc_sys.addEventListener("change", ()=>{ if(STATE.accesso!=="CVC") return; updateProgress(); });
 
-/* ====== GRADING ====== */
+/* ===== GRADING ===== */
 function gradeFromQbAlarm(qb, alarm){
   let g=0;
   if(qb==="mid") g=Math.max(g,1);
@@ -601,12 +508,11 @@ function gradeFromQbAlarm(qb, alarm){
 }
 function mapQb(v){ return v==="ok"?"≥95%":v==="mid"?"85–94%":"<85%"; }
 function mapAlarm(v){ return v==="no"?"no":v==="single"?"intermittenti":"frequenti"; }
-function escapeHtml(s){ return String(s||"").replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m])); }
+function escapeHtml(s){ return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
 function safeCSV(s){ return String(s||"").replaceAll("\n"," ").replaceAll(";"," , "); }
 
 function calc(){
   let g=0; const flags=[];
-
   if(STATE.accesso==="CVC"){
     if([cvc_lumen,cvc_qb,cvc_alarm,cvc_reverse,cvc_exit,cvc_sys].some(x=>!x.value)) return alert("Completa CVC.");
     g = gradeFromQbAlarm(cvc_qb.value, cvc_alarm.value);
@@ -648,26 +554,21 @@ Infermiere: ${STATE.nurse}`;
 
   result.innerHTML = `<span class="badge g${g}">G${g}</span><div style="margin-top:10px">${escapeHtml(LAST.summary)}</div>`;
   handoff.textContent = LAST.msg;
+
   medBlock.classList.toggle("hidden", g<2);
   medicoInf.value="";
-
   go("s5");
-  // aggiorna barra s5 (Fine disabilitato se G2–G3)
   configureBarForStep("s5");
 }
 
-/* abilita “Fine” solo se medicoInf=si quando G2–G3 */
 medicoInf.addEventListener("change", ()=>{
   if(CURRENT!=="s5") return;
   if(LAST.grade<2) return;
   setBar("⬅ Indietro","Fine", medicoInf.value==="si");
 });
 
-/* ====== FINISH + WHATSAPP ====== */
 async function notifyWhatsApp(){
-  if(navigator.share){
-    try{ await navigator.share({ title:"VAS-HD (FAP)", text: LAST.msg }); return; }catch(e){}
-  }
+  if(navigator.share){ try{ await navigator.share({title:"VAS-HD (FAP)", text: LAST.msg}); return; }catch(e){} }
   window.open(`https://wa.me/?text=${encodeURIComponent(LAST.msg)}`,"_blank");
 }
 function finish(){
@@ -677,7 +578,7 @@ function finish(){
   showHome();
 }
 
-/* ====== STORAGE + EXPORT ====== */
+/* storage/export */
 function loadSessions(){ return JSON.parse(localStorage.getItem(STORE) || "[]"); }
 function saveSession(){
   const arr=loadSessions();
@@ -714,8 +615,7 @@ async function shareCSV(){
 }
 
 /* init */
-renderHistory();
-hideBar();
+renderHistory(); hideBar();
 </script>
 </body>
 </html>
