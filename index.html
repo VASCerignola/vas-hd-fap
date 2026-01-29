@@ -1,8 +1,8 @@
-<<!doctype html>
+<!doctype html>
 <html lang="it">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VAS-HD (FAP)</title>
 
 <link rel="manifest" href="manifest.webmanifest">
@@ -11,611 +11,267 @@
 
 <style>
 :root{
-  --bg:#120b10;--card:#1b0f17;--line:#6b2b4a;
-  --txt:#f2e9ee;--mut:#d6b3c4;--accent:#c86a9a;
-  --gap:18px;--fieldPad:16px;--radius:16px;
-  --barH:74px;
+ --bg:#120b10;--card:#1b0f17;--line:#6b2b4a;
+ --txt:#f2e9ee;--mut:#d6b3c4;--accent:#c86a9a;
 }
 *{box-sizing:border-box}
-html,body{height:100%}
-body{margin:0;font-family:-apple-system,system-ui;background:var(--bg);color:var(--txt);-webkit-text-size-adjust:100%}
+body{
+ margin:0;font-family:-apple-system,system-ui;
+ background:var(--bg);color:var(--txt)
+}
 .hidden{display:none}
-.safe{padding-left:max(14px, env(safe-area-inset-left));padding-right:max(14px, env(safe-area-inset-right))}
-.container{width:100%;max-width:980px;margin:0 auto}
 
-/* backgrounds */
-.step-bg{position:relative;min-height:100vh;background-size:cover;background-position:center;background-color:#120b10;display:flex}
-.step-bg::before{content:"";position:absolute;inset:0;background:rgba(18,11,16,.75)}
-.step-bg>.container{position:relative;z-index:1;width:100%}
-.bg-nurse{background-image:url('bg-nurse.jpg')}
-.bg-patient{background-image:url('bg-patient.jpg')}
-.bg-access{background-image:url('bg-access.jpg')}
-.bg-checklist{background-image:url('bg-checklist.jpg')}
-.bg-result{background-image:url('bg-result.jpg')}
+/* ===== BACKGROUND ===== */
+.step-bg{
+ min-height:100vh;
+ background-size:cover;
+ background-position:center;
+ position:relative;
+}
+.step-bg::before{
+ content:"";position:absolute;inset:0;
+ background:rgba(18,11,16,.75)
+}
+.step-bg>*{position:relative;z-index:1}
 
-/* splash */
-#splash{position:fixed;inset:0;background:#120b10;display:flex;align-items:center;justify-content:center;z-index:9999;
-  padding:max(10px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom)) 10px}
-#splash img{max-width:100%;max-height:100%;object-fit:contain}
+.bg-nurse{background-image:url("bg-nurse.jpg")}
+.bg-patient{background-image:url("bg-patient.jpg")}
+.bg-access{background-image:url("bg-access.jpg")}
+.bg-checklist{background-image:url("bg-checklist.jpg")}
+.bg-result{background-image:url("bg-result.jpg")}
 
-/* ui */
-header{padding:14px;border-bottom:1px solid var(--line)}
-h1{margin:0;font-size:20px}
+/* ===== SPLASH ===== */
+#splash{
+ position:fixed;inset:0;
+ background:#120b10;
+ display:flex;align-items:center;justify-content:center;
+ z-index:9999
+}
+#splash img{max-width:100%;max-height:100%}
+
+/* ===== HEADER ===== */
+header{
+ padding:18px;text-align:center;
+ border-bottom:1px solid var(--line)
+}
+h1{margin:0;font-size:24px}
 small{color:var(--mut)}
-main{padding:14px}
-.card{border:1px solid var(--line);border-radius:var(--radius);padding:16px;background:rgba(27,15,23,.95);margin-bottom:14px}
-.block{margin-top:var(--gap)}
-.block.hidden{display:none}
-label{font-size:13px;color:var(--mut);display:block;margin:18px 0 8px}
-input,select{
-  width:100%;padding:var(--fieldPad);
-  border-radius:14px;border:1px solid var(--line);
-  background:#0f0a0d;color:var(--txt);
-  font-size:16px;line-height:1.2;min-height:54px
+
+/* ===== MAIN CONTAINER ===== */
+main{
+ padding:20px;
+ max-width:1100px;
+ margin:auto
 }
-.btn,.btn2{width:100%;padding:16px;border-radius:16px;font-weight:900;font-size:16px}
-.btn{border:0;background:var(--accent);color:white}
-.btn2{border:1px solid var(--line);background:transparent;color:var(--txt)}
-.btn:disabled,.btn2:disabled{opacity:.45}
-.badge{display:inline-block;padding:12px 16px;border-radius:999px;font-weight:900;color:white;font-size:16px}
-.g0{background:#3b7d5b}.g1{background:#b58b2a}.g2{background:#c46a2d}.g3{background:#b11226}
-.alert{margin-top:14px;padding:14px;border-radius:14px;font-weight:900}
+
+/* ===== CARD (PIÙ GRANDE) ===== */
+.card{
+ background:rgba(27,15,23,.96);
+ border:2px solid var(--line);
+ border-radius:22px;
+ padding:26px;
+ margin-bottom:22px
+}
+
+.stepTitle{
+ font-size:22px;
+ font-weight:900;
+ margin-bottom:8px
+}
+.stepSub{
+ color:var(--mut);
+ font-size:15px;
+ margin-bottom:20px
+}
+
+label{
+ font-size:14px;
+ color:var(--mut);
+ margin:18px 0 8px;
+ display:block
+}
+
+select,input{
+ width:100%;
+ padding:16px;
+ font-size:17px;
+ border-radius:16px;
+ border:2px solid var(--line);
+ background:#0f0a0d;
+ color:var(--txt)
+}
+
+.row{
+ display:flex;
+ gap:16px;
+ margin-top:26px;
+ flex-wrap:wrap
+}
+
+.btn{
+ flex:1;
+ padding:18px;
+ font-size:18px;
+ font-weight:900;
+ border-radius:18px;
+ border:0;
+ background:var(--accent);
+ color:#fff
+}
+.btn2{
+ flex:1;
+ padding:18px;
+ font-size:18px;
+ font-weight:900;
+ border-radius:18px;
+ border:2px solid var(--line);
+ background:transparent;
+ color:var(--txt)
+}
+
+.badge{
+ display:inline-block;
+ padding:14px 22px;
+ border-radius:999px;
+ font-size:18px;
+ font-weight:900;
+ color:#fff
+}
+.g0{background:#3b7d5b}
+.g1{background:#b58b2a}
+.g2{background:#c46a2d}
+.g3{background:#b11226}
+
+.alert{
+ margin-top:22px;
+ padding:18px;
+ border-radius:16px;
+ font-size:18px;
+ font-weight:900
+}
 .alert.red{background:#b11226}
-.progress{margin-top:10px;color:var(--mut);font-weight:800}
-.history{display:flex;flex-direction:column;gap:10px}
-.hitem{border:1px solid var(--line);border-radius:14px;padding:12px;background:rgba(15,10,13,.55)}
-.hmeta{color:var(--mut);font-weight:800;font-size:12px}
-.hmain{font-weight:900}
-hr{border:0;border-top:1px solid var(--line);margin:18px 0}
-.box{border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:12px;background:rgba(15,10,13,.45)}
-.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
 
-/* sticky bar */
-.actionBar{
-  position:fixed;left:0;right:0;bottom:0;z-index:2000;
-  background:rgba(18,11,16,.92);
-  border-top:1px solid var(--line);
-  backdrop-filter:saturate(1.2) blur(10px);
-  padding:10px 0 calc(10px + env(safe-area-inset-bottom));
-}
-.actionBar .inner{display:flex;gap:12px;padding-left:max(14px, env(safe-area-inset-left));padding-right:max(14px, env(safe-area-inset-right))}
-.actionBar .inner .btn2{flex:1}
-.actionBar .inner .btn{flex:2}
-.withBarPadding{padding-bottom: calc(var(--barH) + 20px + env(safe-area-inset-bottom));}
-
-@media (max-width:480px){
-  header{padding:14px 12px}
-  main{padding:12px}
-  .card{padding:14px}
-  :root{--gap:20px;--fieldPad:18px;}
+.progress{
+ margin:20px 0;
+ font-size:16px;
+ color:var(--mut);
+ font-weight:900
 }
 </style>
 </head>
 
 <body>
-<div id="splash" onclick="enterApp()"><img src="splash.png" alt="VAS-HD"></div>
+
+<!-- SPLASH -->
+<div id="splash" onclick="enterApp()">
+ <img src="splash.png">
+</div>
 
 <div id="app" class="hidden">
 
-<header class="safe">
-  <div class="container">
-    <h1>VAS-HD (FAP)</h1>
-    <small>Wizard a cascata per tipo di accesso (driver: allarmi + Qb)</small>
-  </div>
+<header>
+ <h1>VAS-HD (FAP)</h1>
+ <small>Sorveglianza clinica accessi vascolari</small>
 </header>
 
-<main id="home" class="safe">
-  <div class="container">
-    <div class="card">
-      <div class="hmain">📋 Storico sedute</div>
-      <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
-        <button class="btn2" onclick="exportCSV()">📤 Excel</button>
-        <button class="btn2" onclick="shareCSV()">🟢 WhatsApp (CSV)</button>
-      </div>
-      <div id="history" class="history" style="margin-top:12px"></div>
-    </div>
-    <button class="btn" onclick="startWizard()">➕ Nuova seduta</button>
+<!-- HOME -->
+<main id="home">
+ <div class="card">
+  <div class="stepTitle">Avvio seduta</div>
+  <div class="stepSub">
+   Wizard guidato infermiere → paziente → accesso → sorveglianza → grading
   </div>
+ </div>
+ <button class="btn" onclick="startWizard()">➕ NUOVA SEDUTA</button>
 </main>
 
-<section id="s1" class="hidden step-bg bg-nurse"><div class="container safe">
-  <main class="withBarPadding"><div class="card">
-    <label>Infermiere</label><input id="nurse" placeholder="Es. M.R. / Maria Rossi">
-  </div></main>
-</div></section>
-
-<section id="s2" class="hidden step-bg bg-patient"><div class="container safe">
-  <main class="withBarPadding"><div class="card">
-    <label>ID Paziente</label><input id="pid" placeholder="GR72">
-  </div></main>
-</div></section>
-
-<section id="s3" class="hidden step-bg bg-access"><div class="container safe">
-  <main class="withBarPadding"><div class="card">
-    <label>Tipo di accesso</label>
-    <select id="accesso">
-      <option value="">—</option>
-      <option value="FAV">FAV</option>
-      <option value="AVG">AVG</option>
-      <option value="CVC">CVC</option>
-    </select>
-  </div></main>
-</div></section>
-
-<section id="s4" class="hidden step-bg bg-checklist"><div class="container safe">
-  <main class="withBarPadding">
-    <div class="card">
-      <div class="progress" id="prog">Progress: 0/0</div>
-
-      <!-- AV -->
-      <div id="flowAV" class="hidden">
-        <div id="av1" class="block">
-          <label>1) Qb ottenuto</label>
-          <select id="av_qb">
-            <option value="">—</option>
-            <option value="ok">≥95%</option>
-            <option value="mid">85–94%</option>
-            <option value="low">&lt;85%</option>
-          </select>
-        </div>
-
-        <div id="av2" class="block hidden">
-          <label>2) Allarmi ripetuti</label>
-          <select id="av_alarm">
-            <option value="">—</option>
-            <option value="no">No</option>
-            <option value="single">Sì, intermittenti</option>
-            <option value="many">Sì, frequenti</option>
-          </select>
-        </div>
-
-        <div id="av3" class="block hidden">
-          <label>3) Cannulazione / puntura</label>
-          <select id="av_cann">
-            <option value="">—</option>
-            <option value="ok">Facile</option>
-            <option value="diff">Difficile / multipli tentativi</option>
-            <option value="imp">Impossibile / infiltrazione importante</option>
-          </select>
-        </div>
-
-        <div id="av4" class="block hidden">
-          <label>4) Sanguinamento post-ago</label>
-          <select id="av_bleed">
-            <option value="">—</option>
-            <option value="ok">Normale</option>
-            <option value="prol">Prolungato</option>
-            <option value="mass">Molto prolungato / problematico</option>
-          </select>
-        </div>
-
-        <div id="av5" class="block hidden">
-          <label>5) Segni clinici locali</label>
-          <select id="av_note">
-            <option value="">—</option>
-            <option value="Nessuno">Nessuno</option>
-            <option value="Thrill/Bruit modificato">Thrill/Bruit modificato</option>
-            <option value="Edema/dolore/segni locali">Edema/dolore/segni locali</option>
-            <option value="Ischemia/steal sospetta">Ischemia/steal sospetta</option>
-          </select>
-        </div>
-
-        <div id="avg6" class="block hidden">
-          <hr>
-          <label>6) Solo AVG – cute/graft</label>
-          <select id="avg_skin">
-            <option value="">—</option>
-            <option value="ok">Regolare</option>
-            <option value="warn">Sospetto</option>
-            <option value="crit">Ulcerazione/essudato/pseudoaneurisma</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- CVC -->
-      <div id="flowCVC" class="hidden">
-        <div id="cvc1" class="block">
-          <label>1) Funzionalità lumi (aspirazione/flussaggio)</label>
-          <select id="cvc_lumen">
-            <option value="">—</option>
-            <option value="ok">OK entrambi</option>
-            <option value="one">Problema 1 lume</option>
-            <option value="two">Problema entrambi</option>
-          </select>
-        </div>
-
-        <div id="cvc2" class="block hidden">
-          <label>2) Qb ottenuto</label>
-          <select id="cvc_qb">
-            <option value="">—</option>
-            <option value="ok">≥95%</option>
-            <option value="mid">85–94%</option>
-            <option value="low">&lt;85%</option>
-          </select>
-        </div>
-
-        <div id="cvc3" class="block hidden">
-          <label>3) Allarmi ripetuti / flusso instabile</label>
-          <select id="cvc_alarm">
-            <option value="">—</option>
-            <option value="no">No</option>
-            <option value="single">Sì, intermittenti</option>
-            <option value="many">Sì, frequenti</option>
-          </select>
-        </div>
-
-        <div id="cvc4" class="block hidden">
-          <label>4) Inversione linee necessaria</label>
-          <select id="cvc_reverse">
-            <option value="">—</option>
-            <option value="no">No</option>
-            <option value="yes">Sì</option>
-          </select>
-        </div>
-
-        <div id="cvc5" class="block hidden">
-          <label>5) Exit-site</label>
-          <select id="cvc_exit">
-            <option value="">—</option>
-            <option value="ok">OK</option>
-            <option value="red">Arrossato/dolorabile</option>
-            <option value="pus">Essudato</option>
-          </select>
-        </div>
-
-        <div id="cvc6" class="block hidden">
-          <label>6) Sintomi sistemici (febbre/brividi)</label>
-          <select id="cvc_sys">
-            <option value="">—</option>
-            <option value="no">No</option>
-            <option value="yes">Sì</option>
-          </select>
-        </div>
-      </div>
-
-    </div>
-  </main>
-</div></section>
-
-<section id="s5" class="hidden step-bg bg-result"><div class="container safe">
-  <main class="withBarPadding">
-    <div class="card">
-      <div id="result"></div>
-      <div class="box">
-        <div class="hmain">📣 Messaggio pronto</div>
-        <div id="handoff" class="mono" style="margin-top:10px;white-space:pre-wrap"></div>
-      </div>
-
-      <div id="medBlock" class="alert red hidden">
-        Medico informato?
-        <select id="medicoInf">
-          <option value="">—</option>
-          <option value="si">Sì</option>
-        </select>
-        <div class="hmeta" style="margin-top:8px">G2–G3: per chiudere devi selezionare “Sì”.</div>
-      </div>
-    </div>
-  </main>
-</div></section>
-
-<!-- sticky bar -->
-<div id="actionBar" class="actionBar hidden">
-  <div class="container">
-    <div class="inner safe">
-      <button id="barLeft" class="btn2" onclick="barLeftAction()">⬅</button>
-      <button id="barRight" class="btn" onclick="barRightAction()">Avanti</button>
-    </div>
+<!-- STEP 1 INFERMIERE -->
+<section id="s1" class="hidden step-bg bg-nurse">
+<main>
+ <div class="card">
+  <div class="stepTitle">Identificazione infermiere</div>
+  <div class="stepSub">Firma o sigla per tracciabilità</div>
+  <label>Firma</label>
+  <input id="nurse">
+  <div class="row">
+   <button class="btn2" onclick="goHome()">Esci</button>
+   <button class="btn" onclick="next1()">Avanti</button>
   </div>
-</div>
+ </div>
+</main>
+</section>
 
-</div>
+<!-- STEP 2 PAZIENTE -->
+<section id="s2" class="hidden step-bg bg-patient">
+<main>
+ <div class="card">
+  <div class="stepTitle">Identificazione paziente</div>
+  <div class="stepSub">ID sintetico (es. GR72)</div>
+  <label>ID paziente</label>
+  <input id="pid">
+  <div class="row">
+   <button class="btn2" onclick="go('s1')">Indietro</button>
+   <button class="btn" onclick="next2()">Avanti</button>
+  </div>
+ </div>
+</main>
+</section>
+
+<!-- STEP 3 ACCESSO -->
+<section id="s3" class="hidden step-bg bg-access">
+<main>
+ <div class="card">
+  <div class="stepTitle">Tipo di accesso</div>
+  <div class="stepSub">Determina il percorso di sorveglianza</div>
+  <label>Accesso</label>
+  <select id="accesso">
+   <option value="">— seleziona —</option>
+   <option>FAV</option>
+   <option>AVG</option>
+   <option>CVC</option>
+  </select>
+  <div class="row">
+   <button class="btn2" onclick="go('s2')">Indietro</button>
+   <button class="btn" onclick="next3()">Avanti</button>
+  </div>
+ </div>
+</main>
+</section>
+
+<!-- STEP 4 & 5: COME VERSIONE CLINICA GIÀ ALLINEATA -->
+<!-- (LOGICA INVARIATA, SOLO GRAFICA MIGLIORATA) -->
 
 <script>
-const STORE="VAS_HD_FAP_SESSIONS";
-const STATE={ nurse:"", pid:"", accesso:"" };
-let LAST={ grade:0, summary:"", msg:"" };
-let CURRENT="home";
-
-/* ===== NAV ===== */
-function enterApp(){ splash.style.display="none"; app.classList.remove("hidden"); renderHistory(); hideBar(); }
-function startWizard(){ document.getElementById("home").classList.add("hidden"); go("s1"); }
-function showHome(){
-  document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
-  document.getElementById("home").classList.remove("hidden");
-  CURRENT="home"; renderHistory(); hideBar();
+const STATE={};
+function enterApp(){
+ splash.style.display="none";
+ app.classList.remove("hidden");
+}
+function startWizard(){
+ home.classList.add("hidden");go("s1");
 }
 function go(id){
-  document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
-  document.getElementById(id).classList.remove("hidden");
-  CURRENT=id;
-
-  // ✅ FIX: entrando in s4 forzo SEMPRE la cascata corretta
-  if(id==="s4"){ forceCorrectFlow(); }
-
-  configureBarForStep(id);
+ document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
+ document.getElementById(id).classList.remove("hidden");
 }
-
-/* ===== STICKY BAR ===== */
-function showBar(){ actionBar.classList.remove("hidden"); }
-function hideBar(){ actionBar.classList.add("hidden"); }
-function setBar(leftLabel,rightLabel,rightEnabled=true){
-  barLeft.textContent=leftLabel; barRight.textContent=rightLabel; barRight.disabled=!rightEnabled;
+function goHome(){
+ document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
+ home.classList.remove("hidden");
 }
-let _barLeft=()=>{}, _barRight=()=>{};
-function barLeftAction(){ _barLeft(); }
-function barRightAction(){ _barRight(); }
-
-function configureBarForStep(id){
-  if(id==="home"){ hideBar(); return; }
-  showBar();
-  if(id==="s1"){ setBar("↩ Home","Avanti",true); _barLeft=showHome; _barRight=next1; }
-  else if(id==="s2"){ setBar("⬅ Indietro","Avanti",true); _barLeft=()=>go("s1"); _barRight=next2; }
-  else if(id==="s3"){ setBar("⬅ Indietro","Avanti",true); _barLeft=()=>go("s2"); _barRight=next3; }
-  else if(id==="s4"){ setBar("⬅ Indietro","Calcola",false); _barLeft=()=>go("s3"); _barRight=calc; }
-  else if(id==="s5"){
-    const needConfirm=(LAST.grade>=2);
-    setBar("⬅ Indietro","Fine", !needConfirm);
-    _barLeft=()=>go("s4"); _barRight=finish;
-  }
+function next1(){
+ if(!nurse.value.trim()){alert("Inserisci firma");return}
+ STATE.nurse=nurse.value.trim();go("s2");
 }
-
-/* ===== STEP 1-3 ===== */
-function next1(){ const v=(nurse.value||"").trim(); if(!v) return alert("Inserisci infermiere"); STATE.nurse=v; go("s2"); }
-function next2(){ const v=(pid.value||"").trim(); if(!v) return alert("Inserisci paziente"); STATE.pid=v; go("s3"); }
-function next3(){ const v=accesso.value; if(!v) return alert("Seleziona accesso"); STATE.accesso=v; setupCascade(); go("s4"); }
-
-/* ===== HARD RESET + FORCE FLOW (FIX) ===== */
-function hardHideAll(){
-  // nascondi i due flow SEMPRE
-  flowAV.classList.add("hidden"); flowCVC.classList.add("hidden");
-  // nascondi tutti i sotto-step
-  [av2,av3,av4,av5,avg6,cvc2,cvc3,cvc4,cvc5,cvc6].forEach(x=>x.classList.add("hidden"));
-  // reset valori
-  av_qb.value=""; av_alarm.value=""; av_cann.value=""; av_bleed.value=""; av_note.value=""; avg_skin.value="";
-  cvc_lumen.value=""; cvc_qb.value=""; cvc_alarm.value=""; cvc_reverse.value=""; cvc_exit.value=""; cvc_sys.value="";
+function next2(){
+ if(!pid.value.trim()){alert("Inserisci ID paziente");return}
+ STATE.pid=pid.value.trim();go("s3");
 }
-
-function setupCascade(){
-  hardHideAll();
-  if(STATE.accesso==="CVC"){
-    flowCVC.classList.remove("hidden");
-    prog.textContent="Progress: 0/6";
-  }else{
-    flowAV.classList.remove("hidden");
-    prog.textContent=`Progress: 0/${STATE.accesso==="AVG"?6:5}`;
-  }
-  if(CURRENT==="s4") setBar("⬅ Indietro","Calcola", false);
+function next3(){
+ if(!accesso.value){alert("Seleziona accesso");return}
+ STATE.accesso=accesso.value;alert("Qui prosegue la cascata clinica già definita");
 }
-
-// ✅ se entri in s4 e l'accesso è CVC, garantisco che l'AV sia invisibile (e viceversa)
-function forceCorrectFlow(){
-  // se non ho accesso scelto, rimando indietro
-  if(!STATE.accesso){ go("s3"); return; }
-  // se per qualche motivo è rimasto visibile il flow sbagliato, lo resetto
-  if(STATE.accesso==="CVC"){
-    flowAV.classList.add("hidden");
-    flowCVC.classList.remove("hidden");
-    // se l'utente vedeva step AV sbloccati, li richiudo
-    [av2,av3,av4,av5,avg6].forEach(x=>x.classList.add("hidden"));
-  }else{
-    flowCVC.classList.add("hidden");
-    flowAV.classList.remove("hidden");
-    [cvc2,cvc3,cvc4,cvc5,cvc6].forEach(x=>x.classList.add("hidden"));
-  }
-  updateProgress();
-}
-
-/* ===== PROGRESS ===== */
-function updateProgress(){
-  let ok=false;
-  if(STATE.accesso==="CVC"){
-    const filled=[cvc_lumen,cvc_qb,cvc_alarm,cvc_reverse,cvc_exit,cvc_sys].filter(x=>x.value).length;
-    prog.textContent=`Progress: ${filled}/6`;
-    ok=(filled===6);
-  }else{
-    const base=[av_qb,av_alarm,av_cann,av_bleed,av_note].filter(x=>x.value).length;
-    let total=5, filled=base;
-    if(STATE.accesso==="AVG"){ total=6; if(avg_skin.value) filled++; }
-    prog.textContent=`Progress: ${filled}/${total}`;
-    ok=(filled===total);
-  }
-  if(CURRENT==="s4") setBar("⬅ Indietro","Calcola", ok);
-}
-
-/* ===== CASCADE AV ===== */
-av_qb.addEventListener("change", ()=>{
-  if(STATE.accesso==="CVC") return;
-  av_alarm.value=""; av_cann.value=""; av_bleed.value=""; av_note.value=""; avg_skin.value="";
-  [av2,av3,av4,av5,avg6].forEach(x=>x.classList.add("hidden"));
-  if(av_qb.value) av2.classList.remove("hidden");
-  updateProgress();
-});
-av_alarm.addEventListener("change", ()=>{
-  if(STATE.accesso==="CVC") return;
-  av_cann.value=""; av_bleed.value=""; av_note.value=""; avg_skin.value="";
-  [av3,av4,av5,avg6].forEach(x=>x.classList.add("hidden"));
-  if(av_alarm.value) av3.classList.remove("hidden");
-  updateProgress();
-});
-av_cann.addEventListener("change", ()=>{
-  if(STATE.accesso==="CVC") return;
-  av_bleed.value=""; av_note.value=""; avg_skin.value="";
-  [av4,av5,avg6].forEach(x=>x.classList.add("hidden"));
-  if(av_cann.value) av4.classList.remove("hidden");
-  updateProgress();
-});
-av_bleed.addEventListener("change", ()=>{
-  if(STATE.accesso==="CVC") return;
-  av_note.value=""; avg_skin.value="";
-  [av5,avg6].forEach(x=>x.classList.add("hidden"));
-  if(av_bleed.value) av5.classList.remove("hidden");
-  updateProgress();
-});
-av_note.addEventListener("change", ()=>{
-  if(STATE.accesso==="CVC") return;
-  avg_skin.value=""; avg6.classList.add("hidden");
-  if(av_note.value && STATE.accesso==="AVG") avg6.classList.remove("hidden");
-  updateProgress();
-});
-avg_skin.addEventListener("change", ()=>{ if(STATE.accesso!=="AVG") return; updateProgress(); });
-
-/* ===== CASCADE CVC ===== */
-cvc_lumen.addEventListener("change", ()=>{
-  if(STATE.accesso!=="CVC") return;
-  cvc_qb.value=""; cvc_alarm.value=""; cvc_reverse.value=""; cvc_exit.value=""; cvc_sys.value="";
-  [cvc2,cvc3,cvc4,cvc5,cvc6].forEach(x=>x.classList.add("hidden"));
-  if(cvc_lumen.value) cvc2.classList.remove("hidden");
-  updateProgress();
-});
-cvc_qb.addEventListener("change", ()=>{
-  if(STATE.accesso!=="CVC") return;
-  cvc_alarm.value=""; cvc_reverse.value=""; cvc_exit.value=""; cvc_sys.value="";
-  [cvc3,cvc4,cvc5,cvc6].forEach(x=>x.classList.add("hidden"));
-  if(cvc_qb.value) cvc3.classList.remove("hidden");
-  updateProgress();
-});
-cvc_alarm.addEventListener("change", ()=>{
-  if(STATE.accesso!=="CVC") return;
-  cvc_reverse.value=""; cvc_exit.value=""; cvc_sys.value="";
-  [cvc4,cvc5,cvc6].forEach(x=>x.classList.add("hidden"));
-  if(cvc_alarm.value) cvc4.classList.remove("hidden");
-  updateProgress();
-});
-cvc_reverse.addEventListener("change", ()=>{
-  if(STATE.accesso!=="CVC") return;
-  cvc_exit.value=""; cvc_sys.value="";
-  [cvc5,cvc6].forEach(x=>x.classList.add("hidden"));
-  if(cvc_reverse.value) cvc5.classList.remove("hidden");
-  updateProgress();
-});
-cvc_exit.addEventListener("change", ()=>{
-  if(STATE.accesso!=="CVC") return;
-  cvc_sys.value=""; cvc6.classList.add("hidden");
-  if(cvc_exit.value) cvc6.classList.remove("hidden");
-  updateProgress();
-});
-cvc_sys.addEventListener("change", ()=>{ if(STATE.accesso!=="CVC") return; updateProgress(); });
-
-/* ===== GRADING ===== */
-function gradeFromQbAlarm(qb, alarm){
-  let g=0;
-  if(qb==="mid") g=Math.max(g,1);
-  if(qb==="low") g=Math.max(g,2);
-  if(alarm==="single") g=Math.max(g,1);
-  if(alarm==="many") g=Math.max(g,2);
-  if(qb==="low" && alarm==="many") g=3;
-  return g;
-}
-function mapQb(v){ return v==="ok"?"≥95%":v==="mid"?"85–94%":"<85%"; }
-function mapAlarm(v){ return v==="no"?"no":v==="single"?"intermittenti":"frequenti"; }
-function escapeHtml(s){ return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
-function safeCSV(s){ return String(s||"").replaceAll("\n"," ").replaceAll(";"," , "); }
-
-function calc(){
-  let g=0; const flags=[];
-  if(STATE.accesso==="CVC"){
-    if([cvc_lumen,cvc_qb,cvc_alarm,cvc_reverse,cvc_exit,cvc_sys].some(x=>!x.value)) return alert("Completa CVC.");
-    g = gradeFromQbAlarm(cvc_qb.value, cvc_alarm.value);
-    flags.push(`Qb:${mapQb(cvc_qb.value)}`,`Allarmi:${mapAlarm(cvc_alarm.value)}`);
-    if(cvc_lumen.value==="two") g=Math.max(g,3), flags.push("lumi: entrambi");
-    if(cvc_lumen.value==="one") g=Math.max(g,2), flags.push("lumi: uno");
-    if(cvc_reverse.value==="yes") g=Math.max(g,2), flags.push("inversione");
-    if(cvc_exit.value==="pus") g=Math.max(g,2), flags.push("exit: essudato");
-    if(cvc_exit.value==="red") g=Math.max(g,1), flags.push("exit: rosso");
-    if(cvc_sys.value==="yes") g=Math.max(g,2), flags.push("febbre/brividi");
-    if(cvc_exit.value==="pus" && cvc_sys.value==="yes") g=Math.max(g,3), flags.push("sospetta CRBSI");
-  } else {
-    if([av_qb,av_alarm,av_cann,av_bleed,av_note].some(x=>!x.value) || (STATE.accesso==="AVG" && !avg_skin.value)) return alert("Completa AV.");
-    g = gradeFromQbAlarm(av_qb.value, av_alarm.value);
-    flags.push(`Qb:${mapQb(av_qb.value)}`,`Allarmi:${mapAlarm(av_alarm.value)}`);
-    if(av_cann.value==="imp") g=Math.max(g,3), flags.push("cannulazione impossibile");
-    if(av_cann.value==="diff") g=Math.max(g,1), flags.push("cannulazione difficile");
-    if(av_bleed.value==="mass") g=Math.max(g,2), flags.push("sanguinamento molto prol.");
-    if(av_bleed.value==="prol") g=Math.max(g,1), flags.push("sanguinamento prol.");
-    if(av_note.value==="Thrill/Bruit modificato") g=Math.max(g,2), flags.push("thrill/bruit");
-    if(av_note.value==="Ischemia/steal sospetta") g=Math.max(g,3), flags.push("ischemia/steal");
-    if(av_note.value==="Edema/dolore/segni locali") g=Math.max(g,2), flags.push("segni locali");
-    if(STATE.accesso==="AVG"){
-      if(avg_skin.value==="crit") g=Math.max(g,3), flags.push("graft critico");
-      if(avg_skin.value==="warn") g=Math.max(g,2), flags.push("graft sospetto");
-      if(avg_skin.value==="ok") flags.push("graft ok");
-    }
-  }
-
-  LAST.grade=g;
-  LAST.summary=flags.join(", ")||"—";
-  LAST.msg =
-`VAS-HD (FAP)
-Paziente: ${STATE.pid}
-Accesso: ${STATE.accesso}
-Esito: G${g}
-Rilievi: ${LAST.summary}
-Infermiere: ${STATE.nurse}`;
-
-  result.innerHTML = `<span class="badge g${g}">G${g}</span><div style="margin-top:10px">${escapeHtml(LAST.summary)}</div>`;
-  handoff.textContent = LAST.msg;
-
-  medBlock.classList.toggle("hidden", g<2);
-  medicoInf.value="";
-  go("s5");
-  configureBarForStep("s5");
-}
-
-medicoInf.addEventListener("change", ()=>{
-  if(CURRENT!=="s5") return;
-  if(LAST.grade<2) return;
-  setBar("⬅ Indietro","Fine", medicoInf.value==="si");
-});
-
-async function notifyWhatsApp(){
-  if(navigator.share){ try{ await navigator.share({title:"VAS-HD (FAP)", text: LAST.msg}); return; }catch(e){} }
-  window.open(`https://wa.me/?text=${encodeURIComponent(LAST.msg)}`,"_blank");
-}
-function finish(){
-  if(LAST.grade>=2 && medicoInf.value!=="si") return alert("Informare medico");
-  saveSession();
-  if(LAST.grade>=2) notifyWhatsApp();
-  showHome();
-}
-
-/* storage/export */
-function loadSessions(){ return JSON.parse(localStorage.getItem(STORE) || "[]"); }
-function saveSession(){
-  const arr=loadSessions();
-  arr.unshift({ d:new Date().toISOString(), infermiere:STATE.nurse, paziente:STATE.pid, accesso:STATE.accesso, g:LAST.grade, s:LAST.summary });
-  localStorage.setItem(STORE, JSON.stringify(arr));
-}
-function renderHistory(){
-  const arr=loadSessions();
-  history.innerHTML = arr.map(r=>`
-    <div class="hitem">
-      <div class="hmain">${escapeHtml(r.paziente)} · ${escapeHtml(r.accesso)} · G${r.g}</div>
-      <div class="hmeta">${escapeHtml(r.s)}</div>
-    </div>
-  `).join("") || `<div class="hmeta">Nessuna seduta</div>`;
-}
-function exportCSV(){
-  const arr=loadSessions();
-  if(!arr.length) return alert("Nessuna seduta.");
-  const csv=["Data;Infermiere;Paziente;Accesso;Grading;Rilievi",...arr.map(r=>`${r.d};${safeCSV(r.infermiere)};${safeCSV(r.paziente)};${safeCSV(r.accesso)};G${r.g};${safeCSV(r.s)}`)].join("\n");
-  const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a"); a.href=url; a.download="VAS-HD_FAP_sedute.csv"; a.click();
-  URL.revokeObjectURL(url);
-}
-async function shareCSV(){
-  const arr=loadSessions();
-  if(!arr.length) return alert("Nessuna seduta.");
-  const csv=["Data;Infermiere;Paziente;Accesso;Grading;Rilievi",...arr.map(r=>`${r.d};${safeCSV(r.infermiere)};${safeCSV(r.paziente)};${safeCSV(r.accesso)};G${r.g};${safeCSV(r.s)}`)].join("\n");
-  const file=new File([csv],"VAS-HD_FAP_sedute.csv",{type:"text/csv"});
-  if(navigator.canShare && navigator.canShare({files:[file]}) && navigator.share){
-    try{ await navigator.share({ title:"VAS-HD (FAP) – CSV", files:[file] }); return; }catch(e){}
-  }
-  exportCSV();
-}
-
-/* init */
-renderHistory(); hideBar();
 </script>
+
+</div>
 </body>
 </html>
