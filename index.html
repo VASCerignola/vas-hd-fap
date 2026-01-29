@@ -5,273 +5,150 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VAS-HD (FAP)</title>
 
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#c86a9a">
-<meta name="apple-mobile-web-app-capable" content="yes">
-
 <style>
-:root{
- --bg:#120b10;--card:#1b0f17;--line:#6b2b4a;
- --txt:#f2e9ee;--mut:#d6b3c4;--accent:#c86a9a;
-}
-*{box-sizing:border-box}
 body{
- margin:0;font-family:-apple-system,system-ui;
- background:var(--bg);color:var(--txt)
+  margin:0;
+  font-family:-apple-system,system-ui;
+  background:#120b10;
+  color:#fff;
+}
+main{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
+.card{
+  background:#1b0f17;
+  border:2px solid #6b2b4a;
+  border-radius:20px;
+  padding:24px;
+  margin-bottom:20px;
+}
+h1,h2{margin-top:0}
+label{
+  display:block;
+  margin-top:18px;
+  font-weight:600;
+}
+select,input{
+  width:100%;
+  padding:16px;
+  margin-top:6px;
+  border-radius:14px;
+  border:1px solid #6b2b4a;
+  background:#0f0a0d;
+  color:#fff;
+  font-size:16px;
+}
+button{
+  margin-top:24px;
+  width:100%;
+  padding:18px;
+  font-size:18px;
+  font-weight:700;
+  border-radius:18px;
+  border:0;
+  background:#c86a9a;
+  color:#fff;
 }
 .hidden{display:none}
-
-/* ===== BACKGROUND ===== */
-.step-bg{
- min-height:100vh;
- background-size:cover;
- background-position:center;
- position:relative;
-}
-.step-bg::before{
- content:"";position:absolute;inset:0;
- background:rgba(18,11,16,.75)
-}
-.step-bg>*{position:relative;z-index:1}
-
-.bg-nurse{background-image:url("bg-nurse.jpg")}
-.bg-patient{background-image:url("bg-patient.jpg")}
-.bg-access{background-image:url("bg-access.jpg")}
-.bg-checklist{background-image:url("bg-checklist.jpg")}
-.bg-result{background-image:url("bg-result.jpg")}
-
-/* ===== SPLASH ===== */
-#splash{
- position:fixed;inset:0;
- background:#120b10;
- display:flex;align-items:center;justify-content:center;
- z-index:9999
-}
-#splash img{max-width:100%;max-height:100%}
-
-/* ===== HEADER ===== */
-header{
- padding:18px;text-align:center;
- border-bottom:1px solid var(--line)
-}
-h1{margin:0;font-size:24px}
-small{color:var(--mut)}
-
-/* ===== MAIN CONTAINER ===== */
-main{
- padding:20px;
- max-width:1100px;
- margin:auto
-}
-
-/* ===== CARD (PIÙ GRANDE) ===== */
-.card{
- background:rgba(27,15,23,.96);
- border:2px solid var(--line);
- border-radius:22px;
- padding:26px;
- margin-bottom:22px
-}
-
-.stepTitle{
- font-size:22px;
- font-weight:900;
- margin-bottom:8px
-}
-.stepSub{
- color:var(--mut);
- font-size:15px;
- margin-bottom:20px
-}
-
-label{
- font-size:14px;
- color:var(--mut);
- margin:18px 0 8px;
- display:block
-}
-
-select,input{
- width:100%;
- padding:16px;
- font-size:17px;
- border-radius:16px;
- border:2px solid var(--line);
- background:#0f0a0d;
- color:var(--txt)
-}
-
-.row{
- display:flex;
- gap:16px;
- margin-top:26px;
- flex-wrap:wrap
-}
-
-.btn{
- flex:1;
- padding:18px;
- font-size:18px;
- font-weight:900;
- border-radius:18px;
- border:0;
- background:var(--accent);
- color:#fff
-}
-.btn2{
- flex:1;
- padding:18px;
- font-size:18px;
- font-weight:900;
- border-radius:18px;
- border:2px solid var(--line);
- background:transparent;
- color:var(--txt)
-}
-
-.badge{
- display:inline-block;
- padding:14px 22px;
- border-radius:999px;
- font-size:18px;
- font-weight:900;
- color:#fff
-}
-.g0{background:#3b7d5b}
-.g1{background:#b58b2a}
-.g2{background:#c46a2d}
-.g3{background:#b11226}
-
-.alert{
- margin-top:22px;
- padding:18px;
- border-radius:16px;
- font-size:18px;
- font-weight:900
-}
-.alert.red{background:#b11226}
-
-.progress{
- margin:20px 0;
- font-size:16px;
- color:var(--mut);
- font-weight:900
-}
 </style>
 </head>
 
 <body>
 
-<!-- SPLASH -->
-<div id="splash" onclick="enterApp()">
- <img src="splash.png">
+<main>
+
+<div class="card">
+  <h1>VAS-HD (FAP)</h1>
+  <p>Sorveglianza clinica accessi vascolari</p>
+
+  <label>Tipo di accesso</label>
+  <select id="accesso">
+    <option value="">— seleziona —</option>
+    <option value="FAV">FAV / AVG</option>
+    <option value="CVC">CVC</option>
+  </select>
 </div>
 
-<div id="app" class="hidden">
+<!-- FAV / AVG -->
+<div id="fav" class="card hidden">
+  <h2>FAV / AVG – Sorveglianza</h2>
 
-<header>
- <h1>VAS-HD (FAP)</h1>
- <small>Sorveglianza clinica accessi vascolari</small>
-</header>
-
-<!-- HOME -->
-<main id="home">
- <div class="card">
-  <div class="stepTitle">Avvio seduta</div>
-  <div class="stepSub">
-   Wizard guidato infermiere → paziente → accesso → sorveglianza → grading
-  </div>
- </div>
- <button class="btn" onclick="startWizard()">➕ NUOVA SEDUTA</button>
-</main>
-
-<!-- STEP 1 INFERMIERE -->
-<section id="s1" class="hidden step-bg bg-nurse">
-<main>
- <div class="card">
-  <div class="stepTitle">Identificazione infermiere</div>
-  <div class="stepSub">Firma o sigla per tracciabilità</div>
-  <label>Firma</label>
-  <input id="nurse">
-  <div class="row">
-   <button class="btn2" onclick="goHome()">Esci</button>
-   <button class="btn" onclick="next1()">Avanti</button>
-  </div>
- </div>
-</main>
-</section>
-
-<!-- STEP 2 PAZIENTE -->
-<section id="s2" class="hidden step-bg bg-patient">
-<main>
- <div class="card">
-  <div class="stepTitle">Identificazione paziente</div>
-  <div class="stepSub">ID sintetico (es. GR72)</div>
-  <label>ID paziente</label>
-  <input id="pid">
-  <div class="row">
-   <button class="btn2" onclick="go('s1')">Indietro</button>
-   <button class="btn" onclick="next2()">Avanti</button>
-  </div>
- </div>
-</main>
-</section>
-
-<!-- STEP 3 ACCESSO -->
-<section id="s3" class="hidden step-bg bg-access">
-<main>
- <div class="card">
-  <div class="stepTitle">Tipo di accesso</div>
-  <div class="stepSub">Determina il percorso di sorveglianza</div>
-  <label>Accesso</label>
-  <select id="accesso">
-   <option value="">— seleziona —</option>
-   <option>FAV</option>
-   <option>AVG</option>
-   <option>CVC</option>
+  <label>Difficoltà di incannulamento</label>
+  <select>
+    <option>No</option>
+    <option>Sì</option>
   </select>
-  <div class="row">
-   <button class="btn2" onclick="go('s2')">Indietro</button>
-   <button class="btn" onclick="next3()">Avanti</button>
-  </div>
- </div>
-</main>
-</section>
 
-<!-- STEP 4 & 5: COME VERSIONE CLINICA GIÀ ALLINEATA -->
-<!-- (LOGICA INVARIATA, SOLO GRAFICA MIGLIORATA) -->
+  <label>Qb target raggiunto</label>
+  <select>
+    <option>Sì</option>
+    <option>No</option>
+  </select>
+
+  <label>Pressione arteriosa di linea elevata</label>
+  <select>
+    <option>No</option>
+    <option>Sì</option>
+  </select>
+
+  <label>Pressione venosa elevata</label>
+  <select>
+    <option>No</option>
+    <option>Sì</option>
+  </select>
+</div>
+
+<!-- CVC -->
+<div id="cvc" class="card hidden">
+  <h2>CVC – Sorveglianza</h2>
+
+  <label>Aspirazione / flussaggio lumi</label>
+  <select>
+    <option>Normale</option>
+    <option>Difficoltosa</option>
+    <option>Impossibile</option>
+  </select>
+
+  <label>Qb target raggiunto</label>
+  <select>
+    <option>Sì</option>
+    <option>No</option>
+  </select>
+
+  <label>Allarmi ripetuti</label>
+  <select>
+    <option>No</option>
+    <option>Sì</option>
+  </select>
+
+  <label>Exit-site patologico</label>
+  <select>
+    <option>No</option>
+    <option>Sì</option>
+  </select>
+</div>
+
+</main>
 
 <script>
-const STATE={};
-function enterApp(){
- splash.style.display="none";
- app.classList.remove("hidden");
-}
-function startWizard(){
- home.classList.add("hidden");go("s1");
-}
-function go(id){
- document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
- document.getElementById(id).classList.remove("hidden");
-}
-function goHome(){
- document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
- home.classList.remove("hidden");
-}
-function next1(){
- if(!nurse.value.trim()){alert("Inserisci firma");return}
- STATE.nurse=nurse.value.trim();go("s2");
-}
-function next2(){
- if(!pid.value.trim()){alert("Inserisci ID paziente");return}
- STATE.pid=pid.value.trim();go("s3");
-}
-function next3(){
- if(!accesso.value){alert("Seleziona accesso");return}
- STATE.accesso=accesso.value;alert("Qui prosegue la cascata clinica già definita");
-}
+const accesso = document.getElementById("accesso");
+const fav = document.getElementById("fav");
+const cvc = document.getElementById("cvc");
+
+accesso.addEventListener("change", function(){
+  fav.classList.add("hidden");
+  cvc.classList.add("hidden");
+
+  if(this.value === "FAV"){
+    fav.classList.remove("hidden");
+  }
+  if(this.value === "CVC"){
+    cvc.classList.remove("hidden");
+  }
+});
 </script>
 
-</div>
 </body>
 </html>
