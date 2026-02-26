@@ -1,215 +1,285 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>VAS-HD (FAP)</title>
 
 <style>
+:root{
+  --bg:#120b10;
+  --card:#1b0f17;
+  --line:#6b2b4a;
+  --txt:#f2e9ee;
+  --mut:#d6b3c4;
+  --accent:#c86a9a;
+}
+
 body{
   margin:0;
-  font-family:system-ui;
-  background:#140a13;
-  color:#f2e9ee;
+  font-family:-apple-system,system-ui;
+  background:var(--bg);
+  color:var(--txt);
 }
-.container{
-  max-width:800px;
+
+/* SPLASH */
+#splash{
+  position:fixed;
+  inset:0;
+  background:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  cursor:pointer;
+}
+#splash img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* APP */
+main{
+  max-width:600px;
   margin:auto;
   padding:20px;
 }
+
 .card{
-  background:#1b0f17;
-  padding:22px;
+  background:var(--card);
+  border:1px solid var(--line);
   border-radius:18px;
+  padding:20px;
   margin-bottom:20px;
 }
+
 label{
   display:block;
-  margin-top:20px;
-  font-weight:600;
+  margin-top:18px;
+  margin-bottom:6px;
+  color:var(--mut);
 }
+
 input,select{
   width:100%;
   padding:16px;
-  margin-top:6px;
   border-radius:14px;
-  border:none;
+  border:1px solid var(--line);
+  background:#0f0a0d;
+  color:var(--txt);
   font-size:16px;
 }
+
 button{
   width:100%;
   padding:18px;
-  margin-top:28px;
+  margin-top:20px;
   border-radius:18px;
   border:none;
-  background:#c86a9a;
+  font-weight:900;
+  font-size:16px;
+}
+
+.btn-primary{
+  background:var(--accent);
   color:white;
-  font-weight:800;
-  font-size:17px;
 }
-.result{
-  margin-top:25px;
-  padding:20px;
-  border-radius:16px;
-  font-weight:800;
+
+.btn-secondary{
+  background:transparent;
+  color:white;
+  border:1px solid var(--line);
 }
-.green{background:#2d6a4f}
-.yellow{background:#b58b2a}
-.red{background:#b11226}
-.hidden{display:none}
+
+.badge{
+  display:inline-block;
+  padding:14px 20px;
+  border-radius:999px;
+  font-weight:900;
+  color:white;
+  margin-top:10px;
+}
+
+.g0{background:#3b7d5b}
+.g1{background:#b58b2a}
+.g2{background:#c46a2d}
+.g3{background:#b11226}
+
+.alert{
+  background:#b11226;
+  padding:16px;
+  border-radius:14px;
+  margin-top:16px;
+  font-weight:900;
+}
+
+.hidden{
+  display:none;
+}
 </style>
 </head>
 
 <body>
 
-<div class="container">
-<div class="card">
-
-<label>Infermiere</label>
-<input id="nurse">
-
-<label>ID Paziente</label>
-<input id="pid">
-
-<label>Tipo accesso</label>
-<select id="accesso">
-<option value="">--</option>
-<option value="FAV">FAV / AVG</option>
-<option value="CVC">CVC</option>
-</select>
-
-<div id="flowAV" class="hidden">
-
-<label>Thrill</label>
-<select id="av_thrill">
-<option value=""></option>
-<option value="normal">Normale</option>
-<option value="reduced">Ridotto</option>
-<option value="absent">Assente (CRITICO)</option>
-</select>
-
-<label>Qb</label>
-<select id="av_qb">
-<option value=""></option>
-<option value="ok">Adeguato</option>
-<option value="low">Ridotto</option>
-<option value="none">Non ottenibile (CRITICO)</option>
-</select>
-
-<label>Steal</label>
-<select id="av_steal">
-<option value=""></option>
-<option value="no">No</option>
-<option value="yes">Sì (CRITICO)</option>
-</select>
-
+<!-- SPLASH SCREEN -->
+<div id="splash" onclick="entraApp()">
+  <img src="splash.jpg" alt="VAS-HD">
 </div>
 
-<div id="flowCVC" class="hidden">
+<!-- APP -->
+<div id="app" class="hidden">
+<main>
+  <h1>VAS-HD (FAP)</h1>
+  <p style="color:var(--mut)">Sorveglianza accessi vascolari</p>
 
-<label>Qb</label>
-<select id="cvc_qb">
-<option value=""></option>
-<option value="ok">Adeguato</option>
-<option value="low">Ridotto</option>
-<option value="none">Non ottenibile (CRITICO)</option>
-</select>
+  <div class="card">
 
-<label>Aspirazione lumi</label>
-<select id="cvc_lumen">
-<option value=""></option>
-<option value="ok">OK</option>
-<option value="one">1 lume difficoltoso</option>
-<option value="two">Entrambi non aspirabili (CRITICO)</option>
-</select>
+    <label>Infermiere</label>
+    <input id="nurse">
 
-<label>Febbre</label>
-<select id="cvc_fever">
-<option value=""></option>
-<option value="no">No</option>
-<option value="yes">Sì (CRITICO)</option>
-</select>
+    <label>ID Paziente</label>
+    <input id="pid">
 
-</div>
+    <label>Tipo accesso</label>
+    <select id="accesso">
+      <option value="">--</option>
+      <option value="FAV">FAV</option>
+      <option value="AVG">AVG</option>
+      <option value="CVC">CVC</option>
+    </select>
 
-<button id="valutaBtn" type="button">VALUTA</button>
+    <label>Qb ottenibile</label>
+    <select id="qb">
+      <option value="">--</option>
+      <option value="ok">≥95%</option>
+      <option value="mid">85–94%</option>
+      <option value="low">Non ottenibile</option>
+    </select>
 
-<div id="result" class="result hidden"></div>
+    <label>Aspirazione lumi</label>
+    <select id="lumi">
+      <option value="">--</option>
+      <option value="ok">Normale</option>
+      <option value="one">1 lume non aspirabile</option>
+      <option value="two">Entrambi non aspirabili</option>
+    </select>
 
-</div>
+    <label>Exit-site</label>
+    <select id="exit">
+      <option value="">--</option>
+      <option value="ok">Normale</option>
+      <option value="red">Arrossato</option>
+      <option value="pus">Essudato</option>
+    </select>
+
+    <label>Febbre / brividi</label>
+    <select id="febbre">
+      <option value="">--</option>
+      <option value="no">No</option>
+      <option value="yes">Sì</option>
+    </select>
+
+    <button class="btn-primary" onclick="valuta()">VALUTA</button>
+
+  </div>
+
+  <div id="risultato"></div>
+
+</main>
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function(){
 
-function el(id){ return document.getElementById(id); }
+let LAST_GRADE = 0;
 
-// Mostra flow corretto
-el("accesso").addEventListener("change", function(){
-  el("flowAV").classList.add("hidden");
-  el("flowCVC").classList.add("hidden");
+function entraApp(){
+  document.getElementById("splash").style.display="none";
+  document.getElementById("app").classList.remove("hidden");
+}
 
-  if(this.value==="FAV") el("flowAV").classList.remove("hidden");
-  if(this.value==="CVC") el("flowCVC").classList.remove("hidden");
-});
+function valuta(){
 
-// Bottone valuta
-el("valutaBtn").addEventListener("click", function(){
+  const nurse = document.getElementById("nurse").value.trim();
+  const pid = document.getElementById("pid").value.trim();
+  const accesso = document.getElementById("accesso").value;
+  const qb = document.getElementById("qb").value;
+  const lumi = document.getElementById("lumi").value;
+  const exit = document.getElementById("exit").value;
+  const febbre = document.getElementById("febbre").value;
 
-  let critical=false;
-  let indicator=false;
-
-  const accesso = el("accesso").value;
-
-  if(!el("nurse").value || !el("pid").value || !accesso){
-    alert("Compilare infermiere, paziente e accesso.");
+  if(!nurse || !pid || !accesso){
+    alert("Compilare infermiere, paziente e accesso");
     return;
   }
 
-  if(accesso==="CVC"){
-    if(el("cvc_qb").value==="none" ||
-       el("cvc_lumen").value==="two" ||
-       el("cvc_fever").value==="yes"){
-      critical=true;
-    }
-    if(el("cvc_qb").value==="low" ||
-       el("cvc_lumen").value==="one"){
-      indicator=true;
-    }
-  }
+  let g = 0;
 
-  if(accesso==="FAV"){
-    if(el("av_thrill").value==="absent" ||
-       el("av_qb").value==="none" ||
-       el("av_steal").value==="yes"){
-      critical=true;
-    }
-    if(el("av_thrill").value==="reduced" ||
-       el("av_qb").value==="low"){
-      indicator=true;
-    }
+  if(qb==="low" || lumi==="two" || exit==="pus" || febbre==="yes"){
+    g = 3;
   }
-
-  const box = el("result");
-  box.className="result";
-  box.classList.remove("hidden");
-
-  if(critical){
-    box.classList.add("red");
-    box.innerText="🔴 Indicatore critico presente. Valutazione urgente.";
-  }
-  else if(indicator){
-    box.classList.add("yellow");
-    box.innerText="🟡 Sospetta disfunzione. Valutazione consigliata.";
+  else if(qb==="mid" || lumi==="one" || exit==="red"){
+    g = 2;
   }
   else{
-    box.classList.add("green");
-    box.innerText="🟢 Nessun indicatore rilevante.";
+    g = 0;
   }
 
-});
+  LAST_GRADE = g;
 
-});
+  mostraRisultato(nurse,pid,accesso,g);
+}
+
+function mostraRisultato(nurse,pid,accesso,g){
+
+  const container = document.getElementById("risultato");
+
+  const testi = [
+    "Routine",
+    "Warning",
+    "Disfunzione probabile",
+    "Critico – intervento urgente"
+  ];
+
+  let html = `
+    <div class="card">
+      <div>Infermiere: <b>${nurse}</b></div>
+      <div>Paziente: <b>${pid}</b></div>
+      <div>Accesso: <b>${accesso}</b></div>
+      <span class="badge g${g}">G${g} – ${testi[g]}</span>
+  `;
+
+  if(g>=2){
+    html += `<div class="alert">⚠️ Medico da informare</div>`;
+  }
+
+  html += `
+      <button class="btn-secondary" onclick="inviaWhatsApp()">Invia su WhatsApp</button>
+    </div>
+  `;
+
+  container.innerHTML = html;
+}
+
+function inviaWhatsApp(){
+
+  const nurse = document.getElementById("nurse").value;
+  const pid = document.getElementById("pid").value;
+  const accesso = document.getElementById("accesso").value;
+
+  let testo = `VAS-HD (FAP)%0A`;
+  testo += `Infermiere: ${nurse}%0A`;
+  testo += `Paziente: ${pid}%0A`;
+  testo += `Accesso: ${accesso}%0A`;
+  testo += `Grading: G${LAST_GRADE}%0A`;
+
+  if(LAST_GRADE>=2){
+    testo += `⚠️ Valutazione medica consigliata`;
+  }
+
+  window.open("https://wa.me/?text=" + testo, "_blank");
+}
+
 </script>
 
 </body>
