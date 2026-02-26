@@ -12,57 +12,50 @@ body{
   background:#120b10;
   color:white;
 }
-
 .container{
   max-width:800px;
   margin:auto;
   padding:20px;
 }
-
 .card{
   background:#1b0f17;
   padding:20px;
-  border-radius:12px;
+  border-radius:14px;
   margin-bottom:20px;
 }
-
 label{
   display:block;
-  margin-top:15px;
+  margin-top:18px;
 }
-
 input,select{
   width:100%;
-  padding:12px;
-  margin-top:5px;
-  border-radius:8px;
+  padding:14px;
+  margin-top:6px;
+  border-radius:10px;
   border:none;
   font-size:16px;
 }
-
 button{
   width:100%;
-  padding:14px;
-  margin-top:20px;
-  border-radius:10px;
+  padding:16px;
+  margin-top:22px;
+  border-radius:12px;
   border:none;
   background:#c86a9a;
   color:white;
-  font-weight:bold;
+  font-weight:700;
   font-size:16px;
 }
-
 .result{
-  margin-top:20px;
-  padding:15px;
-  border-radius:10px;
-  font-weight:bold;
+  margin-top:25px;
+  padding:18px;
+  border-radius:12px;
+  font-weight:700;
 }
-
-.green{background:#2d6a4f}
-.yellow{background:#b58b2a}
-.red{background:#b11226}
-.hidden{display:none}
+.green{background:#2d6a4f;}
+.yellow{background:#b58b2a;}
+.red{background:#b11226;}
+.hidden{display:none;}
 </style>
 </head>
 
@@ -71,7 +64,7 @@ button{
 <div class="container">
 
 <div id="home" class="card">
-  <button onclick="start()">Nuova valutazione</button>
+<button id="startBtn" type="button">Nuova valutazione</button>
 </div>
 
 <div id="form" class="card hidden">
@@ -83,169 +76,167 @@ button{
 <input id="pid">
 
 <label>Tipo accesso</label>
-<select id="accesso" onchange="toggleFlow()">
+<select id="accesso">
   <option value="">--</option>
   <option value="FAV">FAV / AVG</option>
   <option value="CVC">CVC</option>
 </select>
 
+<!-- FLOW FAV -->
 <div id="flowAV" class="hidden">
 
 <label>Thrill</label>
 <select id="av_thrill">
-  <option></option>
+  <option value=""></option>
   <option value="normal">Normale</option>
   <option value="reduced">Ridotto</option>
-  <option value="absent">Assente</option>
+  <option value="absent">Assente (CRITICO)</option>
 </select>
 
 <label>Qb</label>
 <select id="av_qb">
-  <option></option>
+  <option value=""></option>
   <option value="ok">Adeguato</option>
   <option value="low">Ridotto</option>
-  <option value="none">Non ottenibile</option>
+  <option value="none">Non ottenibile (CRITICO)</option>
 </select>
 
-<label>Steal</label>
+<label>Steal ischemico</label>
 <select id="av_steal">
-  <option></option>
+  <option value=""></option>
   <option value="no">No</option>
-  <option value="yes">Sì</option>
+  <option value="yes">Sì (CRITICO)</option>
 </select>
 
 </div>
 
+<!-- FLOW CVC -->
 <div id="flowCVC" class="hidden">
 
 <label>Qb</label>
 <select id="cvc_qb">
-  <option></option>
+  <option value=""></option>
   <option value="ok">Adeguato</option>
   <option value="low">Ridotto</option>
-  <option value="none">Non ottenibile</option>
+  <option value="none">Non ottenibile (CRITICO)</option>
 </select>
 
 <label>Aspirazione lumi</label>
 <select id="cvc_lumen">
-  <option></option>
+  <option value=""></option>
   <option value="ok">OK</option>
-  <option value="one">1 lume</option>
-  <option value="two">Entrambi non aspirabili</option>
+  <option value="one">1 lume difficoltoso</option>
+  <option value="two">Entrambi non aspirabili (CRITICO)</option>
 </select>
 
-<label>Febbre</label>
+<label>Febbre / brividi</label>
 <select id="cvc_fever">
-  <option></option>
+  <option value=""></option>
   <option value="no">No</option>
-  <option value="yes">Sì</option>
+  <option value="yes">Sì (CRITICO)</option>
 </select>
 
 </div>
 
-<button onclick="evaluate()">VALUTA</button>
+<button id="evalBtn" type="button">Valuta</button>
 
 <div id="result" class="result hidden"></div>
-
-<button id="resetBtn" class="hidden" onclick="resetForm()">Nuovo paziente</button>
+<button id="resetBtn" type="button" class="hidden">Nuovo paziente</button>
 
 </div>
 
 </div>
 
 <script>
+document.addEventListener("DOMContentLoaded", function(){
 
-function el(id){
-  return document.getElementById(id);
-}
+function el(id){ return document.getElementById(id); }
 
-function start(){
+// Avvio
+el("startBtn").addEventListener("click", function(){
   el("home").classList.add("hidden");
   el("form").classList.remove("hidden");
-}
+});
 
-function toggleFlow(){
-  const accesso = el("accesso").value;
+// Cambio tipo accesso
+el("accesso").addEventListener("change", function(){
   el("flowAV").classList.add("hidden");
   el("flowCVC").classList.add("hidden");
 
-  if(accesso==="FAV"){
+  if(this.value === "FAV"){
     el("flowAV").classList.remove("hidden");
   }
-  if(accesso==="CVC"){
+  if(this.value === "CVC"){
     el("flowCVC").classList.remove("hidden");
   }
-}
+});
 
-function evaluate(){
+// Valutazione
+el("evalBtn").addEventListener("click", function(){
 
   if(!el("nurse").value || !el("pid").value || !el("accesso").value){
-    alert("Compilare tutti i campi.");
+    alert("Compilare infermiere, paziente e accesso.");
     return;
   }
 
-  let critical=false;
-  let indicator=false;
-
+  let critical = false;
+  let indicator = false;
   const accesso = el("accesso").value;
 
-  if(accesso==="FAV"){
-
-    if(el("av_thrill").value==="absent" ||
-       el("av_qb").value==="none" ||
-       el("av_steal").value==="yes"){
-       critical=true;
+  if(accesso === "FAV"){
+    if(el("av_thrill").value === "absent" ||
+       el("av_qb").value === "none" ||
+       el("av_steal").value === "yes"){
+      critical = true;
     }
-
-    if(el("av_thrill").value==="reduced" ||
-       el("av_qb").value==="low"){
-       indicator=true;
+    if(el("av_thrill").value === "reduced" ||
+       el("av_qb").value === "low"){
+      indicator = true;
     }
-
   }
 
-  if(accesso==="CVC"){
-
-    if(el("cvc_qb").value==="none" ||
-       el("cvc_lumen").value==="two" ||
-       el("cvc_fever").value==="yes"){
-       critical=true;
+  if(accesso === "CVC"){
+    if(el("cvc_qb").value === "none" ||
+       el("cvc_lumen").value === "two" ||
+       el("cvc_fever").value === "yes"){
+      critical = true;
     }
-
-    if(el("cvc_qb").value==="low" ||
-       el("cvc_lumen").value==="one"){
-       indicator=true;
+    if(el("cvc_qb").value === "low" ||
+       el("cvc_lumen").value === "one"){
+      indicator = true;
     }
-
   }
 
   const box = el("result");
-  box.className="result";
+  box.className = "result";
   box.classList.remove("hidden");
 
   if(critical){
     box.classList.add("red");
-    box.innerText="🔴 Indicatore critico presente. Valutazione urgente.";
+    box.innerText = "🔴 Indicatore critico presente. Valutazione urgente.";
   }
   else if(indicator){
     box.classList.add("yellow");
-    box.innerText="🟡 Indicatore di sospetta disfunzione. Valutazione consigliata.";
+    box.innerText = "🟡 Sospetta disfunzione. Valutazione consigliata.";
   }
   else{
     box.classList.add("green");
-    box.innerText="🟢 Nessun indicatore rilevante.";
+    box.innerText = "🟢 Nessun indicatore rilevante.";
   }
 
   el("resetBtn").classList.remove("hidden");
-}
+});
 
-function resetForm(){
-  el("form").reset;
-  document.querySelectorAll("select").forEach(s=>s.value="");
+// Reset
+el("resetBtn").addEventListener("click", function(){
+  document.querySelectorAll("select").forEach(s => s.value = "");
+  el("nurse").value = "";
+  el("pid").value = "";
   el("result").classList.add("hidden");
   el("resetBtn").classList.add("hidden");
-}
+});
 
+});
 </script>
 
 </body>
