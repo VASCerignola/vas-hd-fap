@@ -14,38 +14,17 @@
   --mut:#d6b3c4;
   --accent:#c86a9a;
 }
-
 body{
   margin:0;
   font-family:-apple-system,system-ui;
   background:var(--bg);
   color:var(--txt);
 }
-
-/* SPLASH */
-#splash{
-  position:fixed;
-  inset:0;
-  background:#000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:9999;
-  cursor:pointer;
-}
-#splash img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-/* APP */
 main{
-  max-width:600px;
+  max-width:650px;
   margin:auto;
   padding:20px;
 }
-
 .card{
   background:var(--card);
   border:1px solid var(--line);
@@ -53,14 +32,12 @@ main{
   padding:20px;
   margin-bottom:20px;
 }
-
 label{
   display:block;
   margin-top:18px;
   margin-bottom:6px;
   color:var(--mut);
 }
-
 input,select{
   width:100%;
   padding:16px;
@@ -70,42 +47,31 @@ input,select{
   color:var(--txt);
   font-size:16px;
 }
-
 button{
   width:100%;
   padding:18px;
-  margin-top:20px;
+  margin-top:22px;
   border-radius:18px;
   border:none;
   font-weight:900;
   font-size:16px;
 }
-
-.btn-primary{
+.btn{
   background:var(--accent);
   color:white;
 }
-
-.btn-secondary{
-  background:transparent;
-  color:white;
-  border:1px solid var(--line);
-}
-
 .badge{
   display:inline-block;
   padding:14px 20px;
   border-radius:999px;
   font-weight:900;
   color:white;
-  margin-top:10px;
+  margin-top:14px;
 }
-
 .g0{background:#3b7d5b}
 .g1{background:#b58b2a}
 .g2{background:#c46a2d}
 .g3{background:#b11226}
-
 .alert{
   background:#b11226;
   padding:16px;
@@ -113,175 +79,199 @@ button{
   margin-top:16px;
   font-weight:900;
 }
-
-.hidden{
-  display:none;
-}
+.hidden{display:none}
 </style>
 </head>
 
 <body>
 
-<!-- SPLASH SCREEN -->
-<div id="splash" onclick="entraApp()">
-  <img src="splash.png" alt="VAS-HD">
+<main>
+
+<h1>VAS-HD (FAP)</h1>
+<p style="color:var(--mut)">Supporto decisionale clinico</p>
+
+<div class="card">
+
+<label>Infermiere</label>
+<input id="nurse">
+
+<label>ID Paziente</label>
+<input id="pid">
+
+<label>Tipo accesso</label>
+<select id="accesso" onchange="renderChecklist()">
+  <option value="">--</option>
+  <option value="FAV">FAV</option>
+  <option value="AVG">AVG</option>
+  <option value="CVC">CVC</option>
+</select>
+
+<div id="checklistArea"></div>
+
+<button class="btn" onclick="valuta()">VALUTA</button>
+
 </div>
 
-<!-- APP -->
-<div id="app" class="hidden">
-<main>
-  <h1>VAS-HD (FAP)</h1>
-  <p style="color:var(--mut)">Sorveglianza accessi vascolari</p>
-
-  <div class="card">
-
-    <label>Infermiere</label>
-    <input id="nurse">
-
-    <label>ID Paziente</label>
-    <input id="pid">
-
-    <label>Tipo accesso</label>
-    <select id="accesso">
-      <option value="">--</option>
-      <option value="FAV">FAV</option>
-      <option value="AVG">AVG</option>
-      <option value="CVC">CVC</option>
-    </select>
-
-    <label>Qb ottenibile</label>
-    <select id="qb">
-      <option value="">--</option>
-      <option value="ok">≥95%</option>
-      <option value="mid">85–94%</option>
-      <option value="low">Non ottenibile</option>
-    </select>
-
-    <label>Aspirazione lumi</label>
-    <select id="lumi">
-      <option value="">--</option>
-      <option value="ok">Normale</option>
-      <option value="one">1 lume non aspirabile</option>
-      <option value="two">Entrambi non aspirabili</option>
-    </select>
-
-    <label>Exit-site</label>
-    <select id="exit">
-      <option value="">--</option>
-      <option value="ok">Normale</option>
-      <option value="red">Arrossato</option>
-      <option value="pus">Essudato</option>
-    </select>
-
-    <label>Febbre / brividi</label>
-    <select id="febbre">
-      <option value="">--</option>
-      <option value="no">No</option>
-      <option value="yes">Sì</option>
-    </select>
-
-    <button class="btn-primary" onclick="valuta()">VALUTA</button>
-
-  </div>
-
-  <div id="risultato"></div>
+<div id="risultato"></div>
 
 </main>
-</div>
 
 <script>
 
 let LAST_GRADE = 0;
 
-function entraApp(){
-  document.getElementById("splash").style.display="none";
-  document.getElementById("app").classList.remove("hidden");
+function renderChecklist(){
+
+  const tipo = document.getElementById("accesso").value;
+  const area = document.getElementById("checklistArea");
+  area.innerHTML = "";
+
+  if(tipo==="CVC"){
+    area.innerHTML = `
+      <label>Qb</label>
+      <select id="qb">
+        <option value=""></option>
+        <option value="ok">≥95%</option>
+        <option value="mid">85–94%</option>
+        <option value="low">Non ottenibile</option>
+      </select>
+
+      <label>Aspirazione lumi</label>
+      <select id="lumi">
+        <option value=""></option>
+        <option value="ok">OK</option>
+        <option value="one">1 lume</option>
+        <option value="two">2 lumi</option>
+      </select>
+
+      <label>Exit-site</label>
+      <select id="exit">
+        <option value=""></option>
+        <option value="ok">Normale</option>
+        <option value="red">Arrossato</option>
+        <option value="pus">Essudato</option>
+      </select>
+
+      <label>Febbre</label>
+      <select id="febbre">
+        <option value=""></option>
+        <option value="no">No</option>
+        <option value="yes">Sì</option>
+      </select>
+    `;
+  }
+
+  if(tipo==="FAV" || tipo==="AVG"){
+    area.innerHTML = `
+      <label>Qb</label>
+      <select id="qb">
+        <option value=""></option>
+        <option value="ok">≥95%</option>
+        <option value="mid">85–94%</option>
+        <option value="low">Non ottenibile</option>
+      </select>
+
+      <label>Cannulazione</label>
+      <select id="cann">
+        <option value=""></option>
+        <option value="ok">Facile</option>
+        <option value="diff">Difficile</option>
+        <option value="imp">Impossibile</option>
+      </select>
+
+      <label>Segni clinici</label>
+      <select id="note">
+        <option value=""></option>
+        <option value="ok">Normali</option>
+        <option value="warn">Thrill/Bruit alterato</option>
+        <option value="steal">Ischemia sospetta</option>
+      </select>
+    `;
+  }
+
 }
 
 function valuta(){
 
-  const nurse = document.getElementById("nurse").value.trim();
-  const pid = document.getElementById("pid").value.trim();
+  const nurse = nurseInput();
+  const pid = pidInput();
   const accesso = document.getElementById("accesso").value;
-  const qb = document.getElementById("qb").value;
-  const lumi = document.getElementById("lumi").value;
-  const exit = document.getElementById("exit").value;
-  const febbre = document.getElementById("febbre").value;
 
   if(!nurse || !pid || !accesso){
-    alert("Compilare infermiere, paziente e accesso");
+    alert("Compilare tutti i campi principali");
     return;
   }
 
   let g = 0;
 
-  if(qb==="low" || lumi==="two" || exit==="pus" || febbre==="yes"){
-    g = 3;
+  const qb = getVal("qb");
+
+  if(accesso==="CVC"){
+    const lumi = getVal("lumi");
+    const exit = getVal("exit");
+    const febbre = getVal("febbre");
+
+    if(qb==="low" || lumi==="two" || exit==="pus" || febbre==="yes") g=3;
+    else if(qb==="mid" || lumi==="one" || exit==="red") g=2;
   }
-  else if(qb==="mid" || lumi==="one" || exit==="red"){
-    g = 2;
-  }
-  else{
-    g = 0;
+
+  if(accesso==="FAV" || accesso==="AVG"){
+    const cann = getVal("cann");
+    const note = getVal("note");
+
+    if(qb==="low" || cann==="imp" || note==="steal") g=3;
+    else if(qb==="mid" || cann==="diff" || note==="warn") g=2;
   }
 
   LAST_GRADE = g;
-
   mostraRisultato(nurse,pid,accesso,g);
 }
 
-function mostraRisultato(nurse,pid,accesso,g){
+function mostraRisultato(n,p,a,g){
 
-  const container = document.getElementById("risultato");
-
-  const testi = [
+  const testi=[
     "Routine",
     "Warning",
     "Disfunzione probabile",
-    "Critico – intervento urgente"
+    "Critico"
   ];
 
-  let html = `
-    <div class="card">
-      <div>Infermiere: <b>${nurse}</b></div>
-      <div>Paziente: <b>${pid}</b></div>
-      <div>Accesso: <b>${accesso}</b></div>
-      <span class="badge g${g}">G${g} – ${testi[g]}</span>
+  let html=`
+  <div class="card">
+    <div><b>${n}</b> · ${p} · ${a}</div>
+    <span class="badge g${g}">G${g} – ${testi[g]}</span>
   `;
 
   if(g>=2){
-    html += `<div class="alert">⚠️ Medico da informare</div>`;
+    html+=`<div class="alert">⚠️ Medico da informare</div>`;
   }
 
-  html += `
-      <button class="btn-secondary" onclick="inviaWhatsApp()">Invia su WhatsApp</button>
-    </div>
+  html+=`
+    <button class="btn" onclick="inviaWhatsApp()">Invia su WhatsApp</button>
+  </div>
   `;
 
-  container.innerHTML = html;
+  document.getElementById("risultato").innerHTML=html;
 }
 
 function inviaWhatsApp(){
 
-  const nurse = document.getElementById("nurse").value;
-  const pid = document.getElementById("pid").value;
-  const accesso = document.getElementById("accesso").value;
+  const nurse=nurseInput();
+  const pid=pidInput();
+  const accesso=document.getElementById("accesso").value;
 
-  let testo = `VAS-HD (FAP)%0A`;
-  testo += `Infermiere: ${nurse}%0A`;
-  testo += `Paziente: ${pid}%0A`;
-  testo += `Accesso: ${accesso}%0A`;
-  testo += `Grading: G${LAST_GRADE}%0A`;
-
-  if(LAST_GRADE>=2){
-    testo += `⚠️ Valutazione medica consigliata`;
-  }
-
-  window.open("https://wa.me/?text=" + testo, "_blank");
+  let testo=`VAS-HD (FAP)%0AInfermiere: ${nurse}%0APaziente: ${pid}%0AAccesso: ${accesso}%0AGrading: G${LAST_GRADE}`;
+  window.open("https://wa.me/?text="+testo,"_blank");
 }
+
+function getVal(id){
+  const el=document.getElementById(id);
+  return el?el.value:"";
+}
+function nurseInput(){return document.getElementById("nurse").value.trim();}
+function pidInput(){return document.getElementById("pid").value.trim();}
 
 </script>
 
 </body>
 </html>
-
