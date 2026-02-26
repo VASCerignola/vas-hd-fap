@@ -7,40 +7,78 @@
 
 <style>
 :root{
-  --bg:#120b10;--card:#1b0f17;--line:#6b2b4a;
-  --txt:#f2e9ee;--mut:#d6b3c4;--accent:#c86a9a;
+  --bg:#120b10;
+  --card:#1b0f17;
+  --line:#6b2b4a;
+  --txt:#f2e9ee;
+  --mut:#d6b3c4;
+  --accent:#c86a9a;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:-apple-system,system-ui;background:var(--bg);color:var(--txt)}
+body{
+  margin:0;
+  font-family:-apple-system,system-ui;
+  background:var(--bg);
+  color:var(--txt);
+}
 .hidden{display:none}
 
-header{padding:16px;border-bottom:1px solid var(--line)}
-main{padding:18px;max-width:850px;margin:auto}
+header{
+  padding:18px;
+  border-bottom:1px solid var(--line);
+}
+
+main{
+  padding:20px;
+  max-width:900px;
+  margin:auto;
+}
 
 .card{
   background:rgba(27,15,23,.96);
   border:1px solid var(--line);
   border-radius:18px;
-  padding:20px;
-  margin-bottom:18px;
+  padding:22px;
+  margin-bottom:20px;
 }
 
-label{display:block;margin:22px 0 8px;color:var(--mut);font-weight:600}
+label{
+  display:block;
+  margin:22px 0 8px;
+  color:var(--mut);
+  font-weight:600;
+}
+
 input,select{
-  width:100%;padding:18px;font-size:17px;
-  border-radius:16px;border:1px solid var(--line);
-  background:#0f0a0d;color:var(--txt)
+  width:100%;
+  padding:18px;
+  font-size:17px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  background:#0f0a0d;
+  color:var(--txt);
 }
 
 .btn{
-  width:100%;padding:18px;border-radius:18px;
-  font-weight:900;font-size:17px;margin-top:20px;
-  background:var(--accent);color:white;border:0
+  width:100%;
+  padding:18px;
+  margin-top:22px;
+  border-radius:18px;
+  font-weight:900;
+  font-size:17px;
+  background:var(--accent);
+  color:white;
+  border:0;
 }
 
 .resultBox{
-  padding:20px;border-radius:18px;font-weight:800;margin-top:20px
+  margin-top:25px;
+  padding:22px;
+  border-radius:18px;
+  font-weight:800;
+  line-height:1.4;
 }
+
 .green{background:#2d6a4f}
 .yellow{background:#b58b2a}
 .red{background:#b11226}
@@ -66,10 +104,13 @@ small{color:var(--mut)}
 <section id="s1" class="hidden">
 <main>
 <div class="card">
+
 <label>Infermiere</label>
 <input id="nurse">
+
 <label>ID Paziente</label>
 <input id="pid">
+
 <label>Tipo accesso</label>
 <select id="accesso">
 <option value="">—</option>
@@ -77,7 +118,9 @@ small{color:var(--mut)}
 <option value="AVG">AVG</option>
 <option value="CVC">CVC</option>
 </select>
-<button class="btn" onclick="next()">Avanti</button>
+
+<button class="btn" onclick="goToChecklist()">Avanti</button>
+
 </div>
 </main>
 </section>
@@ -175,61 +218,70 @@ small{color:var(--mut)}
 
 <script>
 
+function el(id){ return document.getElementById(id); }
+
 function startWizard(){
-  home.classList.add("hidden");
-  s1.classList.remove("hidden");
+  el("home").classList.add("hidden");
+  el("s1").classList.remove("hidden");
 }
 
-function next(){
-  if(!nurse.value || !pid.value || !accesso.value){
+function goToChecklist(){
+
+  if(!el("nurse").value || !el("pid").value || !el("accesso").value){
     alert("Compilare tutti i campi.");
     return;
   }
-  s1.classList.add("hidden");
-  s2.classList.remove("hidden");
-  flowAV.classList.add("hidden");
-  flowCVC.classList.add("hidden");
 
-  if(accesso.value==="CVC") flowCVC.classList.remove("hidden");
-  else flowAV.classList.remove("hidden");
+  el("s1").classList.add("hidden");
+  el("s2").classList.remove("hidden");
+
+  el("flowAV").classList.add("hidden");
+  el("flowCVC").classList.add("hidden");
+
+  if(el("accesso").value==="CVC")
+    el("flowCVC").classList.remove("hidden");
+  else
+    el("flowAV").classList.remove("hidden");
 }
 
 function evaluate(){
 
   let critical=false;
   let indicator=false;
+  const accesso = el("accesso").value;
 
-  if(accesso.value==="CVC"){
+  if(accesso==="CVC"){
 
-    if(cvc_qb.value==="none" || 
-       cvc_lumen.value==="two" || 
-       cvc_exit.value==="pus" || 
-       cvc_fever.value==="yes"){
+    if(el("cvc_qb").value==="none" ||
+       el("cvc_lumen").value==="two" ||
+       el("cvc_exit").value==="pus" ||
+       el("cvc_fever").value==="yes"){
        critical=true;
     }
 
-    if(cvc_qb.value==="low" || cvc_lumen.value==="one" || cvc_exit.value==="red"){
+    if(el("cvc_qb").value==="low" ||
+       el("cvc_lumen").value==="one" ||
+       el("cvc_exit").value==="red"){
        indicator=true;
     }
 
-  }else{
+  } else {
 
-    if(av_thrill.value==="absent" || 
-       av_qb.value==="none" || 
-       av_steal.value==="yes" || 
-       av_bleed.value==="yes"){
+    if(el("av_thrill").value==="absent" ||
+       el("av_qb").value==="none" ||
+       el("av_steal").value==="yes" ||
+       el("av_bleed").value==="yes"){
        critical=true;
     }
 
-    if(av_thrill.value==="reduced" || 
-       av_qb.value==="low" || 
-       av_alarm.value==="yes"){
+    if(el("av_thrill").value==="reduced" ||
+       el("av_qb").value==="low" ||
+       el("av_alarm").value==="yes"){
        indicator=true;
     }
-
   }
 
-  let box=document.getElementById("result");
+  const box = el("result");
   box.innerHTML="";
   box.className="resultBox";
 
@@ -246,17 +298,17 @@ function evaluate(){
     box.innerHTML="🟢 Non emergono indicatori clinici rilevanti secondo linee guida.";
   }
 
-  resetBtn.classList.remove("hidden");
+  el("resetBtn").classList.remove("hidden");
 }
 
 function resetAll(){
   document.querySelectorAll("select").forEach(s=>s.value="");
-  pid.value="";
-  result.innerHTML="";
-  result.className="";
-  resetBtn.classList.add("hidden");
-  s2.classList.add("hidden");
-  s1.classList.remove("hidden");
+  el("pid").value="";
+  el("result").innerHTML="";
+  el("result").className="";
+  el("resetBtn").classList.add("hidden");
+  el("s2").classList.add("hidden");
+  el("s1").classList.remove("hidden");
 }
 
 </script>
