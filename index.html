@@ -1,109 +1,80 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VAS-HD (FAP)</title>
 
 <style>
-:root{
-  --bg:#120b10;
-  --card:#1b0f17;
-  --line:#6b2b4a;
-  --txt:#f2e9ee;
-  --mut:#d6b3c4;
-  --accent:#c86a9a;
-}
-*{box-sizing:border-box}
 body{
   margin:0;
-  font-family:-apple-system,system-ui;
-  background:var(--bg);
-  color:var(--txt);
-}
-.hidden{display:none}
-
-header{
-  padding:18px;
-  border-bottom:1px solid var(--line);
+  font-family:system-ui;
+  background:#120b10;
+  color:white;
 }
 
-main{
-  padding:20px;
-  max-width:900px;
+.container{
+  max-width:800px;
   margin:auto;
+  padding:20px;
 }
 
 .card{
-  background:rgba(27,15,23,.96);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:22px;
+  background:#1b0f17;
+  padding:20px;
+  border-radius:12px;
   margin-bottom:20px;
 }
 
 label{
   display:block;
-  margin:22px 0 8px;
-  color:var(--mut);
-  font-weight:600;
+  margin-top:15px;
 }
 
 input,select{
   width:100%;
-  padding:18px;
-  font-size:17px;
-  border-radius:16px;
-  border:1px solid var(--line);
-  background:#0f0a0d;
-  color:var(--txt);
+  padding:12px;
+  margin-top:5px;
+  border-radius:8px;
+  border:none;
+  font-size:16px;
 }
 
-.btn{
+button{
   width:100%;
-  padding:18px;
-  margin-top:22px;
-  border-radius:18px;
-  font-weight:900;
-  font-size:17px;
-  background:var(--accent);
+  padding:14px;
+  margin-top:20px;
+  border-radius:10px;
+  border:none;
+  background:#c86a9a;
   color:white;
-  border:0;
+  font-weight:bold;
+  font-size:16px;
 }
 
-.resultBox{
-  margin-top:25px;
-  padding:22px;
-  border-radius:18px;
-  font-weight:800;
-  line-height:1.4;
+.result{
+  margin-top:20px;
+  padding:15px;
+  border-radius:10px;
+  font-weight:bold;
 }
 
 .green{background:#2d6a4f}
 .yellow{background:#b58b2a}
 .red{background:#b11226}
-
-small{color:var(--mut)}
+.hidden{display:none}
 </style>
 </head>
 
 <body>
 
-<header>
-  <h2>VAS-HD (FAP)</h2>
-  <small>Supporto decisionale basato su indicatori KDOQI</small>
-</header>
+<div class="container">
 
-<main id="home">
-  <div class="card">
-    <button class="btn" onclick="startWizard()">➕ Nuova valutazione</button>
-  </div>
-</main>
+<div id="home" class="card">
+  <button onclick="start()">Nuova valutazione</button>
+</div>
 
-<!-- STEP 1 -->
-<section id="s1" class="hidden">
-<main>
-<div class="card">
+<div id="form" class="card hidden">
 
 <label>Infermiere</label>
 <input id="nurse">
@@ -112,203 +83,167 @@ small{color:var(--mut)}
 <input id="pid">
 
 <label>Tipo accesso</label>
-<select id="accesso">
-<option value="">—</option>
-<option value="FAV">FAV</option>
-<option value="AVG">AVG</option>
-<option value="CVC">CVC</option>
+<select id="accesso" onchange="toggleFlow()">
+  <option value="">--</option>
+  <option value="FAV">FAV / AVG</option>
+  <option value="CVC">CVC</option>
 </select>
-
-<button class="btn" onclick="goToChecklist()">Avanti</button>
-
-</div>
-</main>
-</section>
-
-<!-- STEP 2 -->
-<section id="s2" class="hidden">
-<main>
-<div class="card">
 
 <div id="flowAV" class="hidden">
 
 <label>Thrill</label>
 <select id="av_thrill">
-<option></option>
-<option value="normal">Normale</option>
-<option value="reduced">Ridotto</option>
-<option value="absent">Assente (CRITICO)</option>
+  <option></option>
+  <option value="normal">Normale</option>
+  <option value="reduced">Ridotto</option>
+  <option value="absent">Assente</option>
 </select>
 
-<label>Qb ottenuto</label>
+<label>Qb</label>
 <select id="av_qb">
-<option></option>
-<option value="ok">Adeguato</option>
-<option value="low">Ridotto ma ottenibile</option>
-<option value="none">Non ottenibile (CRITICO)</option>
+  <option></option>
+  <option value="ok">Adeguato</option>
+  <option value="low">Ridotto</option>
+  <option value="none">Non ottenibile</option>
 </select>
 
-<label>Allarmi ripetuti</label>
-<select id="av_alarm">
-<option></option>
-<option value="no">No</option>
-<option value="yes">Sì</option>
-</select>
-
-<label>Segni di steal ischemico</label>
+<label>Steal</label>
 <select id="av_steal">
-<option></option>
-<option value="no">No</option>
-<option value="yes">Sì (CRITICO)</option>
-</select>
-
-<label>Sanguinamento grave</label>
-<select id="av_bleed">
-<option></option>
-<option value="no">No</option>
-<option value="yes">Sì (CRITICO)</option>
+  <option></option>
+  <option value="no">No</option>
+  <option value="yes">Sì</option>
 </select>
 
 </div>
 
 <div id="flowCVC" class="hidden">
 
-<label>Qb ottenibile</label>
+<label>Qb</label>
 <select id="cvc_qb">
-<option></option>
-<option value="ok">Adeguato</option>
-<option value="low">Ridotto</option>
-<option value="none">Non ottenibile (CRITICO)</option>
+  <option></option>
+  <option value="ok">Adeguato</option>
+  <option value="low">Ridotto</option>
+  <option value="none">Non ottenibile</option>
 </select>
 
 <label>Aspirazione lumi</label>
 <select id="cvc_lumen">
-<option></option>
-<option value="ok">Entrambi OK</option>
-<option value="one">1 lume difficoltoso</option>
-<option value="two">Entrambi non aspirabili (CRITICO)</option>
+  <option></option>
+  <option value="ok">OK</option>
+  <option value="one">1 lume</option>
+  <option value="two">Entrambi non aspirabili</option>
 </select>
 
-<label>Exit-site</label>
-<select id="cvc_exit">
-<option></option>
-<option value="ok">Normale</option>
-<option value="red">Arrossato</option>
-<option value="pus">Essudato purulento (CRITICO)</option>
-</select>
-
-<label>Febbre / brividi</label>
+<label>Febbre</label>
 <select id="cvc_fever">
-<option></option>
-<option value="no">No</option>
-<option value="yes">Sì (CRITICO)</option>
+  <option></option>
+  <option value="no">No</option>
+  <option value="yes">Sì</option>
 </select>
 
 </div>
 
-<button class="btn" onclick="evaluate()">Valuta</button>
+<button onclick="evaluate()">VALUTA</button>
 
-<div id="result"></div>
+<div id="result" class="result hidden"></div>
 
-<button class="btn hidden" id="resetBtn" onclick="resetAll()">Nuovo paziente</button>
+<button id="resetBtn" class="hidden" onclick="resetForm()">Nuovo paziente</button>
 
 </div>
-</main>
-</section>
+
+</div>
 
 <script>
 
-function el(id){ return document.getElementById(id); }
-
-function startWizard(){
-  el("home").classList.add("hidden");
-  el("s1").classList.remove("hidden");
+function el(id){
+  return document.getElementById(id);
 }
 
-function goToChecklist(){
+function start(){
+  el("home").classList.add("hidden");
+  el("form").classList.remove("hidden");
+}
+
+function toggleFlow(){
+  const accesso = el("accesso").value;
+  el("flowAV").classList.add("hidden");
+  el("flowCVC").classList.add("hidden");
+
+  if(accesso==="FAV"){
+    el("flowAV").classList.remove("hidden");
+  }
+  if(accesso==="CVC"){
+    el("flowCVC").classList.remove("hidden");
+  }
+}
+
+function evaluate(){
 
   if(!el("nurse").value || !el("pid").value || !el("accesso").value){
     alert("Compilare tutti i campi.");
     return;
   }
 
-  el("s1").classList.add("hidden");
-  el("s2").classList.remove("hidden");
-
-  el("flowAV").classList.add("hidden");
-  el("flowCVC").classList.add("hidden");
-
-  if(el("accesso").value==="CVC")
-    el("flowCVC").classList.remove("hidden");
-  else
-    el("flowAV").classList.remove("hidden");
-}
-
-function evaluate(){
-
   let critical=false;
   let indicator=false;
+
   const accesso = el("accesso").value;
+
+  if(accesso==="FAV"){
+
+    if(el("av_thrill").value==="absent" ||
+       el("av_qb").value==="none" ||
+       el("av_steal").value==="yes"){
+       critical=true;
+    }
+
+    if(el("av_thrill").value==="reduced" ||
+       el("av_qb").value==="low"){
+       indicator=true;
+    }
+
+  }
 
   if(accesso==="CVC"){
 
     if(el("cvc_qb").value==="none" ||
        el("cvc_lumen").value==="two" ||
-       el("cvc_exit").value==="pus" ||
        el("cvc_fever").value==="yes"){
        critical=true;
     }
 
     if(el("cvc_qb").value==="low" ||
-       el("cvc_lumen").value==="one" ||
-       el("cvc_exit").value==="red"){
+       el("cvc_lumen").value==="one"){
        indicator=true;
     }
 
-  } else {
-
-    if(el("av_thrill").value==="absent" ||
-       el("av_qb").value==="none" ||
-       el("av_steal").value==="yes" ||
-       el("av_bleed").value==="yes"){
-       critical=true;
-    }
-
-    if(el("av_thrill").value==="reduced" ||
-       el("av_qb").value==="low" ||
-       el("av_alarm").value==="yes"){
-       indicator=true;
-    }
   }
 
   const box = el("result");
-  box.innerHTML="";
-  box.className="resultBox";
+  box.className="result";
+  box.classList.remove("hidden");
 
   if(critical){
     box.classList.add("red");
-    box.innerHTML="🔴 Presente almeno un indicatore clinico critico. Valutazione urgente raccomandata.";
+    box.innerText="🔴 Indicatore critico presente. Valutazione urgente.";
   }
   else if(indicator){
     box.classList.add("yellow");
-    box.innerHTML="🟡 Presente almeno un indicatore di sospetta disfunzione. Valutazione clinica consigliata.";
+    box.innerText="🟡 Indicatore di sospetta disfunzione. Valutazione consigliata.";
   }
   else{
     box.classList.add("green");
-    box.innerHTML="🟢 Non emergono indicatori clinici rilevanti secondo linee guida.";
+    box.innerText="🟢 Nessun indicatore rilevante.";
   }
 
   el("resetBtn").classList.remove("hidden");
 }
 
-function resetAll(){
+function resetForm(){
+  el("form").reset;
   document.querySelectorAll("select").forEach(s=>s.value="");
-  el("pid").value="";
-  el("result").innerHTML="";
-  el("result").className="";
+  el("result").classList.add("hidden");
   el("resetBtn").classList.add("hidden");
-  el("s2").classList.add("hidden");
-  el("s1").classList.remove("hidden");
 }
 
 </script>
